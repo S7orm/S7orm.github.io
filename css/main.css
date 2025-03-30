@@ -1,0 +1,299 @@
+* {
+  user-select: none;
+  -webkit-user-select: none; /* For Safari */
+  -ms-user-select: none; /* For older Edge */
+}
+body, h1, h2, h3, h4, h5, h6, p, ul, li, fieldset, form, label, legend, table, caption, tr, th, td { vertical-align:top; margin: 0; padding: 0; border: 0; outline: 0; }
+body {
+    font-size: 1.5vh;
+    line-height: 2vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    position: fixed;
+    box-sizing: border-box;
+    font-family: "Bookman Old Style", sans-serif; ;
+    background-color: black;
+    color: #ebebeb;
+    overflow: hidden;
+}
+.rotate-message{
+    width: 50vw;  /* Half the width of the viewport */
+    height: 50vw; /* Half the height of the viewport */
+    transform: translate(50%, 50%); /* Center it using offset */
+    padding: 4vw;
+    border: 0.4vw groove white;
+    font-size: 4vw;
+    line-height: 6vw;
+    border-radius: 15%;
+}
+@media screen and (orientation: portrait) {
+
+    .game-container {
+        display: none; /* Hide the game in portrait mode */
+    }
+
+    .rotate-message {
+        display: block; /* Show the rotate message */
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .rotate-message {
+        display: none; /* Hide the warning in landscape */
+    }
+    .game-container {
+        display: block; 
+    }
+}
+
+img {
+    -webkit-user-drag: none;
+}
+div{
+    box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+span{
+    display: inline-block;
+}
+ul{
+    list-style: none;
+  padding: 0;
+}
+button {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  font-size: 1.25vw;
+  line-height: 1.5vw;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 0;
+  border-radius: 0.5vw;
+  background-color: black;
+  color: white;
+  user-select: none;
+  white-space: nowrap;
+  transition: transform 0.2s;
+}                                           
+button:active {
+  transform: translate(4px, 4px);
+    z-index:50;
+}
+button:not(:active){
+  transition-duration: 0s; /* Instantly revert back */
+}
+                                                                                       /*------BigBox-----*/
+
+#mainWrapper{
+    border: 0.1vw solid transparent;
+    border-image:  url(../images/border6.png) 30% round;
+    border-image-width: 30% 8%;
+    padding-top: 2.9vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    height: 75vh;
+}
+.bigBox{
+    display: none;
+    width: 97vw;
+    height: 69vh;
+}
+
+
+.descriptionBox {
+    display: none;  
+    pointer-events: none;
+    position: absolute;
+    top: 100%;
+    left: 10%;
+    background-color: #FAF9F6;
+    color: black;
+    padding: 0.1vw;
+    width: 15vw;
+    font-size: 1.25vw;
+    line-height: 3vh;
+    text-align: center;
+    z-index: 50;
+    white-space: normal;
+}
+.craftDescription{
+    top: 100%;
+    left: 0%;
+    width: 28vw;
+}
+    .madDescription {
+        width: 10vw;
+        left: 0;
+    }
+.lockDesc{
+    width: 10vw;
+}
+    .descriptionBox.show {
+        display: block;
+    }
+    .desc{
+        min-width: 10vw;
+        clear: left;
+    }
+    .costs{
+        min-width: 3vw;
+    }
+    
+    @keyframes flash {
+    0% { background-color: black; }
+    50% { background-color: white; }
+    100% { background-color: black; }
+}
+
+@keyframes fade-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+    #eventBox{
+        position: absolute;
+        left: 33vw;
+        top: 27vh;
+        z-index: 50;
+        width: 33vw;
+        height: 69vh;
+        background-color: black;
+        border: 0.3vw solid white;
+        border-radius: 15%;
+        color: #ebebeb;
+        display: block; 
+    }
+    #eventImage{
+        display: block;
+        border: 0.2vw solid black;
+        width: auto;
+        height: 25vh;
+        margin: auto;
+        margin-top: 2vh;
+    }
+    #eventTitle{
+        font-size: 4vh;
+        line-height: 5vh;
+        text-align: center;
+        min-width: 33vw;
+        clear: left;
+    }
+    #eventBoxText{
+        text-indent: 20px;
+        margin: 2vw;
+        font-size: 1.25vw;
+        line-height: 1.5vw;
+        width: 28vw;
+        clear: left;
+        color: #ebebeb;
+    }
+    #closeEventButton{
+          position: absolute;
+          top: 0.8vh; 
+          right: 1.5vw; 
+          background-color: transparent;
+          border: none;
+          color: red;
+          font-size: 3vw;
+          line-height: 2.5vw;
+          padding: 1vw;
+          font-weight: bold;
+          cursor: pointer;
+    }
+    @keyframes yess {
+  0% {
+    border-color: #FFF44F; 
+    background-color: #0F52BA;
+    color: #FFF; 
+    font-family: Arial, Helvetica, sans-serif; 
+  }
+  25% {
+    border-color: #FF6EC7; 
+    background-color: #4B0082;
+    color: #FFD700; 
+    font-family: Georgia, 'Times New Roman', Times, serif; 
+  }
+  50% {
+    border-color: #00FFFF; 
+    background-color: #32CD32; 
+    color: #000; 
+    font-family: 'Courier New', Courier, monospace; 
+  }
+  75% {
+    border-color: #DA70D6; 
+    background-color: #8A2BE2; 
+    color: #FF4500; 
+    font-family: 'Lucida Console', Monaco, monospace; 
+  }
+  100% {
+    border-color: #FFD700; 
+    background-color: #000; 
+    color: #FFF; 
+    font-family: Arial, Helvetica, sans-serif; 
+  }
+}
+
+.groovy-border {
+}
+    .eventButtonsLeft{
+        position: absolute;
+        bottom: 4%;
+        left: 12%;
+        font-size: 2vh;
+        min-width: 10vw;
+        min-height: 5vh;
+        border: 0.1vw groove white;
+        font-weight: bold;
+        }
+    .eventButtonsRight{
+        position: absolute;
+        bottom: 4%;
+        right: 12%;
+        font-size: 2vh;
+        min-width: 10vw;
+        min-height: 5vh;
+        border: 0.1vw groove white;
+        font-weight: bold;
+        }
+    #yes{
+        margin-left: 3vw;
+        float: left;
+        clear: left;
+        font-size: 8vh;
+        min-width: 15vw;
+        min-height: 10vh;
+        border: 0.5vw groove white;
+        font-weight: bold;
+        animation: yess 2s infinite; /* Adjust animation duration as needed */
+    }
+    
+    #no{
+        float: right;
+        margin-top: 5vh;
+        margin-right: 3vw;
+        font-size: 2vh;
+        min-width: 5vw;
+        min-height: 3vh;
+        border: 0.1vw solid darkslategrey;
+        
+    }
+   
+#footer{
+    position: fixed;
+    float: right;
+    bottom: 5vh;
+    right: 5vw;
+    width: 10vw;
+    text-align: left;
+}
+.disable-events {
+  pointer-events: none;
+}
+
+
