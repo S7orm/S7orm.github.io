@@ -160,7 +160,6 @@ document.getElementById('load').addEventListener('pointerdown',  () => loadpoint
     document.getElementById('chantWrap').addEventListener('pointerenter', chantTimer);
     document.getElementById('dreamWrap').addEventListener("pointerdown", startDreamTimer);
     document.getElementById('preachWrap').addEventListener('pointerdown', preach);
-    document.getElementById('chantWrap').addEventListener('pointerenter', chantTimer);
     //mad actions
     for(i=0;i<madKeys.length;i++){
         let temp = madKeys[i];
