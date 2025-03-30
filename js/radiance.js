@@ -1,6 +1,6 @@
 /* 
 
-
+ 
 outer gods
 Azathoth #1 win the game, end the universe
 Magnum Tenebrosum -the darkness 
@@ -8,13 +8,9 @@ Magnum Tenebrosum -the darkness
     provides access to Dark Radiance run which lacks other bonuses but provides access to new ones like
      Dark Flame of Yeb
      Ialdagorth -The Dark Devourer mist alternative on dark run
-Nameless Mist reset wipes all followers, assets and West provides access the second layer of gods through space travel:
-    moon beasts
     Venus - Nug the Torch of Nug bonus to vision
-    Mercury -Yeb Furnace of Yeb bonus to sacrifice     
- suposed to be in ocean fastness Ghatanothoa petrification charm is added to terror when calculating control: Scroll of T'yog
+    Mercury -Yeb Furnace of Yeb bonus to sacrifice 
     Jupiter -Hastur -king in yellow yellow sign mind control terror is added to love when calculating follower control 
-    Saturn -Tsathoggua from Pnakotic Manuscripts lazy provides access to increased automation options
     Beyond -yog-sothoth  dad of cth, hast omnicience bred Orb of Sothoth TM bonus to vision and radiance 
 
 

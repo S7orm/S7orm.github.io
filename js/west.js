@@ -8,14 +8,14 @@ let stats = {
         callString: 'vision',
         string: 'Vision',
         description: 'The key to unlocking the mysteries of the universe.',
-        current: 0,
+        current: 0000000,
         unlocked: true
     },
     charm: {//cultist max//
         callString: 'charm',
         string: 'Charm',
-        description: 'With enough Charisma, you can convince people of anything.',
-        current: 0,
+        description: 'With enough Charisma, West can convince people of anything.',
+        current: 000000,
         unlocked: false,
         unlock: ['vision', 1]
     },
@@ -23,25 +23,25 @@ let stats = {
         callString: 'health',
         string: 'Health',
         description: 'Essential',
-        current: 100,
-        max: 100,
+        current: 88,
+        max: 88,
         unlocked: true,
         dyingB: false,
-        dyingCounter: [0, 1],
+        dyingCounter: [0, 2],
         coma: false
     },
     radiance: {//energy//
         callString: 'radiance',
         string: 'Radiance',
         description: 'A reward from the Outer Gods, probably',
-        current: 0,
+        current: 0000,
         unlocked: false,
         unlock: ['radiance', 1]
     },
     shards: {//god energy
         callString: 'shards',
         string: 'Shards',
-        description: 'Fragments of the Divine, they multiply your influence',
+        description: "Fragments of the Divine, they multiply West's influence.",
         current: 0,
         unlocked: false,
         unlock: ['shards', 1]
@@ -65,19 +65,20 @@ let firstBook = 'Necronomicon';
 
  
 let actions = {
-    studyTome: {
+    study: {
         string: 'Study Tome',
         description: ['Research into Abyssal Horrors.', 'Cost: Sanity', 'Benefit: Vision'],
-        level: 1.2,
-        madnessChance: 80,
+        level: 1.4,
+        madnessChance: 0.88,
         unlocked: true,
         purchased: true
     }, 
     chant: {
         string: 'Chant',
-        description: ['Reciting arcane passages imbues you with unearthly Charm', 'Cost: Sanity', 'Benefit: Charm'],
-        level: 1,
-        madnessChance: 80,
+        description: ['Reciting arcane passages imbues West with unearthly Charm', 'Cost: Sanity', 'Benefit: Charm'],
+        level: 1.4,
+        madnessChance: 0.88,
+        toggleBool: false,//for dom
         toggle: false,
         ticCounter: 0,
         ticsNeeded: 2,
@@ -89,11 +90,13 @@ let actions = {
     },    
     dream: {
         string: 'Dream',
-        description: ['Restful sleep improves your Health but dreaming can be dangerous.', 'Cost: Sanity', 'Benefits: Health and Vision'],
-        level: 1,
-        type: 0,
+        description: ['Restful sleep improves Health but dreaming can be dangerous.', 'Cost: Sanity', 'Benefits: Health and Vision'],
+        level: 1.4,
+        madnessChance: 0.88,
+        type: 'mindAlone',
         madCost: 5,
-        benefit:  1,
+        toggle: false,
+        toggleBool: false,//for dom
         unlocked: false,
         purchased: false,
         lockText: "Sleep is not enough.  Cost: 16 Vision",
@@ -102,12 +105,13 @@ let actions = {
     },
     preach: {
         string: 'Preach   ',
-        description: ['Exhibit your Charm so that the Faithful may find you.', ' Cost: Charm ', 'Benefit: Followers'],
+        description: ['Using his Charms, West can bring in the Faithful.', ' Cost: Charm ', 'Benefit: Followers'],
         level: 1,
-        cost: 4,
+        cost: 8,
         benefit: 1,
         timer: 2000,
-        multiplier: 8,
+        multiplier: 16,
+        audio: 0,
         unlocked: false,
         purchased: false,
         lockText: "Preach to the Faithful Cost: 8 Vision",
@@ -118,22 +122,22 @@ let actions = {
     	//=========================================
 	//                      West Action Functions
 	//=========================================
-function studyTome(){
+function study(){
   plays(studying);
   var element = document.getElementById("studyProgress");   
   var width = 1;
   var identity = setInterval(study, 5);
-     let temp =  document.getElementById('studyTomeWrap');
+     let temp =  document.getElementById('studyWrap');
      temp.classList.add("studyPulse");
-     let tempTimer = actions.studyTome.timer;
+     let tempTimer = 444;
      setTimeout(()=>{temp.classList.remove("studyPulse");}, tempTimer);
   function study() {
     if (width >= 100) {
-        let madChance = Math.floor(Math.random() * 100);   
-        if(madChance <= actions.studyTome.madnessChance){
-             numberChange('stats', 'madness', 1 , '#FE2EF7', 'blue');  
+        let madChance = Math.random();   
+        if(madChance <= actions.study.madnessChance){
+             numberChange('stats', 'madness', Math.floor(actions.study.level) , '#FE2EF7', 'blue');  
             }
-         numberChange('stats', 'vision', actions.studyTome.level , '#40E0D0', 'red'); 
+         numberChange('stats', 'vision', actions.study.level , '#40E0D0', 'red'); 
          numberChange('stats', 'health',  -1 , 'blue', 'red');  
         clearInterval(identity); 
         width = 0; 
@@ -146,27 +150,35 @@ function studyTome(){
 }
 
 function chant(){
-    let madChance = Math.floor(Math.random() * 100);      
-     if(madChance <= actions.chant.madnessChance){
-         numberChange('stats', 'madness', 1 , '#FE2EF7', 'blue');  
+    if(stats.madness.current<=stats.madness.madCap){
+        let madChance = Math.random();      
+         if(madChance <= actions.chant.madnessChance){
+             numberChange('stats', 'madness', actions.chant.level  , '#FE2EF7', 'blue');  
         }
-    numberChange('stats', 'health',  -1 , 'blue', 'red');
-    numberChange('stats', 'charm',  1 , '#FFFF00', 'red');  
+        numberChange('stats', 'health',  - 1 , 'blue', 'red');
+        numberChange('stats', 'charm',  actions.chant.level , '#FFFF00', 'red');  
+    }else if(actions.chant.toggle === true){ //ends toggle if madCap reached
+        chantToggle();
+    }
 };
         
 function chantTimer(){
     var intervalId = null;
      let temp =  document.getElementById('chantWrap');
-     document.getElementById('chantWrap').onmouseover = function() {
-        intervalId = setInterval(chant, 500);
+     document.getElementById('chantWrap').onpointerenter = function() {//calls chant every 400 mics
+        intervalId = setInterval(chant, 400);
         plays(chanting);
      temp.classList.add("chantPulse");
     };
-    document.getElementById('chantWrap').onmouseout = function() {
+    document.getElementById('chantWrap').onpointerleave = function() {
         // Clear any timers set to timeout
         clearInterval(intervalId);
-        pauses(chanting);
-        temp.classList.remove("chantPulse");
+        if(actions.chant.toggle===false){
+            pauses(chanting);
+            temp.classList.remove("chantPulse");
+        }else{
+            chanting.volume=0.3;
+        }
     };
 };
 
@@ -176,166 +188,176 @@ function chantTimer(){
 let dreamChoices = {
        mindAlone: {
            string: 'Mind Alone',
-           description: ['Just you and the endless expanses. ' , 'No modifier.'] ,
+           description: ['Just West and the endless expanses. ' , 'Benefit: Vision and Health'] ,
+           img: "images/west/dream.jpg",
            unlocked: true
        },
        lighthouse: {
            string: 'Lighthouse',
-           description: ['Light the beacon so that you may travel further safely.', 'Cost: 1 Radiance'],
+           description: ['Lighting the beacon allows to West to travel further.', 'Cost: 1 Radiance', 'Benefit: Health and increased Vision'],
+           img: "images/eventImages/lighthouse.jpg",
            unlocked: false
        },
        whiteShip: {
            string: 'White Ship',
-           description: ['Buy passage on the White Ship', 'Spend 1 Radiance for every hour of Dream Travel.', 'Benefit: More Vision'],
+           description: ['Buy passage on the White Ship. ', 'Spend 1 Radiance for every hour of Dream Travel.', 'Benefit: Health and greatly increased Vision'],
+           img: "images/eventImages/whiteShip.jpg",
            unlocked: false
        },
        blackShip: {
            string: 'Black Ship',
-           description: ['Oh the vistas they offer', 'Each hour requires more Radiance than the one before.', 'Benefit: Increased Vision'],
+           description: ['Oh the vistas they offer', 'Each hour requires more Radiance than the one before.', 'Benefit: Massive Visions but reduces Health '],
+           img: "images/dreamEx/dylath.jpg",
            unlocked: false
        } 
     };
 let dreamKeys = Object.keys(dreamChoices);
-// Toggle the dropdown menu
-function showDreamChoices() {
-    var dreamChoices = document.getElementById("dreamChoices");
-    dreamChoices.style.display = 'block';
+// Toggle the dropdown menu hide added to show
+function toggleDreamChoices() {
+    let t = document.getElementById("dreamChoices").style.display;
+    if(t === 'none' || t === ''){
+        document.getElementById("dreamChoices").style.display = 'block';
+    }else{
+        document.getElementById("dreamChoices").style.display = 'none';
+    }
 }
-
-function hideDreamChoices() {
-    var dreamChoices = document.getElementById("dreamChoices");
-    dreamChoices.style.display = 'none';
-}
-
 // Select an option and update the main div text
 function dreamChoice(option) {
-     let temp = dreamChoices[option].string;
-    // change dream type
-    const dreamWrap = document.getElementById('dreamWrap');
-    document.getElementById("dreamChosen").innerHTML = temp;
-    actions['dream']['type'] = dreamKeys.indexOf(option);
-    window.console.log(actions.dream.type, option);
-    hideDreamChoices();
+    document.getElementById("dreamChosen").innerHTML = dreamChoices[option].string;
+    document.getElementById('dreamImg').src = dreamChoices[option].img;
+    actions.dream.type = option;
+    document.getElementById('dreamDesc').innerHTML= dreamChoices[option].description[0];
+    document.getElementById('dreamcost').innerHTML= dreamChoices[option].description[1];
+    document.getElementById('dreamBenefit').innerHTML= dreamChoices[option].description[2];
+    toggleDreamChoices();
 }
     let startTime;
     let endTime;
     let timerInterval;
     let sequenceEnded = false;
-    function dream(totalTime, cost){//consider changing radiance costs outputting each second
-        let time = Math.floor(totalTime); 
-        if(time >1){
-            let benefitAmount = time * Math.max(cost, 1);
-            let tempMad = Math.floor(Math.random() * benefitAmount) + 1;
-            let type = actions['dream']['type'];
-            window.console.log(type);
-            if(type === 0){
-                numberChange('stats', 'madness', (tempMad + 4) , '#FE2EF7', 'blue');  
-                numberChange('stats', 'health', (benefitAmount * 8) , 'blue', 'red');  
-                numberChange('stats', 'vision', (benefitAmount * 4) , 'blue', 'red');  
-            }else if(type === 1){
-                numberChange('stats', 'madness',  tempMad , '#FE2EF7', 'blue'); 
-                numberChange('stats', 'health', (benefitAmount * 8) , 'blue', 'red');
-                numberChange('stats', 'vision', (benefitAmount * 8) , 'blue', 'red');  
-                window.console.log(stats.radiance.current);
-                numberChange('stats', 'radiance', -cost , 'blue', 'red');  
-                window.console.log(stats.radiance.current);
-            }else if(type === 2){
-                numberChange('stats', 'madness',  tempMad , '#FE2EF7', 'blue'); 
-                numberChange('stats', 'health', (benefitAmount * 8) , 'blue', 'red');
-                numberChange('stats', 'vision', (benefitAmount * time * 8) , 'blue', 'red');  
-                numberChange('stats', 'radiance', -cost , 'blue', 'red');  
-            }else if(type === 3){
-                numberChange('stats', 'madness',  (tempMad  * time) , '#FE2EF7', 'blue'); 
-                numberChange('stats', 'health', benefitAmount , 'blue', 'red');
-                numberChange('stats', 'vision', (benefitAmount * time * 8) , 'blue', 'red');  
-                numberChange('stats', 'radiance', -cost , 'blue', 'red');  
-            }
-            let temp =  document.getElementById('dreamWrap');
-            temp.classList.add("dreamPulse");
-            let tempTimer = actions['dream']['timer'];
-            setTimeout(()=>{temp.classList.remove("dreamPulse");}, tempTimer);
-            flash('health', 'blue', 'white');
-            flash('vision', 'blue', 'white');
-        }
-    }
+    let typeMultiplier = 1;
 // Function to start the timer
-function startDreamTimer() {
+function startDreamTimer(type) {
     sequenceEnded = false; 
-    plays(dreaming);
+    document.getElementById("dreamTimer").style.display = "block";
+    document.getElementById('dreamWrap').classList.add("dreamPulse");
+    if (type === 'coma') {
+        document.removeEventListener("pointerup", endDreamTimer);
+        plays(dreaming);
+    } else if(type === 'toggled'){
+            playWithLowVolume(dreaming);
+    }else{
+        plays(dreaming);
+        document.addEventListener("pointerup", endDreamTimer);
+        document.addEventListener('pointerleave', endDreamTimer);
+    }
     startTime = Date.now();
     // Clear any existing timer interval
     clearInterval(timerInterval);
-    // Update the timer display every 100 milliseconds (adjust as needed)
-    timerInterval = setInterval(() => updateTimer(), 100);
+    // Update the timer display every 1seconds
+    timerInterval = setInterval(() => updateTimer(), 1000);
 }
 function calculateCost(elapsedTime) {
     let dreamType = actions.dream.type;
     switch (dreamType) {
-        case 0:
-            return 0; // no cost
-        case 1:
-            return 1; // 1 
-        case 2:
-            return 1 * elapsedTime; // 1 per second linear increase
-        case 3:
-            return 1 * elapsedTime * elapsedTime; // 1 per second per second quadratic increase
+        case 'mindAlone':
+            return 0; // no radCost
+        case  'lighthouse':
+            if(elapsedTime ===1){
+                return 1;
+            }else{
+                return 0;
+            }
+        case  'whiteShip':
+            return 1 ; // 1 per second linear increase
+        case  'blackShip':
+            return elapsedTime; // 1 per second per second quadratic increase
         default:
-            window.console.log('error');
-            return 0; // Default to 0 cost
+            return 0; // Default to 0 radCost
     }
 }
 function updateTimer() {
     const timerDisplay = document.getElementById("dreamTimer");
     const currentTime = Date.now();
-    const elapsedTime = (currentTime - startTime) / 800; // Convert to seconds
+    const elapsedTime = (currentTime - startTime) / 1000; // Convert to seconds
     // Get the cost formula based on dreamType
-
-    // Calculate the cost per second using the formula
-    const costNextSecond = calculateCost(elapsedTime + 1);
+    const radCost = calculateCost(elapsedTime);
+    
     // Check if the cost per second exceeds available radiance
-    if (costNextSecond > stats.radiance.current) {
+    if (radCost > stats.radiance.current) {
         comment('We can go no further.');
         endDreamTimer(); // Stop the timer and call endDreamTimer
-            timerDisplay.style.fontSize="17vw";
+        timerDisplay.style.fontSize = "17vw";
     } else {
         timerDisplay.innerText = elapsedTime.toFixed(0);
-        timerDisplay.style.display = "block";
-        if(elapsedTime >9.5){
-            timerDisplay.style.fontSize="8vw";
+
+        // Update the stats every second based on the elapsed time
+        if (Math.floor(elapsedTime) > 0) { // Only update if at least 1 second has passed
+            let madChance = Math.random();
+            let mad = 0;
+         if(madChance <= actions.dream.madnessChance){
+             mad = actions.dream.level;
+            }
+            let dHealth = 1;
+            if(world.ant.unlocked === true){
+                dhealth = 0.5;
+            }
+            const type = actions['dream']['type'];
+            if (type === 'mindAlone') {
+                numberChange('stats', 'madness',  mad, '#FE2EF7', 'blue');  
+                numberChange('stats', 'health', 12 * dHealth, 'blue', 'red');  
+                numberChange('stats', 'vision', (2 * actions.dream.level), 'blue', 'red');  
+            } else if (type === 'lighthouse') {
+                numberChange('stats', 'madness', mad * 4, '#FE2EF7', 'blue'); 
+                numberChange('stats', 'health', 8 * dHealth, 'blue', 'red');
+                numberChange('stats', 'vision', (8 * actions.dream.level), 'blue', 'red');  
+                numberChange('stats', 'radiance', -radCost, 'blue', 'red');
+            } else if (type === 'whiteShip') {
+                numberChange('stats', 'madness', mad * 8, '#FE2EF7', 'blue'); 
+                numberChange('stats', 'health',  8 * dHealth, 'blue', 'red');
+                numberChange('stats', 'vision', (elapsedTime * 8 * actions.dream.level), 'blue', 'red');  
+                numberChange('stats', 'radiance', -radCost, 'blue', 'red');  
+            } else if (type === 'blackShip') {
+                numberChange('stats', 'madness', (mad * elapsedTime * 8), '#FE2EF7', 'blue'); 
+                numberChange('stats', 'health',   -8 * dHealth, 'blue', 'red');
+                numberChange('stats', 'vision', (elapsedTime * elapsedTime * 8 * actions.dream.level), 'blue', 'red');  
+                numberChange('stats', 'radiance', -radCost, 'blue', 'red');  
+            }
         }
     }
 }
+
 // Function to end the timer and reset the display
 function endDreamTimer() {   
     if (!sequenceEnded) { // Check if the sequence hasn't ended already
         sequenceEnded = true; // Set the flag to indicate the sequence has ended
-        endTime = Date.now();
-        const totalTime = (endTime - startTime) / 1000; // Convert to seconds
-        const cost = calculateCost(totalTime);
         const timerDisplay = document.getElementById("dreamTimer");
         timerDisplay.style.display = "none";
-        timerDisplay.style.fontSize="17vw";
-        // Call the dreamEnd function with the time as a variable
-        dream(totalTime, cost);
         clearInterval(timerInterval);
         // Reset the timer display
         timerDisplay.style.zIndex = "1";
-        timerDisplay.innerText = "";
+        timerDisplay.innerText = ""; 
+        document.removeEventListener("pointerup", endDreamTimer);
+       document.getElementById('dreamWrap').classList.remove("dreamPulse");
+        stop(dreaming);
     }
 }
 
+//add endless dreaming
+
 function preach() {
-    window.console.log(stats.charm.current >=  actions.preach.cost);
     if (stats.charm.current >=  actions.preach.cost) {
         if(cult.faithful.unlocked === false){
             cult.faithful.unlocked = true;
             domUnlocks.cult = true;
-            eventBox("images/faithful.png", "The Cult", "One alone cannot accomplish Greatness. You must find and use those foolish enough to follow you into darkness.");
+            eventBox("images/eventImages/cult.jpg", "The Cult", "One alone cannot accomplish Greatness. West must find and use those foolish enough to follow him into darkness.");
             setTimeout(() => {
                 document.getElementById('cultTab').style.display='block';
                 document.getElementById('faithfulWrap').style.display='block';
                 comment('A beginning', 'red', 'pr');
             }, 1500);
+        }else if(actions.preach.level>1){
+            comment("We welcome more lost souls into the fold.");
         }else{
                     comment('Another lost soul joins us.');
         }
@@ -343,16 +365,15 @@ function preach() {
          temp.classList.add("preachPulse");
          let tempTimer = actions.preach.timer;
          setTimeout(()=>{temp.classList.remove("preachPulse");}, tempTimer);
-        //plays(preaching);
+        playPreachAudio();
          numberChange('stats', 'charm',  -actions.preach.cost , '#FE2EF7', 'blue'); 
-         numberChange('cult', 'faithful',  actions.preach.benefit , '#FE2EF7', 'blue');
-         window.console.log(actions.preach.benefit, cult.faithful.current);
-        actions.preach.cost = Math.max((cult.faithful.current * actions.preach.multiplier), 4);
+         numberChange('cult', 'faithful',  actions.preach.level , '#FE2EF7', 'blue');
+        actions.preach.cost = Math.max((cult.faithful.current * actions.preach.multiplier), 8);
         document.getElementById('preachCost').innerHTML = actions.preach.cost;
         document.getElementById('preachWrapCost').innerHTML = actions.preach.cost;
         //innocent chance
         if(vault.love.current > vault.terror.current || actionUpgrades.preach.fiction.unlocked === true){
-            numberChange('cult', 'innocents',  1 , '#FE2EF7', 'blue');
+            numberChange('cult', 'innocents',  actions.preach.level , '#FE2EF7', 'blue');
             if(cult.innocents.unlocked === false){
                 cult.innocents.unlocked = true;
                 document.getElementById('innocentsWrap').style.display='block';
@@ -363,107 +384,122 @@ function preach() {
         }
     }
 };
+// Define the audio sequence
+const preachAudios = [
+    'preaching.mp3',
+    'believeGood.mp3',
+    'believeRules.mp3',
+    'godWho.mp3',
+    'godRules.mp3',
+    'believeFinal.mp3'
+];
+
+// Function to play the audio for the current index
+function playPreachAudio() {
+    const audioIndex = actions.preach.audio;
+    const audioFile = preachAudios[Math.min(audioIndex, preachAudios.length - 1)];
+    const audioPath = `audio/${audioFile}`; // Assuming the audio folder is inside root
+    
+    // Create an audio element to play the file
+    const audio = new Audio(audioPath);
+    plays(audio);
+
+    // Increment the audio index for the next time, ensuring it doesn't exceed the array length
+    if (audioIndex < preachAudios.length - 1) {
+        actions.preach.audio++;
+    }
+}
+
 
      	//=========================================
 	// West Action Upgrades  Scroll of T'yog
 	//=========================================
         
 let actionUpgrades = { //add mad chance reduction to reading
-  studyTome: {
-      pnat: {
-          string: 'Pnatotic Manuscripts',
-          description: ['Translating the manuscripts will double your insights when studying', ' Cost: Vision '],
-          cost: 22,
-          func: pnat,
-          costType: 'vision',
-          unlocked: false,
-          purchased: false
-      }, 
-      hsan: {
-          string: 'Seven Cryptical Books of Hsan',
-          description: ['routes in the dreaming. does not show kadath', 'Cost: Vision '],
-          cost: 44,
-          func: hsan,
+  study: {
+      pnak: {
+          string: 'Pnakotic Manuscripts',
+          description: ["Translation of Tomes doubles West's Studying effectivness and Mental Fortitude.", ' Cost: Vision '],
+          cost: 48,
+          func: pnak,
           costType: 'vision',
           unlocked: false,
           purchased: false
       },      
-      dzyan: {
+      dzyan: {//preach * 2
           string: 'Book of Dzyan',
-          description: ['history book atlantis,, lemuria', ' Cost: Vision '],
-          cost: 88,
+          description: ['Pure bunk, but it is useful to learn what moves men to madness.', ' Cost: Vision '],
+          cost: 84,
           func: dzyan,
           costType: 'vision',
           unlocked: false,
           purchased: false
-      },            
-      dhol: {
-          string: 'Dhol Chants',
-          description: ['Secrets of subliminal Chanting.', ' Cost: Charm 222 Vision '],
-          cost: 444,
-          func: dhol,
-          costType: 'vision',
-          unlocked: false,
-          purchased: false
-      },         
-      goul: {//unlocked by men of leng unlocks cannibalism
-          string: 'Cultes des Goules',
-          description: ['To Serve Man', '  Cost: Vision '],
-          cost: 444,
-          func: goul,
-          costType: 'vision',
-          unlocked: false,
-          purchased: false,
-          unlocks: ['cannibalism'],
-          comment: 'A Toast: To your Health!'
-      },  
+      },   
       kult: {
           string: 'Unaussprechlichen Kulten',
-          description: [' Cost: Vision '],
-          cost: 4444,
+          description: ["Old secrets, older magics.", "Cost: Vision "],
+          cost: 484,
           func: kult,
           costType: 'vision',
           unlocked: false,
           purchased: false
-      },           
-      azat: {//sign name may move higher
-          string: 'Book of Azathoth',
-          description: ['Sign your name and .', '  Cost: Vision '],
-          cost: 8888,
-          func: azat,
-          costType: 'vision',
-          unlocked: false,
-          purchased: false
-      }, 
-      alch: { //tangential, may be cut
-          string: 'Clavis Alchimiae',
-          description: ['Turn Flesh into Ichor.', ' Cost: Vision '],
-          cost: 100,
-          func: alch,
-          costType: 'vision',
-          unlocked: false,
-          purchased: false
-      },    
-      eibon: {
-          string: 'Book of Eibon',
-          description: ['from hyborea. spellbook entrancement, petrification -art, open doorway for Tsathoggua or shub', '  Cost: Vision '],
-          cost: 44444,
-          func: eibon,
-          costType: 'vision',
-          unlocked: false,
-          purchased: false,
-          unlocks: ['darkYoung'],
-          comment: 'Sacrifice...!'
-      },      
-      damn: {
-          string: 'Liber Damnatus',
-          description: ['Rebirth Yog-sothhoth.', ' Cost: Vision '],
-          cost: 88888,
-          func: damn,
+      },            
+      hsan: {
+          string: 'Seven Cryptical Books of Hsan',
+          description: ['One can travel the Dreamlands with confidence with these maps.', 'Cost: Vision '],
+          cost: 848,
+          func: hsan,
           costType: 'vision',
           unlocked: false,
           purchased: false
       },  
+      alch: { 
+          string: 'Clavis Alchimiae',
+          description: ['The secrets of Alchemy.', ' Cost: Vision '],
+          cost: 4848,
+          func: alch,
+          costType: 'vision',
+          unlocked: false,
+          purchased: false
+      },  
+      dhol: {
+          string: 'Dhol Chants',
+          description: ['The words echo eternally.', ' Cost: Charm 848, Vision '],
+          cost: 8484,
+          func: dhol,
+          costType: 'vision',
+          unlocked: false,
+          purchased: false
+      },   
+      vermin: {
+          string: 'De Vermis Mysteriis',
+          description: ['Summons a familiar.', ' Cost: Vision '],
+          cost: 24848,
+          func: vermin,
+          costType: 'vision',
+          unlocked: false,
+          purchased: false
+      },   
+      //stage 2   
+      eibon: {
+          string: 'Book of Eibon',
+          description: ['Leaving humanity behind may be the only choice. Madness Minimum: 8888', '  Cost: Vision '],
+          cost: 48484,
+          func: eibon,
+          costType: 'vision',
+          unlocked: false,
+          purchased: false,
+          unlocks: ['darkYoung']
+      },        
+      damn: {
+          string: 'Liber Damnatus',
+          description: ['Rebirth Yog-sothhoth. Not implemented. You can buy more tomes to add more priests', ' Cost: Vision '],
+          cost: 84848,
+          func: damn,
+          costType: 'vision',
+          unlocked: false,
+          purchased: false
+      },   
       necr: {
           string: 'Necronomicon',
           description: ['These sounds are more pleasing to the ear.', '  Cost: Vision '],
@@ -472,21 +508,32 @@ let actionUpgrades = { //add mad chance reduction to reading
           costType: 'vision',
           unlocked: false,
           purchased: false
-      }
-  },
-  chant: {
-      echoes: {
-          string: 'Echoes',
-          description: [''],
-          cost: 500,
-          func: echoes,
+      },
+      goul: {//unlocked by men of leng unlocks cannibalism
+          string: 'Cultes des Goules',
+          description: ['To Serve Man', '  Cost: Vision '],
+          cost: 484,
+          func: goul,
+          costType: 'vision',
+          unlocked: false,
+          purchased: false,
+          unlocks: ['cannibalism'],
+          comment: 'A Toast: To your Health!'
+      },
+      azat: {//unlocked by throne of azathoth
+          string: 'Book of Azathoth',
+          description: ['Sign your name and end this insanity.', '  Cost: Vision '],
+          cost: 88888888,
+          func: azat,
           costType: 'vision',
           unlocked: false,
           purchased: false
-    },
+      }
+  },
+  chant: {
     choir: {
         string: 'Eternal Choir',
-        description: ['Sacrifice a chanter and capture a piece of their soul to forever sing inside your mind. This is probably not good for your mental well being.'],
+        description: ['Sacrifice a chanter and capture a piece of their soul to sing forever. Probably not healthy.'],
         unlocked: false,
         purchased: false,
         cost: 10,
@@ -497,7 +544,7 @@ let actionUpgrades = { //add mad chance reduction to reading
   preach: {
       fiction: {
           string: 'Fiction',
-          description: ['People love your funny little stories. (guarantees innocent when Preaching) '],
+          description: ['People love funny little stories about aliens. (guarantees innocent when Preaching) '],
           cost: 88,
           func: fiction,
           costType: 'vision',
@@ -511,164 +558,227 @@ let actionUpgrades = { //add mad chance reduction to reading
 	//                  Study upgrades
 	//=========================================
  function studyMultiplier(){//multiplies study parameter and comments
-        actions.studyTome.level = actions.studyTome.level * 2;
+        actions.study.level = actions.study.level * 2;
         comment('(Studying x 2)', 'lightgreen');
  }     
  function madCapIncrease(){
      stats.madness.madCap = stats.madness.madCap * 2;
     comment('(Madness Capacity x 2)', 'pink');
  }
-function pnat(){//unlocked by crypt
-    if(stats.vision.current >= actionUpgrades.studyTome.pnat.cost){
-        stats.vision.current -= actionUpgrades.studyTome.pnat.cost;
-        document.getElementById('vision').innerHTML= Math.floor(stats.vision.current);
-        flashFade('pnatWrap');
+function pnak(){//unlocked by crypt
+    if(stats.vision.current >= actionUpgrades.study.pnak.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.pnak.cost, '', 'red');
+        flashFade('pnakWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
         studyMultiplier();
         madCapIncrease();
-        actionUpgrades.studyTome.pnat.purchased = true;
-    }
-}
-function hsan(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.hsan.cost){
-        stats.vision.current -= actionUpgrades.studyTome.hsan.cost;
-        document.getElementById('vision').innerHTML= Math.floor(stats.vision.current);
-        flashFade('hsanWrap');
-        //comment('Maps to the Dreaming! (Dream Expeditions)', 'lightgreen');
-        //document.getElementById('dreamEx').style.display='block';
-        //document.getElementById('celephaisWrap').style.display='block';
-        //document.getElementById('dylathLeenWrap').style.display='block';
-        //document.getElementById('landOfZarWrap').style.display='block';
-        //flash('expeditionsTab', 'lightgreen');
-        studyMultiplier();
-        madCapIncrease();
-        actionUpgrades.studyTome.hsan.purchased = true;
+        actionUpgrades.study.pnak.purchased = true;
+        comment("+1 Tome in Vault");
     }
 }
 function dzyan(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.dzyan.cost){
-        stats.vision.current -= actionUpgrades.studyTome.dzyan.cost;
-        document.getElementById('vision').innerHTML= Math.floor(stats.vision.current);
+    if(stats.vision.current >= actionUpgrades.study.dzyan.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.dzyan.cost, '', 'red');
         flashFade('dzyanWrap');
-       // comment('Remnants of lost continents! ( Island Ruins)', 'lightgreen');
-       // document.getElementById('islandRuinsWrap').style.display='block';
-       // flash('expeditionsTab', 'lightgreen');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
         studyMultiplier();
         madCapIncrease();
-        actionUpgrades.studyTome.dzyan.purchased = true;
-    }
-}
-function dhol(){ //unlocked by tome
-    if((stats.vision.current >= 444) && (stats.charm.current >= 222)){
-        numberChange('stats', 'vision', -444, '', 'red');
-        numberChange('stats', 'charm', -222, '', 'red');
-        flashFade('dholWrap');
-        comment('Endless Chanting. ( Chanting Toggle)', 'lightgreen');
-        document.getElementById('chantToggle').style.display='block';
-        let chantWrap = document.getElementById('chantWrap');
-        const clonedElement = chantWrap.cloneNode(true);
-        chantWrap.parentNode.replaceChild(clonedElement, chantWrap);
-        document.getElementById('chantWrap').addEventListener('click',  chantToggle);
-        studyMultiplier();
-        madCapIncrease();
-        actionUpgrades.studyTome.dhol.purchased = true;
+        actions.preach.level++;
+        comment('Preach effectiveness increased. +1 Tome in Vault', 'lightblue');
+        actionUpgrades.study.dzyan.purchased = true;
     }
 }
 
 function kult(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.kult.cost){
-        stats.vision.current -= actionUpgrades.studyTome.kult.cost;
-        document.getElementById('vision').innerHTML= Math.floor(stats.vision.current);
+    if(stats.vision.current >=actionUpgrades.study.kult.cost ){
+        numberChange('stats', 'vision', -actionUpgrades.study.kult.cost, '', 'red');
         flashFade('kultWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
         studyMultiplier();
         madCapIncrease();
-        actionUpgrades.studyTome.kult.purchased = true;
-    }
-}
-function goul(){//unlocked by men of leng unlocks cannibalism
-    if(stats.vision.current >= actionUpgrades.studyTome.goul.cost){
-        stats.vision.current -= actionUpgrades.studyTome.goul.cost;
-        studyMultiplier();
-        madCapIncrease();
-        flashFade('goulWrap');
-        actionUpgrades.studyTome.goul.purchased = true;
-        fleshCrafts.cannibalism.unlocked = true;
-        fleshCrafts.cannibalism.purchased = true;
-        document.getElementById('cannibalismWrap').style.display='block';
-        comment('Tome title translated: To Serve Man (Cannibalism unlocked in FleshCrafts)');
-    }
-}
-function eibon(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.eibon.cost){
-        studyMultiplier();
-        madCapIncrease();
-        flashFade('eibonWrap');
-        actionUpgrades.studyTome.eibon.purchased = true;
-    }
-}
-function alch(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.alch.cost){
-        studyMultiplier();
-        madCapIncrease();
-        flashFade('alchWrap');
-        actionUpgrades.studyTome.alch.purchased = true;
-    }
-}
-function damn(){//unlocked by tome
-     if(stats.vision.current >= actionUpgrades.studyTome.damn.cost){
-        studyMultiplier();
-        madCapIncrease();
-        flashFade('damnWrap');
-        actionUpgrades.studyTome.damn.purchased = true;
-    }
-}
-function necr(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.necr.cost){
-        studyMultiplier();
-        madCapIncrease();
-        flashFade('necrWrap');
-        actionUpgrades.studyTome.necr.purchased = true;
-    }
-}
-function azat(){//unlocked by tome
-    if(stats.vision.current >= actionUpgrades.studyTome.azat.cost){
-        studyMultiplier();
-        madCapIncrease();
-        flashFade('azatWrap');
-        actionUpgrades.studyTome.azat.purchased = true;
+        actionUpgrades.study.kult.purchased = true;
+        relics.tyog.unlocked = true;
+        document.getElementById('tyogWrap').style.display='block'; 
+        comment("Forged the Scroll of T'yog. (Stone Passage, Wax Museum expeditions updated. +1 Tome in Vault)", "pink");
+        document.getElementById('waxDesc').innerText = "Careful examination reveals all.";
+        document.getElementById('waxBenefit').innerText = "";
+        document.getElementById('waxWrap').style.backgroundColor='black';
+        world.wax.kult = true;
     }
 }
 
+function hsan(){//unlocked by tome
+    if(stats.vision.current >= actionUpgrades.study.hsan.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.hsan.cost, '', 'red');
+        flashFade('hsanWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        dreamEx.cele.unlocked = true;
+        dreamEx.dylath.unlocked = true;
+        dreamEx.zar.unlocked = true;
+        document.getElementById('celeWrap').style.display='block';
+        document.getElementById('dylathWrap').style.display='block';
+        document.getElementById('zarWrap').style.display='block';
+        flash('expeditionsTab', 'lightgreen', 'white');
+        comment('Maps to the Dreaming! (Dream Expeditions, +1 Tome in Vault)', 'lightgreen');
+        actionUpgrades.study.hsan.purchased = true;
+    }
+}
+
+function alch(){//unlocked by tome
+    if(stats.vision.current >= actionUpgrades.study.alch.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.alch.cost, '', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        flashFade('alchWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        actionUpgrades.study.alch.purchased = true;
+        fleshCrafts.transmute.unlocked = true;
+        document.getElementById('transmuteWrap').style.display='block';
+        comment('Alchemical Transmutation of Flesh into Ichor now possible (FleshCrafts, +1 Tome in Vault)', 'pink');
+    }
+}
+//should be stage 2 cost increased
+function dhol(){ //unlocked by tome
+    if((stats.vision.current >= actionUpgrades.study.dhol.cost) && (stats.charm.current >= 848)){
+        numberChange('stats', 'vision', -actionUpgrades.study.dhol.cost, '', 'red');
+        numberChange('stats', 'charm', -848, '', 'red');
+        flashFade('dholWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        document.getElementById('chantToggle').style.display='block';
+        document.getElementById('chantWrap').removeEventListener('pointerenter', chantTimer);
+        document.getElementById('chantWrap').addEventListener('pointerdown',  chantToggle);
+        studyMultiplier();
+        madCapIncrease();
+        comment('Endless Chanting. ( Chanting Toggle) +1 Tome in Vault', 'lightgreen');
+        actionUpgrades.study.dhol.purchased = true;
+        actions.chant.toggleBool = true;
+    }
+}
+
+function vermin(){ //unlocked by tome
+    if(stats.vision.current >= actionUpgrades.study.vermin.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.vermin.cost, '', 'red');
+        flashFade('verminWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        actionUpgrades.study.vermin.purchased = true;
+        eventBox("images/relics/jenkin.jpg", "Brown Jenkin", "Summoned through a dark ritual encoded in the text, the man faced rat offers to show West passages to the deepest layer of the Dreaming. Its strangly human hands wring in anticipation. (Brown Jenkin in Sacrarium, Throne of Azathoth dream expedition available)");
+        relics.jenkin.unlocked = true;
+        document.getElementById('jenkinWrap').style.display="block";
+        dreamEx.throne.unlocked = true;
+        document.getElementById('throneWrap').style.display="block";
+    }
+}
+
+function eibon(){//unlocked by tome tentacle bonus
+    if(stats.vision.current >= actionUpgrades.study.eibon.cost && madMin(8888)){
+        numberChange('stats', 'vision', -actionUpgrades.study.eibon.cost, '', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        flashFade('eibonWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        actionUpgrades.study.eibon.purchased = true;
+        fleshCrafts.cannibalism.tentacle = true;
+        fleshCrafts.cannibalism.description[0] = "Watching West's second mouth eat horrifies the Faithful (increased Terror)";
+        fleshCrafts.cannibalism.description[2] = "Benefits: Health, Madness, Terror, and Radiance";
+        comment("A hungry tentacle now emerges from West's head while he eats. (Cannibalism now also provides Radiance, Madness, and increased Terror. +1 Tome in Vault)");
+    }
+}
+
+function damn(){//unlocked by tome unlocks yog sothoth via the twins
+     if(stats.vision.current >= actionUpgrades.study.damn.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.damn.cost, '', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        flashFade('damnWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        actionUpgrades.study.damn.purchased = true;
+        comment("Not implemented (+1 Tome in Vault)");
+    }
+}
+
+function necr(){//unlocked by tome
+    if(stats.vision.current >= actionUpgrades.study.necr.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.necr.cost, '', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        flashFade('necrWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        actionUpgrades.study.necr.purchased = true;
+        comment("Not implemented (+1 Tome in Vault)");
+    }
+}
+
+function goul(){//unlocked by men of leng unlocks cannibalism
+    if(stats.vision.current >= actionUpgrades.study.goul.cost){
+        numberChange('stats', 'vision', -actionUpgrades.study.goul.cost, '', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        flashFade('goulWrap');
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        actionUpgrades.study.goul.purchased = true;
+        fleshCrafts.cannibalism.unlocked = true;
+        fleshCrafts.cannibalism.purchased = true;
+        document.getElementById('cannibalismWrap').style.display='block';
+        comment('Tome title translated: To Serve Man (Cannibalism unlocked in FleshCrafts, +1 Tome in Vault)');
+    }
+}
+
+function azat(){//unlocked by azat ex
+    const currentTime = Date.now();
+    const timeDifference = (currentTime - totalTime.timeInit) / 3600000;
+    totalTime.total += timeDifference;
+    eventBox("/images/gods/azat.jpg", "Azathoth", "It ends here. Outside the ordered universe, at the center of infinity, lies the boundless daemon sultan Azathoth gnawing hungrily amidst the beating of vile drums and the monotonous whine of accursed flutes. As you sign your name, the pipes and drums rise to a furious pace and then cease forever. All of creation falls into nothing. Thanks for playing. The Gods have taken " + Math.floor(totalTime.total) + " hours of your life.");
+}
     	//=========================================
-	//                  Chant upgrades
+	//                  Chant Toggle
 	//=========================================
 
 function chantToggle(){
     if(actions.chant.toggle === false){
+        if(actions.dream.toggle === true){
+             dreamToggle();
+        }
     actions.chant.toggle = true;
+    playWithLowVolume(chanting);
     document.getElementById('chantToggle').style.backgroundColor='green';
     }else{
     actions.chant.toggle = false;
+        pauses(chanting);
+        chanting.volume=1;
     document.getElementById('chantToggle').style.backgroundColor='red';
+    document.getElementById('chantWrap').classList.remove("chantPulse");
     }
 }
 function autoChant(tics){
-    if(actions.chant.ticCounter < actions.chant.ticsNeeded){
-        actions.chant.ticCounter += tics;
-        if(actions.chant.ticCounter>= actions.chant.ticsNeeded){
-            actions.chant.ticCounter = 0;
-            window.console.log('chantTic');
-            numberChange('stats', 'madness', 0.4, 'red', 'blue');
-            numberChange('stats', 'charm', 0.8, 'yellow', 'red');
+    if(tics >= 1){
+            chant();
+            document.getElementById('chantWrap').classList.add("chantPulse");//visual cue that it is working
         }
-    }
 }
 
-
-function echoes(){
-    //sac for endless chanting 
-}
-function choir(){
+function choir(){// every point of radiance adds 0.1 to chant effectiveness unlocked by
     
+}
+    	//=========================================
+	//                  Dream Toggle
+	//=========================================
+function dreamToggle(){
+    if(actions.dream.toggle === false){
+        if(actions.chant.toggle === true){
+             chantToggle();
+        }
+    actions.dream.toggle = true;
+    document.getElementById('dreamToggle').style.backgroundColor='green';
+    startDreamTimer('toggled');
+    }else{
+    actions.dream.toggle = false;
+    document.getElementById('dreamToggle').style.backgroundColor='red';
+    endDreamTimer();
+    }
 }
 
     	//=========================================
@@ -689,38 +799,69 @@ function fiction(){//??
 	//                  Madness Actions
 	//=========================================
         
-function madAct(madAction){ 
+let madActIntervalId; // Specific name for the interval
+let madActFrequency = 1; // Frequency starts at 1 iteration per second
+
+function startMadActLoop(madAction) {
     let stat = madActions[madAction].costStat;
-    let temp;
-    if(madAction === 'drink' || madAction === 'smoke' ||madAction === 'flagellate'){
-        temp = stats[stat].current;
-    }else{
-          temp = vault[stat].current;
+    let current;
+    let parent;
+    if (madAction === 'drink' || madAction === 'smoke' || madAction === 'flagellate') {
+        current = stats[stat].current;
+        parent = "stats";
+    } else {
+        current = vault[stat].current;
+        parent = "vault";
     }
-    if(temp >= madActions[madAction].cost){ //check if payable
-        temp -= madActions[madAction]['cost'];
-        if(stats.madness.current > madActions[madAction].benefit){ //don't let madness go below 0
-            stats.madness.current -= madActions[madAction].benefit;
-        }else{
-            stats.madness.current = 0;
+    if (current >= madActions[madAction].cost && stats.madness.current > 0) { // check if payable and needed
+    madActFrequency = 2; // Start frequency
+    madActIntervalId = setInterval(() => {
+        for (let i = 0; i < madActFrequency; i++) {
+            executeMadAction(madAction); // Perform the action
         }
-        if(madAction === 'drink' || madAction === 'smoke' ||madAction === 'flagellate'){
-            stats[stat].current = temp;
-            document.getElementById(stat).innerHTML = Math.floor(stats[stat].current);
-        }else{
-            vault[stat].current = temp;
-            document.getElementById(stat).innerHTML = Math.floor(vault[stat].current) ;
+        madActFrequency++; // Increase frequency each loop
+    }, 800);
+    document.getElementById(madAction + "Wrap").classList.add("madActPulse");
+    document.addEventListener('pointerup', () => stopMadActLoop(madAction, madActIntervalId), { once: true });
+    }
+}
+
+function stopMadActLoop(madAction) {
+    clearInterval(madActIntervalId); // Stop the interval
+    document.getElementById(madAction + "Wrap").classList.remove("madActPulse");
+}
+
+function executeMadAction(madAction) {
+    let stat = madActions[madAction].costStat;
+    let current;
+    let parent;
+    if (madAction === 'drink' || madAction === 'smoke' || madAction === 'flagellate') {
+        current = stats[stat].current;
+        parent = "stats";
+    } else {
+        current = vault[stat].current;
+        parent = "vault";
+    }
+    if (current >= madActions[madAction].cost && stats.madness.current > 0) { // check if payable
+            numberChange(parent, stat, -madActions[madAction].cost, "blue", "red");
+        if (stats.madness.current > madActions[madAction].benefit) { // don't let madness go below 0
+            numberChange("stats", "madness", -madActions[madAction].benefit, "red", "blue");
+        }else {
+            numberChange("stats", "madness", -stats.madness.current, "red", "blue");
+            stopMadActLoop(madAction, madActIntervalId);
         }
-        document.getElementById('madness').innerHTML = Math.floor(stats.madness.current) ;
-        flash('madness', 'blue', 'white');
-        flash(stat , 'red', 'white');
-        }
-};
+        comment(madActions[madAction].comment, "#C083EB");
+    }else{
+         stopMadActLoop(madAction, madActIntervalId);
+    }
+}
+
 
 let madActions ={
   drink: {
       string: 'Drink',
-      description: ['A bottle a day keeps the voices away...  Cost: Vision '],
+      description: ['A draught to drown the whispers.', 'Cost: Vision ', 'Benefit: -2 Madness'],
+      comment: 'You cannot hide forever.',
       benefit: 2,
       costStat: 'vision',
       cost: 1,
@@ -728,15 +869,16 @@ let madActions ={
   },
   smoke: {
       string: 'Smoke',
-      description: ['What is in the pipe? Who cares.  Cost: Charm '],
-      benefit: 2,
+      description: ['Veils of fog quiet the chaos within.', 'Cost: Charm ', 'Benefit: -4 Madness'],
+      comment: 'There is no escape from the Truth.',
+      benefit: 4,
       costStat: 'charm',
-      cost: 4,
+      cost: 2,
       unlocked: true
   },
   flagellate: {
       string: 'Flagellate',
-      description: ['The beatings will continue until morale improves.  Cost: Health '],
+      description: ['Through suffering, clarity emerges.', 'Cost: Health ', 'Benefit: -12 Madness'],
       comment: 'Is this truly necessary?',
       benefit: 12,
       costStat: 'health',
@@ -746,8 +888,8 @@ let madActions ={
   },
   rave: {
       string: 'Rave',
-      description: ['Scream and foam at the mouth until you collapse.  Cost: Love '],
-      comment: 'They will forgive you, in time.',
+      description: ['Wail until only silence remains.', 'Cost: Love ', 'Benefit: -16 Madness'],
+      comment: 'Hmmm...',
       benefit: 16,
       costStat: 'love',
       cost: 32,
@@ -756,7 +898,7 @@ let madActions ={
   },
   doomScroll: {
       string: 'Doom Scroll',
-      description: ['Stare at your phone until the madness fades. It is a bad look but whatever.   Cost: Terror '],
+      description: ["The mundane feed bleeds the frenzy from your mind.", 'Cost: Terror -', 'Benefit: -8 Madness'],
       comment: 'Those who are not feared cannot rule.',
       benefit: 8,
       costStat: 'terror',
@@ -786,11 +928,13 @@ function west(){
     for(i=0;i<statKeys.length; i++){
         document.getElementById(statKeys[i]).innerHTML = stats[statKeys[i]].current;
     };
-    document.getElementById('testBox').innerHTML +=
-            //"<button id='time'>Time</button>" +
-            //"<button id='test'>Test</button>" +
-            "<button id='save'>Save</button>" +
-            "<button id='load'>Load</button>";
+    document.getElementById('menuBox').innerHTML +=
+            "<button class='menuItem'> </button>" +
+            "<button class='menuItem' id='mute'>Mute</button>" +
+            "<button class='menuItem' id='save'>Save</button>" +
+            "<button class='menuItem' id='load'>Load</button>" +
+            "<button class='menuItem' id='reset'>Reset</button>" +
+            "<button class='menuItem' id='test'>Test</button>";
     document.getElementById('west').innerHTML =    
             "<div id='actionBox' >" +
             "</div>" +
@@ -807,21 +951,21 @@ function west(){
                 "<button type='button' class='actionLocks' id='" + actionKeys[i] + "Lock'>" +actions[actionKeys[i]]['lockText'] + "</button>";
         }
     }
-    document.getElementById('studyTomeWrap').innerHTML += 
-         "<span id='tome'>Ex Abysso</span>" +
-         "<img class='actionPng' src='images/studyTome.png' alt='?'/>" +
+    document.getElementById('studyWrap').innerHTML += 
+         "<img class='actionPng' src='images/west/study.jpg' alt='?'/>" +
          "<span class='actionText'>Study Tome</span>" +
          "<span id='studyProgress'></span>";
     document.getElementById('chantWrap').innerHTML += 
          "<span id='chantToggle'></span>" +
-         "<img class='actionPng' src='images/chant.png' alt='?'/>" +
+         "<img class='actionPng' src='images/west/chant.jpg' alt='?'/>" +
          "<span class='actionText'>Chant</span>";
     document.getElementById('dreamWrap').innerHTML += 
-         "<img class='actionPng' src='images/dream.png' alt='?'/>" +
+         "<span id='dreamToggle'></span>" +
+         "<img class='actionPng' id='dreamImg' src='images/west/dream.jpg' alt='?'/>" +
          "<span class='actionText'>Dream</span>" +
           "<span id='dreamTimer'>0</span>";
     document.getElementById('preachWrap').innerHTML += 
-         "<img class='actionPng' src='images/preach.png' alt='?'/>" +
+         "<img class='actionPng' src='images/west/preach.jpg' alt='?'/>" +
          "<span class='actionText' id='preachText'>Preach</span>" +
         "<span id='preachWrapCost'>" + actions.preach.cost + "</span>";
               
@@ -839,7 +983,7 @@ function west(){
             document.getElementById('madActionBox').innerHTML +=
                     "<button class='madActionWraps' id='" +madKeys[i] + "Wrap'>" +
                     "<span class='madTitle'>" + madActions[madKeys[i]].string + "</span>" + 
-                    "<img class='madActionPng' src='images/" + madKeys[i] + ".png' alt='?'/>" +
+                    "<img class='madActionPng' src='images/west/" + madKeys[i] + ".jpg' alt='?'/>" +
                     "</button>";
     };
 
@@ -849,12 +993,11 @@ west();
 function makeDreamChoices(){
     document.getElementById('dreamColumn').innerHTML +=
         "<span  id='dreamChosen'>Mind Alone</span>" +
-        "<button onmousedown='showDreamChoices()' onmouseup='hideDreamChoices()' id='dreamDropBtn'>&#9662;</button>" +
+        "<button onpointerdown='toggleDreamChoices()' id='dreamDropBtn'>&#9662;</button>" +
         "<div id='dreamChoices'></div>";
     for(i=0;i<dreamKeys.length;i++){
         document.getElementById('dreamChoices').innerHTML +=
-        "<button class='dreamChoice' id='" + dreamKeys[i] + "Choice' onmouseup='dreamChoice(\"" + dreamKeys[i]+ "\")'>" + dreamChoices[dreamKeys[i]].string + "</button>";
+"<button class='dreamChoice' id='" + dreamKeys[i] + "Choice' onpointerdown='dreamChoice(\"" + dreamKeys[i] + "\")'>" + dreamChoices[dreamKeys[i]].string + "</button>";
     }
 };
  makeDreamChoices();
-

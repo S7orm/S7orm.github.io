@@ -4,73 +4,81 @@
 let cult = {
         faithful:{
             string: 'Faithful',
-            description:['Men, women who have heard the call. Maintaining their numbers is critical to your success.'],
-            current: 0,
+            description:["Men, women who have heard the call. They provide Love, Terror and Gold and increase the Cult's capacity for emotions. "],
+            current: 00,
+            purchased: 0,
+            unplaced: 00,
+            placed: 0,
             ticCounter: 0,
-            ticsNeeded: 3,
-            outMultipliers: [1.0, 1.0, 1.0],//love, terror, gold
+            ticsNeeded: 2,
+            outMultipliers: [1.4, 0.8, 0.4],//love, terror, gold
             unlocked: false
         },
         chanters:{
             string: 'Chanters',
-            description: ['Given scraps of writing from your Book, these cult will chant in your name, focusing the thoughts of the Faithful toward Love.'],
-            current: 0,
+            description: ["Given scraps of writing from the Book, these cultists chant endlessly. They increase Love, the Cult's capacity for Love, and add to West's Charm."],
+            current: 00,
+            unplaced: 00,
+            placed: 0,
             ticCounter: 0,
-            ticsNeeded: 4,
-            outMultiplier: 1.0,
+            ticsNeeded: 8,
+            outMultiplier: 0.8,
             unlocked: false,
             cost: ['charm', 10]
         },
-        sentinals:{
-            string: 'Sentinals',
+        sentinels:{
+            string: 'Sentinels',
             cost: ['charm', 25],
-            description:['Gelded and trepanned, Sentinals obey your will alone and cause Terror in the Faithful.'],
-            current: 0,
+            description:["Silent and dangerous, Sentinels increase Terror in the Faithful, the Cult's Capacity for Terror, and assist in Expeditions."],
+            current: 00,
+            unplaced: 00,
+            placed: 0,
             ticCounter: 0,
-            ticsNeeded: 4,
-            outMultiplier: 1.0,
+            ticsNeeded: 8,
+            outMultiplier: 0.8,
             unlocked: false,
             unlock: ['charm', 50]
         },
         priests:{
             string: 'Priests',
             cost: ['tomes', 1],
-            description: ['Dedicated followers gifted a dangeous Tome, they can lure in the Innnocent and convert them into more Faithful for you.'],
+            description: ['Dedicated followers gifted a dangeous Tome, they can do many things.'],
             current: 0,
-            ticCounter: 0,
-            ticsNeeded: 22,
-            outMultiplier: 1.0,
-            unlocked: false
+            unplaced: 0,
+            placed: 0,
+            altar: false,
+            vaultActions: false,
+            vaultAction: null,
+            vaultCounter: 0,
+            vaultNeeded: 4, 
+            conversionCounter: 0, 
+            conversionTicsNeeded: 88,
+            recruitInnocents: false,
+            convertFaithful: false
         },
         innocents:{
             string: 'Innocents',
-            description: ['Spouses, children, and former loved ones, they are offered up unto you by the faithful. They may be turned to your cause or sacrificed to it.'],
-            current: 0,
+            description: ['Spouses, children, and former loved ones, they are offered up by the Faithful. They may be turned to the cause or sacrificed to it.'],
+            current: 000,
             chance: 10,
             unlocked: false
         },
         insane:{
             string: 'The Insane',
-            description: ['A regrettable penalty for your own suffering sanity is the loss of your followers into Madness. While you can recover, they never will and are only useful as sacrifice to the Drak Gods.'],
-            current: 0,
+            description: ['The weakest fall to madness forever and are only useful as sacrifice to the Dark Gods.'],
+            current: 000,
             unlocked: false,
             unlock: ['madness', 50]
         },
         hybrids:{
             string: 'Hybrids',
             cost: ['charm', 100],
-            description: ['Hybrids are loyal and more useful than cult but require bargaining with the Deep Ones and time to raise.'],
+            description: ['Human enough to pass in a crowd, but terrible to behold in a dark alley. (count as both Faithful and  Sentinel)'],
             current: 0,
+            unplaced: 0,
+            placed: 0,
             unlocked: false,
             unlock: ['charm', 500]
-        },
-        deepOnes:{
-            string: 'Deep Ones',
-            cost: ['radiance', 10],
-            description: ['Allies, but perhaps they only bide their time. Deep ones inspire terror but bring gold and trinkets from a lost time.'],
-            current: 0,
-            unlocked: false,
-            unlock: ['vision', 1000]
         }
 };
 
@@ -82,16 +90,16 @@ let vault = {
         love:{// love from faithful burn love to force them to unspeakable acts
             callString: 'love',
             string: 'Love',
-            description: ['Idolatry, like true Love, is a potent tool in your hands.'],
-            current: 0,
+            description: ['Idolatry, like true Love, is a potent tool.'],
+            current: 0000000,
             unlocked: true,
             unlock: ['vision', 10]
         },
         terror:{
             callString: 'terror',
             string: 'Terror',
-            description: ['While Love helps, Terror is essential for Control.'],
-            current: 0,
+            description: ['While Love helps, Terror is essential.'],
+            current: 000000,
             unlocked: true,
             unlock: ['vision', 10]
         },
@@ -99,15 +107,15 @@ let vault = {
             callString: 'gold',
             string: 'Gold',
             description: ['Gold always has its purpose.'],
-            current: 0,
+            current:000000000,
             unlocked: true,
             unlock: ['vision', 10]
         },
         flesh:{//feed to deep ones, build servitors
             callString: 'flesh',
             string: 'Flesh',
-            description: ['Pallid, eyeless, and grasping, the Flesh can be used to create Abominations or Traded to the dark beings on your doorstep.'],
-            current: 0,
+            description: ['The Natives used every part of the buffalo.'],
+            current: 0000,
             unlocked: false
         },
         tomes:{
@@ -116,35 +124,33 @@ let vault = {
             description: ['Found in forgotten places, these can be given to the Faithful to convert them into Priests.'],
             current: 0,
             unlocked: false,
-            unlock: ['vision', 300],
             pageCounter: 0,
-            pagesNeeded: 44,
+            pagesNeeded: 88,
             pageMultiplier: 4
         },
-        ichor:{//trade with deep ones for gold
+        ichor:{
             callString: 'ichor',
             string: 'Ichor',
-            description: ['Something grows now, under the earth. Its secretions can be milked.'],
+            description: ['Concentrated Essence of Life itself.'],
             current: 0,
-            unlocked: false,
-            unlock: ['vision', 100]
-        },
-        keys:{ //need a key to unlock a gate
-            callString: 'keys',
-            string: 'Key',
-            description: ['A key is a simple thing. What it unlocks could rip this world apart.'],
-            current: 0,
-            unlocked: false,
-            unlock: ['vision', 1000]
-        },
-        gates:{ //each gate opens the way for an outer god
-            callString: 'gates',
-            string: 'Gate',
-            description: ['Each larger than the last, Gates must be built from... must be built to open the way.'],
-            current: 0,
-            unlocked: false,
-            unlock: ['radiance', 100]
+            unlocked: false
         }
+//        keys:{ //need a key to unlock a gate
+//            callString: 'keys',
+//            string: 'Key',
+//            description: ['A key is a simple thing. What it unlocks could rip this world apart.'],
+//            current: 0,
+//            unlocked: false,
+//            unlock: ['vision', 1000]
+//        },
+//        gates:{ //each gate opens the way for an outer god
+//            callString: 'gates',
+//            string: 'Gate',
+//            description: ['Each larger than the last, Gates must be built from... must be built to open the way.'],
+//            current: 0,
+//            unlocked: false,
+//            unlock: ['radiance', 100]
+ //       }
 };
 let cultKeys = Object.keys(cult);
 let vaultKeys = Object.keys(vault);
@@ -162,7 +168,7 @@ function cultLoad(){
         let temp =  vaultKeys[i];
     document.getElementById('vault').innerHTML +=
             "<button class='vaultWraps' id='" + temp + "Wrap'>" +
-            "<img class='vaultPng' src='images/" + temp + ".png' alt='?'/>" +
+            "<img class='vaultPng' src='images/vault/" + temp + ".jpg' alt='?'/>" +
             "<span class='vaultText'>" + vault[vaultKeys[i]].string + "</span>" +
             "<span class='vaultNum' id='" +temp + "'>" + vault[vaultKeys[i]].current + "</span>" +
             "</button>";
@@ -177,15 +183,6 @@ cultLoad();
                                                         //=========================================
                                                         //                                      Crafts 
                                                         //=========================================
-                                                        //Locations: upgrade faithful output and capacity
-//Current location should be displayed left side above cult
-//Grove by Midnight - free desc ‘Meetings here are dangerous and short lived.’
-//Love- School Basement  desc ‘A more private place to meet, ‘gifted’ by the Faithful -increased Love
-//Love Lodge Hall desc ‘Proof of brotherly Love is an open bar. -increased Love and Gold
-//Gold- Isolated Mansion desc ‘Impressive as well as hidden from prying eyes. -increased Gold, unlocks breeding pits
-//Terror -Reinforced Compound ‘convince the faithful that their lives depend on it.-increased Terror
-//Terror -Nuclear Bunker ‘We must go Deeper…-increased Terror
-//Gold- Private Island  ‘Finally we can build freely -increased Love, Terror
 
 //=========================
 //                                      LoveCrafts
@@ -194,10 +191,10 @@ let loveCrafts = {
     adoration:{
         callString: 'adoration',
         string: 'Adoration',
-        description:['By their Love, you are made more Charming. Cost: Love '],
+        description:['Use their Love to appear more Charming.', 'Cost: Love '],
         func: adoration,  
         cost: 40,
-        benefit: 4,
+        benefit: 8,
         unlocked: true,
         purchased: true,
         permanent: true
@@ -205,10 +202,12 @@ let loveCrafts = {
     terrorize:{
         callString: 'terrorize',
         string: 'Terrorize',
-        description: ['Convert your followers Love into Terror. Upset the balance too much and they will abandon you. Cost: Love '],
-        func: terrorize,  
-        cost: 2,
-        benefit: 1,
+        description: ["We have such sights to show you.", 'Cost: Love '],
+        func: 'vaultConversion',  
+        vaultCost: 'love',        
+        vaultBenefit: 'terror',    
+        cost: 4,
+        benefit: 2,
         unlocked: true,
         purchased: true,
         permanent: true
@@ -216,10 +215,12 @@ let loveCrafts = {
     requestGold:{
         callString: 'requestGold',
         string: 'Request Gold',
-        description: ['While the Faithful will provide you with Gold and trinkets, it does not endear you to them. Cost: Love '],
-        func: requestGold,  
-        cost: 2,
-        benefit: 1,
+        description: ['While the Faithful will provide Gold and trinkets, it looks bad having to ask.', 'Cost: Love '],
+        func: 'vaultConversion',  
+        vaultCost: 'love',        
+        vaultBenefit: 'gold',    
+        cost: 4,
+        benefit: 2,
         unlocked: true,
         purchased: true,
         permanent: true
@@ -227,20 +228,88 @@ let loveCrafts = {
     convertChanter:{
         callString: 'convertChanter',
         string: 'Chanter Subjugation',
-        description: ['Their endless Chanting enhances the Love of the Faithful.', 'Costs: Faithful 1, Love ', 'Benefits: Idle Charm and Love'],
+        description: ['Their endless Chanting enhances the Love of the Faithful.', 'Costs: Faithful 1, Love  ', 'Benefits: Idle Charm and Love'],
         func: cChant,
         comment: 'Almost as essential as the Faithful themselves. ( idle Charm and Love)',
         unlockText: 'Chanters?',
-        lockCost: 'Vision: 22',
-        unlockCost: 22,
-        cost: 4,
+        lockCost: 'Vision: 24',
+        unlockCost: 24,
+        cost: 24,
         benefit: 1,
-        multiplier: 8,
+        multiplier: 24,
         unlocked: true,
         purchased: false,
         permanent: true
+    },
+    basement:{
+        callString: 'basement',
+        string: 'School Basement',
+        description: ['More private than the woods, offered up by the Faithful.', 'Cost: Love ', "Benefit: larger Altar Room"],
+        func: basement,  
+        cost: 848,
+        unlocked: true,
+        purchased: false,
+        permanent: false
+    },
+    lodge:{
+        callString: 'lodge',
+        string: 'Masonic Lodge Hall',
+        description: ['Their rituals are easily co-opted.', 'Cost: Love  ', "Benefit: larger Altar Room"],
+        func: lodge,  
+        cost: 4848,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    cathedral:{
+        callString: 'cathedral',
+        string: 'Cathedral',
+        description: ['With so much Love, there is no longer any need to hide.', 'Cost: 1 Priest, 44 Chanters, Love  ', "Benefit: larger Altar Room"],
+        func: cathedral,  
+        cost: 48484,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    oakAltar:{
+        callString: 'oakAltar',
+        string: 'Carved Oak Altar',
+        description: ['Carved with Love by the Faithful.', 'Cost: Love ', 'Benefit: Chanters adjacent to the Altar are twice as effective.'],
+        func: oakAltar,  
+        cost: 888,
+        unlocked: false,
+        purchased: false,
+        permanent: false
     }
 };
+
+//===============================
+//                                     Vault Conversions
+//===============================
+let vaultConversionInterval; // Stores the interval ID
+
+function vaultConversionLoop(craft) {
+        vaultConversionInterval = setInterval(() => {
+            executeVaultConversion(craft); // Perform the action
+    }, 400);
+    document.getElementById(craft.callString + "Wrap").classList.add("vaultPulse");
+    // Stop the loop on pointerup
+    document.addEventListener('pointerup', () => stopVaultConversion(craft), { once: true });
+}
+function executeVaultConversion(craft){
+    if(vault[craft.vaultCost].current >= craft.cost){
+        numberChange("vault", craft.vaultCost, -craft.cost, "blue", "red");
+        numberChange("vault", craft.vaultBenefit, craft.benefit, "blue", "red");
+    }else{
+        stopVaultConversion(craft);
+    }
+}
+
+function stopVaultConversion(craft) {
+    document.getElementById(craft.callString + "Wrap").classList.remove("vaultPulse");
+    clearInterval(vaultConversionInterval);  
+}
+
 //===============================
 //                                      LoveCrafts Functions
 //===============================
@@ -250,37 +319,71 @@ function adoration(){
         numberChange('stats', 'charm',  loveCrafts.adoration.benefit, '#FFFF00', 'red');
     }
 }
-function terrorize(){
-    if(vault.love.current >= loveCrafts.terrorize.cost){
-        numberChange('vault', 'love', -loveCrafts.terrorize.cost, '#FF559D', 'red');
-        numberChange('vault', 'terror', loveCrafts.terrorize.benefit, 'red', 'blue');
-    }    
-}
-function requestGold(){
-        if(vault.love.current >= loveCrafts.requestGold.cost){
-        numberChange('vault', 'love', -loveCrafts.requestGold.cost, '#FF559D', 'red');
-        numberChange('vault', 'gold', loveCrafts.requestGold.benefit, 'yellow', 'red');
-    }  
-}
+
 function cChant(){
     if(vault.love.current >=  loveCrafts.convertChanter.cost && cult.faithful.current >= loveCrafts.convertChanter.benefit){
-        if(cult.chanters.unlocked === false){
-            cult.chanters.unlocked = true;
-            document.getElementById('chantersWrap').style.display= 'block';
-            comment('What a lovely voice.', 'lightgreen', 'ch');
-        }else{
-            comment('Another joins the choir.');
-        }
+        comment('Another joins the choir.');
+        loveCrafts.convertChanter.multiplier+=8;
         numberChange('vault', 'love', -loveCrafts.convertChanter.cost, '#FF559D', 'red');
         numberChange('cult', 'faithful', -loveCrafts.convertChanter.benefit, 'green', 'red');
         numberChange('cult', 'chanters', loveCrafts.convertChanter.benefit, 'green', 'red');
-        loveCrafts.convertChanter.cost =  Math.max(cult.chanters.current * loveCrafts.convertChanter.multiplier, 4);
-        document.getElementById('convertChanterCost').innerHTML =  loveCrafts.convertChanter.cost;
-        actions.preach.cost = Math.max((cult.faithful.current * actions.preach.multiplier), 4);
-        document.getElementById('preachCost').innerHTML = actions.preach.cost;
-        document.getElementById('preachWrapCost').innerHTML = actions.preach.cost;
     }
 };
+
+function basement(){
+    if(vault.love.current >= loveCrafts.basement.cost){
+        numberChange('vault', 'love', -loveCrafts.basement.cost, '', 'red');
+        replaceGrid('basement');
+        gridChosen = "basement";
+        flashFade('basementOneOff');
+        loveCrafts.basement.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Basement";
+        document.getElementById('altarRoomTitle').innerText = "School Basement";
+        comment('Altar Room moved to School Basement.');
+        goldCrafts.motel.unlocked = true;
+        document.getElementById('motelOneOff').style.display='block';
+    }
+}
+function lodge(){
+    if(vault.love.current >= loveCrafts.lodge.cost){
+        numberChange('vault', 'love', -loveCrafts.lodge.cost, '', 'red');
+        replaceGrid('lodge');
+        gridChosen = "lodge";
+        flashFade('lodgeOneOff');
+        loveCrafts.lodge.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Lodge";
+        document.getElementById('altarRoomTitle').innerText = "Masonic Lodge";
+        comment('Altar Room moved to Masonic Lodge.');
+        goldCrafts.mansion.unlocked = true;
+        document.getElementById('compoundOneOff').style.display='block';
+    }
+}
+function cathedral(){
+    if(vault.love.current >= loveCrafts.cathedral.cost && cult.priests.current>=1 && cult.chanters.current>=44){
+        numberChange('vault', 'love', -loveCrafts.cathedral.cost, '', 'red');
+        numberChange('cult', 'priests', -1, '', 'red');
+        numberChange('cult', 'chanters', -44, '', 'red');
+        replaceGrid('cathedral');
+        gridChosen = "cathedral";
+        flashFade('cathedralOneOff');
+        loveCrafts.cathedral.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Cathedral";
+        document.getElementById('altarRoomTab').innerText= "Obscene Cathedral";
+        comment('Altar Room moved to center of town.');
+    }
+}
+function oakAltar(){
+    if(vault.love.current >= 888){
+        numberChange('vault', 'love', -888, 'yellow', 'red');
+        loveCrafts.oakAltar.purchased = true;
+        altars.oak.purchased = true;
+        flashFade('oakAltarOneOff');
+        document.getElementById('oakWrap').style.display='flex';
+        goldCrafts.marbleAltar.unlocked = true;
+        setTimeout(() => {document.getElementById('marbleAltarOneOff').style.display='block';}, 1500);
+        comment('Oak Altar available for use in Altar Room.');
+    }
+}
 
 //========================
 //                                      Terror
@@ -290,28 +393,33 @@ let terrorCrafts = {
         callString: 'mesmerize',
         string: 'Mesmerize',
         description: ['One can force a semblance of Love.', ' Cost: Terror '],
-        func: mesmerize,  
-        cost: 2,
-        benefit: 1,
-        unlocked: true,
-        purchased: true,
-        permanent: true
-    },    
-    demandGold:{
-        callString: 'demandGold',
-        string: 'Demand Gold',
-        description: ['Exhort the Faithful to find wealth at any cost.', ' Cost: Terror '],
-        func: demandGold,  
-        cost: 2,
-        benefit: 1,
+        func: 'vaultConversion',  
+        vaultCost: 'terror',        
+        vaultBenefit: 'love',    
+        cost: 4,
+        benefit: 2,
         unlocked: true,
         purchased: true,
         permanent: true
     },
-    demandFlesh:{
+    demandGold:{
+        callString: 'demandGold',
+        string: 'Demand Gold',
+        description: ['Exhort the Faithful to find wealth at any cost.', ' Cost: Terror '],
+        func: 'vaultConversion',  
+        vaultCost: 'terror',        
+        vaultBenefit: 'gold',    
+        cost: 4,
+        benefit: 2,
+        unlocked: true,
+        purchased: true,
+        permanent: true
+    },
+    demandFlesh:{//not available possibly unlocks after canibalism?
         callString: 'demandFlesh',
         string: 'Demand Flesh',
         description: ['Exhort the Faithful to find bodies at any cost.', ' Love -', 'Flesh +4','Terror Minimum: 444'],
+        madMin: " Minimum Madness: 444",
         func: demandFlesh,  
         cost: 88,
         benefit: 4,
@@ -319,18 +427,19 @@ let terrorCrafts = {
         purchased: false,
         permanent: true
     },
-    convertSentinal:{
-        callString: 'convertSentinal',
-        string: 'Enthrall Sentinal',
-        description: ['Created through trepanning, gelding and occult ritual, their existence inspires fear in the faithful.', ' Cost: Faithful 1, Love '],
+    convertsentinel:{
+        callString: 'convertsentinel',
+        string: 'Enthrall Sentinel',
+        description: ['Created through trepanning, gelding and occult ritual, their existence inspires Terror in the Faithful.', ' Cost: Faithful 1, Love '],
+        madMin: " Minimum Madness: 48 ",
         comment: 'Just Man&#39;s inhumanity to Man I suppose. (idle Terror)',
-        func: cSentinal,
-        unlockText: 'Sentinals?',
-        lockCost: 'Vision: 44',
-        unlockCost: 44,
-        cost: 16,
+        func: csentinel,
+        unlockText: 'Sentinels?',
+        lockCost: 'Vision: 48',
+        unlockCost: 48,
+        cost: 48,
         benefit: 1,
-        multiplier: 22,
+        multiplier: 48,
         unlocked: true,
         purchased: false,
         permanent: true
@@ -338,50 +447,117 @@ let terrorCrafts = {
     sacrifice:{
         callString: 'sacrifice',
         string: 'Sacrifice Innocents',
-        description:['Through a ritual of blood and madness, an innocent life is spent.', 'Cost: 1 Innocent ', 'Benefits: Terror, Flesh and Radiance', ' Terror Minimum: 44 '],
+        description:['Through a ritual of blood and madness, an innocent life is spent.', 'Cost: 1 Innocent ', 'Benefits: Terror, Flesh and Radiance', ' Terror Minimum: 88 '],
+        madMin: " Minimum Madness: 88 ",
         func: sacrifice, 
-        terrorMin: 10,
+        terrorMin: 88,
         cost: '',
         terrorMultiplier: 1,
         type: 'innocents',
         unlocked: false,
         purchased: false,
         permanent: true
+    },
+    maw:{
+        callString: 'maw',
+        string: 'Devouring Maw',
+        description:['Waiting with open maw, Tsathoggua proves a picky eater. ', ' Ritual Requires 8 Sentinels, Cost: 16 Faithful', "Benefits: 44 Radiance, 484 Terror"],
+        madMin: " Minimum Madness: 888",
+        func: maw, 
+        cost: '',
+        unlocked: false,
+        purchased: true,
+        permanent: true
+    },
+    mass:{
+        callString: 'mass',
+        string: 'Black Mass',
+        description:["Led by T'yog, the participants are brought to the heights even as Rhan winds her tendrils throughout.", " Cost: 16 Faithful, 16 Innocents ", " Benefits: 32 Flesh, 44 Radiance"],
+        func: mass, 
+        cost: '',
+        unlocked: false,
+        purchased: true,
+        permanent: true
+    },
+    box:{
+        callString: 'box',
+        string: 'The Box',
+        description:['An immersive experience which should bring individuals into the community.', 'Cost: 1 Innocent, Patience ', 'Benefit: 1 Faithful, 88 Terror', ' Terror Minimum: 248'],
+        madMin: " Minimum Madness: 248",
+        unlockText: 'The Box?',
+        lockCost: 'Vision: 444',
+        unlockCost: 444,
+        func: box, 
+        terrorMin: 248,
+        cost: '',
+        unlocked: true,
+        purchased: false,
+        permanent: true
+    },
+    breedingPits: {//grow innocents for flesh
+        callString: 'breedingPits',
+        string: 'Breeding Pits',
+        description: ['Lead them into pens and let nature take its course.', 'Cost: Innocents ' , 'Benefits: Passive Terror and Innocent Growth', ' Terror Minimum: 444 '],
+        madMin: " Minimum Madness: 444",
+        func: pits,
+        cost: 4,
+        level: 0,
+        shub: false,
+        terrorMin: 444,
+        terror: 44,
+        counter: [0, 40],
+        unlocked: false,
+        purchased: true,
+        permanent: true
+    },
+    compound:{
+        callString: 'compound',
+        string: 'Militarized Compound',
+        description: ['We are done hiding.', 'Cost: Sentinels  ', "Benefit: larger Altar Room", "Minimum Terror 4444 "],
+        madMin: " Minimum Madness: 888",
+        madCost: 888,
+        terrorCost: 4444,
+        func: compound,  
+        cost: 8,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    silo:{
+        callString: 'silo',
+        string: 'Abandoned Nuclear Silo',
+        description: ['The tunnels can hide any number of indescretions.', 'Cost: Sentinels ', "Benefit: larger Altar Room", "Minimum Terror 8888 "],
+        madMin: " Minimum Madness: 4444",
+        madCost: 4444,
+        terrorCost: 8888,
+        func: silo,  
+        cost: 44,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    obsidianAltar:{
+        callString: 'obsidianAltar',
+        string: 'Obsidian Altar',
+        description: ["Mined from the depths, it isn't really obsidian but something darker. Terror Minimum: 444 ", ' Cost: Faithful ', " Benefit: Sentinals adjacent to the Altar are four times as effective."],
+        func: obsidianAltar,  
+        cost: 88,
+        unlocked: false,
+        purchased: false,
+        permanent: false
     }
 };
 //================================
 //                                     TerrorCrafts Functions
 //================================
-function mesmerize(){
-        if(vault.terror.current >= terrorCrafts.mesmerize.cost){
-        numberChange('vault', 'terror', -terrorCrafts.mesmerize.cost, 'red', 'blue');
-        numberChange('vault', 'love', terrorCrafts.mesmerize.benefit, '#FF559D', 'red');
-    }
-};
-function demandGold(){
-        if(vault.terror.current >= terrorCrafts.demandGold.cost){
-        numberChange('vault', 'terror', -terrorCrafts.mesmerize.cost, 'red', 'blue');
-        numberChange('vault', 'gold', terrorCrafts.mesmerize.benefit, 'yellow', 'red');
-    }  
-}
-function cSentinal(){
-    if(vault.love.current >=  terrorCrafts.convertSentinal.cost && cult.faithful.current >= terrorCrafts.convertSentinal.benefit){
-        if(cult.sentinals.unlocked === false){
-            cult.sentinals.unlocked = true;
-            comment('Perhaps you could save the leftovers for a soup?', 'lightred', 'sent');
-            document.getElementById('sentinalsWrap').style.display= 'block';
-        }else{
-            comment('Forever vigilant.');
-        }
-        numberChange('vault', 'love', -terrorCrafts.convertSentinal.cost, '#FF559D', 'red');
-        numberChange('cult', 'faithful', -terrorCrafts.convertSentinal.benefit, 'green', 'red');
-        numberChange('cult', 'sentinals', terrorCrafts.convertSentinal.benefit, 'green', 'red');
-        terrorCrafts.convertSentinal.cost = Math.max(cult.sentinals.current * terrorCrafts.convertSentinal.multiplier, 22);
-        document.getElementById('convertSentinalcost').innerHTML =  terrorCrafts.convertSentinal.cost;
-        actions.preach.cost = Math.max((cult.faithful.current * actions.preach.multiplier), 4);
-        document.getElementById('preachCost').innerHTML =  actions.preach.cost;
-        document.getElementById('preachWrapCost').innerHTML = actions.preach.cost;
 
+function csentinel(){
+    if(vault.love.current >=  terrorCrafts.convertsentinel.cost && cult.faithful.current >= terrorCrafts.convertsentinel.benefit && madMin(48)){
+        comment('Forever vigilant.');
+        terrorCrafts.convertsentinel.multiplier+=8;
+        numberChange('vault', 'love', -terrorCrafts.convertsentinel.cost, '#FF559D', 'red');
+        numberChange('cult', 'faithful', -terrorCrafts.convertsentinel.benefit, 'green', 'red');
+        numberChange('cult', 'sentinels', terrorCrafts.convertsentinel.benefit, 'green', 'red');
     }
 }
   	//=======
@@ -391,74 +567,88 @@ function cSentinal(){
 let sacrificeTypes = {
     innocents: {
         string: 'Smother an Innocent',
-        description: ['Through a ritual of blood and madness, an innocent life is spent. ', ' Cost: 1 Innocent', ' Benefits: Terror, Flesh and Radiance', ' Terror Minimum: 44'],
+        description: ['Through a ritual of blood and madness, an innocent life is spent. ', ' Cost: 1 Innocent', ' Benefits: Terror, Flesh and Radiance', ' Terror Minimum: 88'],
+        madMin: "Minimum Madness: 44",
+        mad: 44,
         unlocked: true,
         terrorMin: 44
     },  
     faithful: {
         string: 'Drown the Faithful',
-        description: ['The greater the sacrifice, the greater the reward.', 'Cost: 1 Faithful', ' Benefits: Terror, Flesh and Radiance', ' Terror minimum: 48 '],
+        description: ['The greater the sacrifice, the greater the reward.', 'Cost: 1 Faithful', ' Benefits: Terror, Flesh and Radiance', ' Terror minimum: 88 '],
+        madMin: "Minimum Madness: 88 ",
+        mad: 88,
         unlocked: true,
-        terrorMin: 48
+        terrorMin: 88
     },  
     chanters: {
         string: "Slit a Chanter's Throat",
-        description: ['Silence is Golden.', ' Cost: 1 Chanter', ' Benefits: Terror, Flesh and Radiance', ' Terror Minimum: 64'],
+        description: ['Silence is Golden.', ' Cost: 1 Chanter', ' Benefits: Terror, Flesh and Radiance', ' Terror Minimum: 88'],
+        madMin: "Minimum Madness: 88 ",
+        mad: 88,
         unlocked: true,
-        terrorMin: 64
+        terrorMin: 88
     },  
-    sentinals: {
-        string: 'Retire a Sentinal',
-        description: ['End its suffering.', ' Cost: 1 Sentinal', ' Benefits: Flesh and Radiance', ' Terror Minimum: 84'],
+    sentinels: {
+        string: 'Retire a Sentinel',
+        description: ['End its suffering.', ' Cost: 1 Sentinel', ' Benefits: Flesh and Radiance', ' Terror Minimum: 88'],
+        madMin: "Minimum Madness: 88 ",
+        mad: 88,
         unlocked: true,
-        terrorMin: 84
+        terrorMin: 44
     },  
     insane: {
         string: 'Cleanse the Insane',
         description: ['Probably better this way.', 'Cost: 1 Insane', 'Benefits: Terror, Flesh and Radiance', 'Terror Minimum: 22 '],
+        madMin: "Minimum Madness: 22 ",
+        mad: 22,
         unlocked: true,
         terrorMin: 22
     }
 };
-function sacrifice(){
+function sacrifice(rhan){
     let type = terrorCrafts.sacrifice.type;   
-    if((cult[type].current >= 1) && (vault.terror.current >=  sacrificeTypes[type].terrorMin  ) ){
-        if(type === 'innocents'){
+    let altarBump = 1;
+    if(altars.lagh.current===true){
+        altarBump = 2;
+    }
+if ((cult[type].current >= 1 &&( (vault.terror.current >= sacrificeTypes[type].terrorMin && madMin(sacrificeTypes[type].mad)) || rhan === 'rhan') ) ) {
+      if(type === 'innocents'){
             numberChange('cult', 'innocents', -1, 'green', 'red');
-            numberChange('stats', 'radiance', 1, 'blue', 'red');
+            numberChange('stats', 'radiance', (1 * altarBump), 'blue', 'red');
             numberChange('vault', 'terror', (22 * terrorCrafts.sacrifice.terrorMultiplier), 'red', 'blue');
-            comment("so innocent (Terror " +(22 * terrorCrafts.sacrifice.terrorMultiplier) +")", 'red');
+            comment("Not a great loss (-1 Innocent, +" + (1 * altarBump) + " Radiance, + " +(22 * terrorCrafts.sacrifice.terrorMultiplier) +" Terror)", 'red');
         }else if (type === 'faithful'){
             numberChange('cult', 'faithful', -1, 'green', 'red');
-            numberChange('stats', 'radiance', 2, 'blue', 'red');
+            numberChange('stats', 'radiance', (2 * altarBump), 'blue', 'red');
             numberChange('vault', 'terror', (88 * terrorCrafts.sacrifice.terrorMultiplier), 'red', 'blue');
-            comment("too close for comfort (Terror " + (88 * terrorCrafts.sacrifice.terrorMultiplier) +")", 'red');
+            comment("They find this too close for comfort (-1 Faithful, +" + (2 * altarBump) + " Radiance, " + (88 * terrorCrafts.sacrifice.terrorMultiplier) +" Terror ", 'red');
             actions.preach.cost = Math.max((cult.faithful.current * actions.preach.multiplier), 4);
             document.getElementById('preachCost').innerHTML = actions.preach.cost;
             document.getElementById('preachWrapCost').innerHTML = actions.preach.cost;
         }else if (type === 'chanters'){
             numberChange('cult', 'chanters', -1, 'green', 'red');
-            numberChange('stats', 'radiance', 4, 'blue', 'red');
+            numberChange('stats', 'radiance', (4 * altarBump), 'blue', 'red');
             numberChange('vault', 'terror', (44 * terrorCrafts.sacrifice.terrorMultiplier), 'red', 'blue');
-            comment("silence is golden (Terror " + (44 * terrorCrafts.sacrifice.terrorMultiplier) +")", 'red');
-            loveCrafts.convertChanter.cost =  Math.max(cult.chanters.current * loveCrafts.convertChanter.multiplier, 4);
+            comment("Silence is golden (-1 Chanter, +" + (4 * altarBump) + " Radiance, " + (44 * terrorCrafts.sacrifice.terrorMultiplier) +" Terror)", 'red');
+            loveCrafts.convertChanter.cost =  Math.max(cult.chanters.current * loveCrafts.convertChanter.costMultiplier, 4);
             document.getElementById('convertChanterCost').innerHTML =  loveCrafts.convertChanter.cost;
-        }else if (type === 'sentinals'){
-            numberChange('cult', 'sentinals', -1, 'red', 'red');
-            numberChange('stats', 'radiance', 1, 'blue', 'red');
-            numberChange('vault', 'terror',  -22, 'red', 'blue');
-            comment("everyone seems ok with this (Terror -" + -22 +")", 'green');
-            terrorCrafts.convertSentinal.cost = Math.max(cult.sentinals.current * terrorCrafts.convertSentinal.multiplier, 22);
-            document.getElementById('convertSentinalcost').innerHTML =  terrorCrafts.convertSentinal.cost;
+        }else if (type === 'sentinels'){
+            numberChange('cult', 'sentinels', -1, 'red', 'red');
+            numberChange('stats', 'radiance', (1 * altarBump), 'blue', 'red');
+            numberChange('vault', 'terror',  -(Math.min(vault.terror.current, 22)), 'red', 'blue');
+            comment("Everyone seems ok with this (-1 Sentinel, +" + (1 * altarBump) + " Radiance, -" + (Math.min(vault.terror.current, 22)) +" Terror)", 'pink');
+            terrorCrafts.convertsentinel.cost = Math.max(cult.sentinels.current * terrorCrafts.convertsentinel.costMultiplier, 22);
+            document.getElementById('convertsentinelCost').innerHTML =  terrorCrafts.convertsentinel.cost;
         }else if (type === 'insane'){
             numberChange('cult', 'insane', -1, 'green', 'red');
-            numberChange('stats', 'radiance', 2, 'blue', 'red');
+            numberChange('stats', 'radiance', (2 * altarBump), 'blue', 'red');
             numberChange('vault', 'terror', (22 * terrorCrafts.sacrifice.terrorMultiplier), 'red', 'blue');
-            comment("mercy killing (Terror " + (22 * terrorCrafts.sacrifice.terrorMultiplier) +")", 'red');
+            comment("Rhan seems to like this one. (-1 Insane, +" + (2 * altarBump) + " Radiance, " + (22 * terrorCrafts.sacrifice.terrorMultiplier) +" Terror)", 'red');
         }else{
-            window.console.log('?');
         };
         numberChange('vault', 'flesh', 1, 'red', 'grey');
+        relics.rhanRelic.hungerCounter = 0;
         }
 };
 let sacrificeKeys = Object.keys(sacrificeTypes);
@@ -467,22 +657,15 @@ let sacrificeKeys = Object.keys(sacrificeTypes);
 function isDescendant(elements, target) {
   return Array.from(elements).some(element => element.contains(target));
 }
-function showSacrificeTypes() {
-    document.addEventListener('mouseup', function mouseupHandler(event) {
-        if (!sacDropBtn.contains(event.target) && !isDescendant(sacrificeTypes, event.target)) {
-            // Clicked outside the menu and button, close the menu
-            hideSacrificeTypes();
-            // Remove the temporary mouseup event listener
-            document.removeEventListener('mouseup', mouseupHandler);
-        };
-    });
-    var temp = document.getElementById("sacrificeTypes");
-    temp.style.display = 'block';
+function toggleSacrificeTypes() {
+    let t = document.getElementById("sacrificeTypes").style.display;
+    if(t === 'none' || t === ''){
+        document.getElementById("sacrificeTypes").style.display = 'block';
+    }else{
+        document.getElementById("sacrificeTypes").style.display = 'none';
+    }
 }
-function hideSacrificeTypes() {
-    var temp = document.getElementById("sacrificeTypes");
-    temp.style.display = 'none';
-}
+
 function sacrificeType(typeButton) {
     type = typeButton.slice(0, -3);
      let temp = sacrificeTypes[type].string;
@@ -492,18 +675,19 @@ function sacrificeType(typeButton) {
     document.getElementById("sacrificeTerror").innerHTML = sacrificeTypes[type].description[3];
     document.getElementById("sacrificecost").innerHTML = sacrificeTypes[type].description[1];
     document.getElementById("sacrificeBenefit").innerHTML = sacrificeTypes[type].description[2];
-    hideSacrificeTypes();
+    document.getElementById("sacrificeMadMin").innerHTML = sacrificeTypes[type].madMin;
+    toggleSacrificeTypes();
 }
 //make the sacrifice buttons
 function makeSacrificeChoices(){ //calling in crafts creation
     var sacrifice = document.getElementById("sacrificeWrap");
     var btn = document.createElement("button");
-    btn.id = "sacDropBtn";
+    btn.id = "sacToggle";
     btn.innerHTML  = "&#9662;";
     sacrifice.insertAdjacentElement("afterend", btn);
     var typesBox = document.createElement("div"); //div which holds sac options
     typesBox.id = "sacrificeTypes";
-    var btnloc = document.getElementById("sacDropBtn");
+    var btnloc = document.getElementById("sacToggle");
     btnloc.insertAdjacentElement('afterend', typesBox);
     var typeBox = document.getElementById("sacrificeTypes");
     for(i=0;i<sacrificeKeys.length;i++){
@@ -514,8 +698,157 @@ function makeSacrificeChoices(){ //calling in crafts creation
         typeBox.appendChild(temp);
         }
     };
-function demandFlesh(){
+
+function rhanSac(){
+    let typeStorage = terrorCrafts.sacrifice.type;
+    let temp;
+    if(cult.insane.current >= 1){
+        temp = 'insane';
+    }else{
+        let rhanKeys = Object.keys(sacrificeTypes);
+        do {
+            temp = rhanKeys[Math.floor(Math.random() * rhanKeys.length)];
+        } while (cult[temp].current < 1); //ensures a sac target
+    }
+        terrorCrafts.sacrifice.type = temp;
+    comment('Rhan was hungry...(random sacrifice can be prevented with regular feeding.)', 'red');
+    sacrifice('rhan');
+    terrorCrafts.sacrifice.type = typeStorage;
+}
     
+function demandFlesh(){
+    if(madMin(444)){
+        
+    }
+} 
+
+function maw(){
+    if(cult.faithful.current>=16 && cult.sentinels.current >=8 && madMin(888)){
+        numberChange('cult', 'faithful', -16, '', 'red');
+        numberChange('vault', 'terror', 484, 'red', '');
+        numberChange('stats', 'radiance', 44, 'blue', '');
+        relics.tsathRelic.terror =0;
+        relics.tsathRelic.hungerCounter[0]=0;
+        comment("He leaves nothing but the bones. (+44 Radiance Tsathoggua Terror loop reset)");
+    }
+}
+
+function mass(){
+    if(cult.faithful.current>=16 && cult.innocents.current >=16){
+        numberChange('cult', 'faithful', -16, '', 'red');
+        numberChange('cult', 'innocents', -16, '', 'red');
+        numberChange('vault', "flesh", +32, 'red', 'red');
+        numberChange('stats', 'radiance', 44, 'blue', '');
+        relics.rhanRelic.hungerCounter=0;
+        comment("Rhan is sated. (+32 Flesh, +44 Radiance)");
+    }
+}
+
+function box() {
+    if (cult.innocents.current >= 1 && vault.terror.current >= 248 && madMin(248)) {
+        numberChange('cult', 'innocents', -1, '', 'red');
+        numberChange('vault', 'terror', 88, 'red', 'red');
+        var boxCry = new Audio("audio/box.mp3");
+        plays(boxCry);
+        // Create a progress bar if it doesn't already exist
+        let progressBar = document.getElementById('box-progress-bar');
+        if (!progressBar) {
+            progressBar = document.createElement('div');
+            progressBar.id = 'box-progress-bar';
+            document.getElementById('boxWrap').appendChild(progressBar);
+        }
+        let boxSpan = document.getElementById("box");
+        let totalDuration = 16000; // Total duration in milliseconds (16 seconds)
+
+        // Disable the button and start the progress bar
+        document.getElementById("boxWrap").classList.add("disable-events");
+        progressBar.style.width = '0';  // Reset progress bar
+        boxSpan.textContent = `The Box (${(totalDuration / 1000).toFixed(0)}s)`;  // Initial text
+        let elapsedTime = 0;  // Track elapsed time
+        // Flash background colors every second
+        let flashColors = ["red", "yellow", "white"];
+        let flashIndex = 0;
+        let flashInterval = setInterval(() => {
+            progressBar.style.backgroundColor = flashColors[flashIndex];
+            flashIndex = (flashIndex + 1) % flashColors.length; // Cycle through colors
+        }, 100); // Change color every 250 milliseconds
+        let interval = setInterval(() => {
+            elapsedTime += 100; // Increment elapsed time by 100ms
+            boxSpan.textContent = `The Box ${((totalDuration - elapsedTime) / 1000).toFixed(0)}s`;  // Update text with countdown
+            progressBar.style.width = `${(elapsedTime / totalDuration) * 100}%`;  // Update progress bar
+            if (elapsedTime >= totalDuration) {
+                clearInterval(interval);
+                clearInterval(flashInterval); // Stop flashing
+                progressBar.style.width = '100%';  // Complete the progress bar
+                boxSpan.textContent = "The Box";  // Reset the text
+                // Perform number changes after 16 seconds
+                numberChange('cult', 'faithful', 1, 'blue', '');
+                document.getElementById("boxWrap").classList.remove("disable-events");
+                // Remove the progress bar from the DOM
+                progressBar.remove(); 
+                // Play oven ding sound here if needed
+                // Example: new Audio('oven-ding-sound.mp3').play();
+            }
+        }, 100);  // Update every 100 milliseconds
+    }
+}
+
+
+
+function pits(){
+    if(cult.innocents.current >=  terrorCrafts.breedingPits.cost && vault.terror.current >= 444 && madMin(444)){
+        numberChange('cult', 'innocents', - terrorCrafts.breedingPits.cost, 'blue', 'red');
+        terrorCrafts.breedingPits.cost = terrorCrafts.breedingPits.cost * 2; 
+        terrorCrafts.breedingPits.level++;
+        document.getElementById('breedingPitsDesc').innerHTML = "Current stock produces an Innocent every " + Math.ceil(40/terrorCrafts.breedingPits.level) + " seconds.";
+        document.getElementById('breedingPitsCost').innerHTML =  terrorCrafts.breedingPits.cost;
+        document.getElementById('breedingPitsBenefit').innerHTML = "Increasing the herd size will produce an Innocent every " + Math.ceil(40/(terrorCrafts.breedingPits.level + 1)) + " seconds(+44 Terror).";
+        if(terrorCrafts.breedingPits.shub === true){
+            document.getElementById('breedingPitsDesc').innerHTML = "Iä! Current stock produces 4 Innocents every " + Math.ceil(40/terrorCrafts.breedingPits.level) + " seconds.";
+            document.getElementById('breedingPitsBenefit').innerHTML = "Increasing the herd size will produce Innocents every " + Math.ceil(40/(terrorCrafts.breedingPits.level + 1)) + " seconds(+88 Terror).";
+        }
+    }
+}
+
+function compound(){
+    if(cult.sentinels.current >= terrorCrafts.compound.cost && vault.terror.current >= 4444 && madMin(888)){
+        numberChange('cult', 'sentinels', -terrorCrafts.compound.cost, '', 'red');
+        replaceGrid('compound');
+        gridChosen = "compound";
+        flashFade('compoundOneOff');
+        terrorCrafts.compound.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Compound";
+        document.getElementById('altarRoomTitle').innerText = "Militarized Compound";
+        comment('Altar Room moved to Militarized Compound.');
+        goldCrafts.mansion.unlocked = true;
+        document.getElementById('mansionOneOff').style.display='block';
+    }
+}
+function silo(){
+    if(cult.sentinels.current >= terrorCrafts.silo.cost && vault.terror.current >= 8888 && madMin(4444)){
+        numberChange('cult', 'sentinels', -terrorCrafts.silo.cost, '', 'red');
+        replaceGrid('silo');
+        gridChosen = "silo";
+        flashFade('siloOneOff');
+        terrorCrafts.silo.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Silo";
+        document.getElementById('altarRoomTitle').innerText = "Nuclear Silo";
+        comment('Altar Room moved to Abandoned Nuclear Silo.');
+        loveCrafts.cathedral.unlocked = true;
+        document.getElementById('cathedralOneOff').style.display='block';
+    }
+}
+function obsidianAltar(){
+    if(cult.faithful.current >= 8 && vault.terror.current >444){
+        numberChange('cult', 'faithful', -8, 'yellow', 'red');
+        flashFade('obsidianAltarOneOff');
+        terrorCrafts.obsidianAltar.purchased = true;
+        altars.obsidian.purchased = true;
+        document.getElementById('obsidianWrap').style.display='flex';
+        goldCrafts.ivoryAltar.unlocked = true;        
+        setTimeout(() => {document.getElementById('ivoryAltarOneOff').style.display='block';}, 1500);
+        comment('Obsidian Altar available in Altar Room.');
+    }  
 }
 //======================
 //                                      Gold
@@ -525,74 +858,76 @@ let goldCrafts = {
         callString: 'gifts',
         string: 'Lavish Gifts',
         description: ['Spend Gold to please the Faithful.', 'Cost: Gold '],
-        func: gifts,  
-        cost: 2,
-        benefit: 1,
+        func: 'vaultConversion',  
+        vaultCost: 'gold',        
+        vaultBenefit: 'love',    
+        cost: 4,
+        benefit: 2,
         unlocked: true,
         purchased: true,
         permanent: true
     },
-    oakAltar:{
-        callString: 'oakAltar',
-        string: 'Oaken Altar',
-        description: ['The massive altar hides Rhan somewhat. (reduced Sacrifice Terror)', 'Gold:'],
-        func: oakAltar,  
-        cost: 444,
-        unlocked: false,
-        purchased: false,
-        permanent: false
-    },
     tithe:{
         callString: 'tithe',
         string: 'Tithe Toggle',
-        description: ['Tithing is a time honored tradition.'],
+        description: ['Tithing is a time honored tradition. (1/8th Love converted into less Gold)'],
         unlockText: 'Tithing?',
         lockCost: 'Vision: 88 ',
         func: titheToggle,
-        timeCounter: [0,1.6],
+        timeCounter: [0,4],
         toggle: false,
-        comment: 'Everyone hates the tax man. (idle conversion of Love into Gold)',
+        comment: 'Everyone hates the tax man. (Gold at the cost of Love. Can be toggled.)',
         unlockCost: 88,
         unlocked: true,
         purchased: false,
         permanent: true
     },
-    marbleAltar:{
-        callString: 'marbleAltar',
-        string: 'Marble Altar',
-        description: ['Functionally the same altar, but more impressive.(increased Gold from the Faithful)', 'Cost: Gold '],
-        func: marbleAltar,  
-        cost: 888,
-        unlocked: false,
-        purchased: false,
-        permanent: false
-    },
-    obsidianAltar:{
-        callString: 'obsidianAltar',
-        string: 'Obsidian Altar',
-        description: ['Functionally the same altar, but more Terrifying.(increased Terror from the Faithful)', 'Cost: Gold '],
-        func: obsidianAltar,  
-        cost: 4444,
-        unlocked: false,
-        purchased: false,
-        permanent: false
-    },
-    ivory:{
-        callString: 'ivory',
-        string: 'Ivory Finish',
-        description: ['This alabaster altar stone makes the sacrifice both more impressive and terrifying. (increased Gold from the Faithful, Terror from Sacrifices)', 'Cost: Gold '],
-        func: ivory,  
-        cost: 888,
-        unlocked: false,
-        purchased: false,
-        permanent: false
-    },
     expedition:{
         callString: 'expedition',
         string: 'Expeditions?',
-        description: ['Preparations are essential where you must travel.', 'Cost: Gold 22'],
+        description: ['Preparations are essential. Supplies must be gathered.', 'Cost: Gold 44'],
         func: expedition,
         unlocked: true,
+        purchased: false,
+        permanent: false
+    },
+    motel:{
+        callString: 'motel',
+        string: 'Seedy Motel',
+        description: ['Old and ugly, it provides great cover and substantial space.', 'Cost: Gold ', "Benefit: larger Altar Room"],
+        func: motel,  
+        cost: 2488,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    mansion:{
+        callString: 'mansion',
+        string: 'Isolated Mansion',
+        description: ['Worth its weight in gold for the privacy it offers.', 'Cost: Gold ', "Benefit: larger Altar Room"],
+        func: mansion,  
+        cost: 84848,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    marbleAltar:{
+        callString: 'marbleAltar',
+        string: 'Marble Altar',
+        description: ['Functionally the same altar, but more impressive.', 'Cost: Gold ', "Benefit: Priests adjacent to the Altar are twice as effective."],
+        func: marbleAltar,  
+        cost: 4848,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    ivoryAltar:{
+        callString: 'ivoryAltar',
+        string: 'Ivory Capstone',
+        description: ['This flagrant display of wealth elicits better donations.', 'Cost: Gold ', "Benefit: Priests adjacent to the Altar are four times as effective and other Priests are twice as effective."],
+        func: ivoryAltar,  
+        cost: 8484,
+        unlocked: false,
         purchased: false,
         permanent: false
     }
@@ -600,67 +935,26 @@ let goldCrafts = {
 //=======================
 //                                     GoldCrafts
 //=======================
-        
-function gifts(){
-        if(vault.gold.current >= goldCrafts.gifts.cost){
-        numberChange('vault', 'gold', -1, 'yellow', 'red');
-        numberChange('vault', 'love', 1, 'pink', 'red');
-    }
-}
-function oakAltar(){
-    if(vault.gold.current >= 444){
-        numberChange('vault', 'gold', -444, 'yellow', 'red');
-        goldCrafts.oakAltar.purchased = true;
-        flashFade('oakAltarOneOffs');
-        goldCrafts.marbleAltar.unlocked = true;
-        setTimeout(() => {document.getElementById('marbleAltarOneOffs').style.display='block';}, 1500);
-        terrorCrafts.sacrifice.terrorMultiplier = (terrorCrafts.sacrifice.terrorMultiplier * 0.75); //terror from sacrifices
-        comment('Sacrifice Terror reduced by 25%');
-    }
-}
-function marbleAltar(){ //outMultipliers: [1.0, 1.0, 1.0],//love, terror, gold
-    if(vault.gold.current >= 888){
-        numberChange('vault', 'gold', -888, 'yellow', 'red');
-        flashfade('marbleAltarOneOffs');
-        goldCrafts.marbleAltar.purchased = true;
-        goldCrafts.obsidianAltar.unlocked = true;        
-        setTimeout(() => {document.getElementById('obsidianAltarOneOffs').style.display='block';}, 1500);
-        cult.faithful.outMultipliers[2] = 1.4;
-        comment('Increased Gold from the Faithful');
-    }    
-}
-function obsidianAltar(){
-    if(vault.gold.current >= 888){
-        numberChange('vault', 'gold', -888, 'yellow', 'red');
-        flashfade('obsidianAltarOneOffs');
-        goldCrafts.marbleAltar.purchased = true;
-        goldCrafts.obsidianAltar.unlocked = true;        
-        //setTimeout(() => {document.getElementById('AltarOneOffs').style.display='block';}, 1500);
-        cult.faithful.outMultipliers[1] = 1.4;
-        comment('Increased Terror from the Faithful');
-    }  
-}
-function ivory(){
-    
-}
+
 function expedition(){
-    if(vault.gold.current >= 22){
-        numberChange('vault', 'gold', -22, 'yellow', 'red');
+    if(vault.gold.current >= 44){
+        numberChange('vault', 'gold', -44, 'yellow', 'red');
         document.getElementById('expeditionsTab').style.display = 'block';
         document.getElementById('waxWrap').style.display = 'block';
         document.getElementById('cryptWrap').style.display = 'block';
         document.getElementById('towerWrap').style.display = 'block';
-        //document.getElementById('estateWrap').style.display = 'block';
-        flashFade('expeditionOneOffs');
-        eventBox("images/expedition.jpg", "Far off places...", "Having gathered supplies and weathered maps, you may now set out to find the lost places. (Expeditions unlocked)");
-        comment('We must find the hidden places.', 'lightgreen', 'ex');
+        document.getElementById('passageWrap').style.display='block';
+        document.getElementById('estateWrap').style.display = 'block';
+        flashFade('expeditionOneOff');
+        eventBox("images/eventImages/expeditions.jpg", "Far off places...", "Having gathered supplies and weathered maps, West is driven to seek out the lost and isolated places where secrets may be uncovered. (Expeditions unlocked)");
+        comment('You must find what was lost.', 'lightgreen', 'ex');
         flash('expeditionsTab', 'lightgreen', 'white');
         goldCrafts.expedition.purchased = true;
         domUnlocks.expeditions = true;
         world.wax.unlocked = true;
         world.crypt.unlocked = true;
         world.tower.unlocked = true;
-        //world.estate.unlocked = true;
+        world.estate.unlocked = true;
     }
 }
 function titheToggle(){
@@ -673,14 +967,14 @@ function titheToggle(){
     }
 }
 function tithe(){
-    if(vault.love.current>=20){
+    if(vault.love.current>=16){
         if(goldCrafts.tithe.timeCounter[0] < goldCrafts.tithe.timeCounter[1]){
             goldCrafts.tithe.timeCounter[0]++;
         }else{
             goldCrafts.tithe.timeCounter[0] = 0;
-            let delta = vault.love.current/10;
+            let delta = vault.love.current/8;
             numberChange('vault', 'love', -Math.floor(delta), 'pink', 'red');
-            numberChange('vault', 'gold', Math.floor(delta/2), 'gold', 'red');
+            numberChange('vault', 'gold', Math.floor(delta/4), 'gold', 'red');
         }
     }
 }
@@ -692,93 +986,110 @@ function addTithe(){//called at crafts creation
     button.id="titheToggle"; // Apply the CSS class for the button
     titheW.appendChild(button);
     }
-    
+function motel(){
+    if(vault.gold.current >= goldCrafts.motel.cost){
+        numberChange('vault', 'gold', -goldCrafts.motel.cost, '', 'red');
+        replaceGrid('motel');
+        gridChosen = "motel";
+        flashFade('motelOneOff');
+        goldCrafts.motel.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Motel";
+        document.getElementById('altarRoomTitle').innerText = "Motel Courtyard";
+        comment('Altar Room moved to Motel Courtyard.');
+        loveCrafts.lodge.unlocked = true;
+        document.getElementById('lodgeOneOff').style.display='block';
+    }
+}
+function mansion(){
+    if(vault.gold.current >= goldCrafts.mansion.cost){
+        numberChange('vault', 'gold', -goldCrafts.mansion.cost, '', 'red');
+        replaceGrid('mansion');
+        gridChosen = "mansion";
+        flashFade('mansionOneOff');
+        goldCrafts.mansion.purchased = true;
+        document.getElementById('altarRoomTab').innerText = "Mansion";
+        document.getElementById('altarRoomTitle').innerText = "Isolated Mansion";
+        comment('Altar Room moved to Isolated Mansion.');
+        terrorCrafts.silo.unlocked = true;
+        document.getElementById('siloOneOff').style.display='block';
+    }
+}
+
+function marbleAltar(){
+    if(vault.gold.current >= 4848){
+        numberChange('vault', 'gold', -4848, 'yellow', 'red');
+        flashFade('marbleAltarOneOff');
+        goldCrafts.marbleAltar.purchased = true;
+        altars.marble.purchased = true;
+        document.getElementById('marbleWrap').style.display='flex';
+        terrorCrafts.obsidianAltar.unlocked = true;        
+        setTimeout(() => {document.getElementById('obsidianAltarOneOff').style.display='block';}, 1500);
+        comment('Marble Altar available in Altar Room.');
+    }    
+}
+
+function ivoryAltar(){
+    if(vault.gold.current >= 8484){
+        numberChange('vault', 'gold', -8484, 'yellow', 'red');
+        flashFade('ivoryAltarOneOff');
+        goldCrafts.ivoryAltar.purchased = true;
+        altars.ivory.purchased = true;
+        document.getElementById('ivoryWrap').style.display='flex';
+        fleshCrafts.boneAltar.unlocked = true;        
+        setTimeout(() => {document.getElementById('boneAltarOneOff').style.display='block';}, 1500);
+        comment('Ivory Altar available in Altar Room.');
+    }    
+}
 //=======================
 //                                      Flesh
 //=======================
 
 let fleshCrafts = {
-    dreadRevel: {
-        callString: 'dreadRevel',
-        string: 'Dread Revel',
-        description: ['Desensitize the Chosen using a unique set of party guests.',  'Cost: Flesh 4 Love ', 'Benefit: -88 Terror'],
-        func: dreadRevel,
-        unlockText: 'Revelry?',
-        lockCost: 'Vision: 88',
-        unlockCost: 88,
-        cost: 44,
-        unlocked: true,
-        purchased: false,
-        permanent: true
-        
-    },
     leatherBinding: {
         callString: 'leatherBinding',
-        string: 'Book Binding',
-        description: ['For a Tome to be forged, it must be bound in Flesh.', 'Cost: Pages 44 Flesh '],
+        string: 'Leather Bound Tomes',
+        description: ['For a true Tome to be forged, it must be bound in Flesh. ', 'Cost: Pages 88 Flesh '], 
+        madMin: "Minimum Madness: 88 ",
         unlockText: 'Leather?',
         lockCost: 'Vision: 88',
         unlockCost: 88,
         func: leatherBinding,
-        cost: 4,
+        cost: 8,
         unlocked: true,
         purchased: false,
         permanent: true,
-        tomeList: ['hsan', 'dzyan', 'dhol', 'kult', 'azat', 'alch', 'eibon', 'damn', 'necr']
+        tomeList: [ 'dzyan', 'kult', 'hsan', 'alch', 'dhol', 'vermin', 'eibon', 'damn', 'necr']
     },
     cannibalism : {
         callString: 'cannibalism',
         string: 'Cannibalism',
-        description: ['Some hungers go deeper.', 'Cost: Flesh ', 'Benefits: Health and Madness'],
+        description: ['Some hungers go deeper. ', 'Cost: Flesh ', 'Benefits: Health, Madness, and Terror'],
+        madMin: "Minimum Madness: 484",
         func: cannibalism,
         cost: 1,
+        tentacle: false,
         unlocked: false,
         purchased: false,
-        permanent: true
-    },
-    bone: {
-        callString: 'bone',
-        string: 'Bone Altar Stone',
-        description: ['A finely wrought layer of bone covering the Altar is a terrifying thing to behold. (increases Terror from Faithful and Sacrifice)', 'Cost 88 Flesh'],
-        unlockText: 'Vision: ',
-        func: bone,
-        cost: 4,
-        unlocked: false,
-        purchased: false,
-        permanent: false
-    },
-    breedingPits: {//grow innocents for flesh
-        callString: 'breedingPits',
-        string: 'Breeding Pits',
-        description: ['Two by two, lead them into pens. (Cost: 2 Innocents Gain: 1000 Terror, slow passive Innocents gain)'],
-        func: pits,
-        current: 0,
-        unlockText: '1+1=3',
-        lockCost: 'Vision: 444',
-        unlockCost: 444,
-        cost: 2,
-        benefit: 3,
-        terror: 1000,
-        unlocked: false,
-        purchased: true,
         permanent: true
     },
     deepTrade:{
         callString: 'deepTrade',
         string: 'Trade with Deep Ones.',
-        description: ['The need is ever growing. Cost: Flesh '],
+        description: ['The need is ever growing. ', 'Cost: Flesh ', 'Benefit: Gold '],
+        madMin: "Minimum Madness: 888",
         func: deepTrade,
-        cost: 1,
-        benefit: 100,
+        cost: 2,
+        benefit: 444,
         multiplier: 4,
         unlocked: false,
-        purchased: false,
+        purchased: true,
         permanent: true
     },
     sculpt:{
         callString: 'sculpt',
         string: 'Sculpture',
-        description: ['Create Terrifying Artwork for the Museum.', 'Cost: Flesh ', 'Benefit: Gold 444'],
+        description: ['Create Terrifying Artwork for the Museum. ', 'Cost: Flesh ', 'Benefit: Gold 444'],
+        madMin: "Minimum Madness: 248",
         comment: 'reminiscent of Geiger...',
         func: sculpt,
         cost: 8,
@@ -789,20 +1100,75 @@ let fleshCrafts = {
         unlocked: true,
         purchased: false,
         permanent: true
+    },
+    dreadRevel: {
+        callString: 'dreadRevel',
+        string: 'Dread Revel',
+        description: ['Antagonize the Chosen with unique party guests. ',  'Cost: Flesh 16, Love -', 'Benefit: +848 Terror'],
+        madMin: "Minimum Madness: 444",
+        func: dreadRevel,
+        unlockText: 'Revelry?',
+        lockCost: 'Vision: 444',
+        unlockCost: 444,
+        fleshCost: 16,
+        cost: 484,
+        benefit: 848,
+        unlocked: true,
+        purchased: false,
+        permanent: true
+    },
+    transmute:{
+        callString: 'transmute',
+        string: 'Transmute',
+        description: ['The Health benefits are amazing. ', 'Cost: Flesh ', 'Benefit: Ichor '],
+        madMin: "Minimum Madness: 888 ",
+        comment: 'How inspired! (+1 Ichor)',
+        func: transmute,
+        cost: 8,
+        benefit: 1,
+        unlocked: false,
+        purchased: true,
+        permanent: true
+    },
+    robes:{
+        callString: 'robes',
+        string: 'Ceremonial Robes',
+        description: ["Woven with gold thread and covered in arcane sigils, the material still bears distinctive scars and tatoos.", 'Cost: Flesh ', "Benefit: Doubles Terror from Faithful."],
+        madMin: "Minimum Madness: 888",
+        func: bloodAltar,  
+        cost: 16,
+        unlocked: false,
+        purchased: false,
+        permanent: false
+    },
+    bloodAltar:{
+        callString: 'bloodAltar',
+        string: 'Blood Stained Slab',
+        description: ["The stains are a constant reminder.", 'Cost: Flesh ', "Benefit: Sentinals adjacent to the Altar are twice as effective."],
+        madMin: "Minimum Madness: 88",
+        func: bloodAltar,  
+        cost: 4,
+        unlocked: true,
+        purchased: false,
+        permanent: false
+    },
+    boneAltar: {
+        callString: 'boneAltar',
+        string: 'Bone Altar Stone',
+        description: ['A finely wrought lattice of bone covering the Altar is a terrifying thing to behold.', 'Cost 88 Flesh', "Benefit: Sentinals adjacent to the Altar are four times as effective and other Sentinals are twice as effective."],
+        madMin: "Minimum Madness: 888",
+        func: boneAltar,
+        cost: 88,
+        unlocked: false,
+        purchased: false,
+        permanent: false
     }
 };
 //===============================
 //                                      FleshCrafts Actions
 //===============================
 
-function dreadRevel(){
-    if(vault.flesh.current >= 4 && vault.love.current >= 44){
-        numberChange('vault', 'flesh', -4, 'red', 'red');
-        numberChange('vault', 'love', -44, 'pink', 'red');
-        let temp = Math.min(vault.terror.current, 88);
-        numberChange('vault', 'terror', -temp, 'red', 'red');
-    }
-}
+
 
 function getTome() {
   if( fleshCrafts.leatherBinding.tomeList.length === 0) {
@@ -814,51 +1180,128 @@ function getTome() {
   return Tome;
 }
 function leatherBinding(){
-    if(vault.flesh.current>= fleshCrafts.leatherBinding.cost && vault.tomes.pageCounter >= vault.tomes.pagesNeeded){
-        numberChange('vault', 'flesh', -4, 'red', 'red');
-        numberChange('vault', 'tomes', 1, 'blue', 'red');
-        fleshCrafts.leatherBinding.cost = fleshCrafts.leatherBinding.cost * 2;
+    if(vault.flesh.current>= fleshCrafts.leatherBinding.cost && vault.tomes.pageCounter >= vault.tomes.pagesNeeded && madMin(88)){
+        numberChange('vault', 'flesh', -fleshCrafts.leatherBinding.cost, 'red', 'red');
+        fleshCrafts.leatherBinding.cost = Math.ceil(fleshCrafts.leatherBinding.cost * 1.4);
         vault.tomes.pageCounter -= vault.tomes.pagesNeeded;
-        vault.tomes.pagesNeeded = vault.tomes.pagesNeeded * 2;
+        vault.tomes.pagesNeeded =  Math.ceil(vault.tomes.pagesNeeded * 2.4);
         document.getElementById('pages').innerHTML = Math.floor(vault.tomes.pageCounter);
-        document.getElementById('leatherBindingcost').innerHTML = 'Cost: Flesh ' + fleshCrafts.leatherBinding.cost + ' Pages ' + vault.tomes.pagesNeeded;
+        document.getElementById('leatherBindingcost').innerHTML = 'Cost: ' + vault.tomes.pagesNeeded  + ' Pages, Flesh: ';
+        document.getElementById('leatherBindingCost').innerHTML = fleshCrafts.leatherBinding.cost;
         const Tome = getTome();
-        actionUpgrades.studyTome[Tome].unlocked = true;
+        if(Tome){
+        actionUpgrades.study[Tome].unlocked = true;
         document.getElementById(Tome + "Wrap").style.display='block';
-        comment('You have pieced together an entire manuscript. (West tab, Tomes +1', 'blue');
+        comment('The completed Tome hums slightly and is warm to the touch. (Tome ready for translation in West tab)', 'blue');
+        }else{
+        numberChange('vault', 'tomes', 1, 'blue', 'red');
+        studyMultiplier();
+        madCapIncrease();
+        comment("There are no more unique Tomes to find.");
+        }
     }
 }
 function cannibalism(){
-    if(vault.flesh.current >=1){
+    if(vault.flesh.current >=1 && madMin(484)){
         numberChange('vault', 'flesh', -1, 'red', 'red');
         numberChange('stats', 'madness', 44, 'red', 'blue');
+        numberChange('stats', 'health', 88, 'blue', 'red');
+        if(fleshCrafts.cannibalism.tentacle === true){
+        numberChange('stats', 'radiance', 1, 'blue', 'red');
+        numberChange('vault', 'terror', 444, 'red', 'green');
+        comment("Where does the little guy hide when he's not eating? (Madness +44 Terror +444, Health +88 Radiance +1)");
+        }else{
         numberChange('vault', 'terror', 88, 'red', 'green');
-        numberChange('stats', 'health', 100, 'blue', 'red');
-        numberChange('vault', 'radiance', 1, 'blue', 'red');
-        comment('waste not, want not (Madness +44 Terror +88, Health +100, Radiance +1');
+        comment('Waste not, want not (Madness +44 Terror +88, Health +88)');
+        }
     }
 }
-function bone(){
-    
-}
 function deepTrade(){
-    
+    if(vault.flesh.current >= fleshCrafts.deepTrade.cost && madMin(888)){
+        numberChange('vault', 'flesh', -fleshCrafts.deepTrade.cost, 'red', 'red');
+        numberChange('vault', 'gold', fleshCrafts.deepTrade.benefit, 'yellow', 'red');
+        fleshCrafts.deepTrade.cost = fleshCrafts.deepTrade.cost * 4;
+        fleshCrafts.deepTrade.benefit = fleshCrafts.deepTrade.benefit * 2;
+        document.getElementById('deepTradeCost').innerHTML = fleshCrafts.deepTrade.cost;
+        document.getElementById('deepTradeBenefit').innerHTML = "Benefit: Gold " + fleshCrafts.deepTrade.benefit;
+        comment('As the Deep Ones sink beneath the waves, oddly carved chests begin to wash ashore. ( +' + fleshCrafts.deepTrade.benefit + ' Gold)');
+    }
 }
+
 function sculpt(){
-    if(vault.flesh.current >=fleshCrafts.sculpt.cost){
+    if(vault.flesh.current >=fleshCrafts.sculpt.cost && madMin(248)){
         numberChange('vault', 'flesh', -fleshCrafts.sculpt.cost, 'red', 'red');
         numberChange('vault', 'terror', (fleshCrafts.sculpt.cost * 4), 'red', 'blue');
         numberChange('vault', 'gold', fleshCrafts.sculpt.benefit, 'yellow', 'red');
         fleshCrafts.sculpt.cost = Math.floor(fleshCrafts.sculpt.cost * 1.2);
         fleshCrafts.sculpt.benefit = Math.floor(fleshCrafts.sculpt.benefit * 1.2);
-        document.getElementById('sculptcost').innerHTML = fleshCrafts.sculpt.cost;
+        document.getElementById('sculptCost').innerHTML = fleshCrafts.sculpt.cost;
         document.getElementById('sculptBenefit').innerHTML = "Benefit: Gold: " + fleshCrafts.sculpt.benefit;
-        comment('stunning use of the media.');
+        comment('Stunning use of the media.');
     }
 }
-function pits(){
-    
+
+function dreadRevel(){
+    if(vault.flesh.current >= fleshCrafts.dreadRevel.fleshCost && vault.love.current >= fleshCrafts.dreadRevel.cost && madMin(444)){
+        numberChange('vault', 'flesh', -fleshCrafts.dreadRevel.fleshCost, 'red', 'red');
+        numberChange('vault', 'love', -fleshCrafts.dreadRevel.cost, 'pink', 'red');
+        numberChange('vault', 'terror', fleshCrafts.dreadRevel.benefit, 'red', 'red');
+        comment("The party is quite a grave affair.(-" + fleshCrafts.dreadRevel.fleshCost + " Flesh, -" + fleshCrafts.dreadRevel.cost + " Love, +" + fleshCrafts.dreadRevel.benefit + " Terror)");
+        fleshCrafts.dreadRevel.fleshCost *= Math.floor(fleshCrafts.dreadRevel.fleshCost*1.4);
+        fleshCrafts.dreadRevel.cost *=Math.floor(fleshCrafts.dreadRevel.cost*1.4);
+        fleshCrafts.dreadRevel.benefit *=Math.floor(fleshCrafts.dreadRevel.benefit*1.4);
+        document.getElementById('leatherBindingcost').innerHTML = 'Cost: ' + fleshCrafts.dreadRevel.fleshCost  + ' Flesh,  ';
+        document.getElementById('leatherBindingCost').innerHTML = fleshCrafts.dreadRevel.cost + " Love";
+        document.getElementById('leatherBindingBenefit').innerHTML = "Benefit: -" + fleshCrafts.dreadRevel.benefit + " Terror";
+
+    }
 }
+
+function transmute(){
+    if(vault.flesh.current>=fleshCrafts.transmute.cost && madMin(888)){
+        numberChange('vault', 'flesh', -fleshCrafts.transmute.cost, '', 'red');
+        numberChange('vault', 'ichor', fleshCrafts.transmute.benefit, 'blue', 'red');
+        if(vault.ichor.unlocked === false){
+            vault.ichor.unlocked = true;
+            document.getElementById('ichorWrap').style.display='block';
+        }
+    }
+}
+
+function robes(){
+    if(vault.flesh.current >= 16 && madMin(888)){
+        numberChange('vault', 'flesh', -16, 'yellow', 'red');
+         fleshCrafts.robes.purchased = true;
+        flashFade('robesOneOff');
+        cult.faithful.outMultipliers[1] *=2;
+        comment('Probably should have used more lotion on that. (Faithful produce twice as much Terror.)');
+    }
+}
+
+function bloodAltar(){
+    if(vault.flesh.current >= 4 && madMin(88)){
+        numberChange('vault', 'flesh', -4, 'yellow', 'red');
+         fleshCrafts.bloodAltar.purchased = true;
+        altars.blood.purchased = true;
+        flashFade('bloodAltarOneOff');
+        document.getElementById('bloodWrap').style.display='flex';
+        loveCrafts.oakAltar.unlocked = true;
+        setTimeout(() => {document.getElementById('oakAltarOneOff').style.display='block';}, 1500);
+        comment('Blood Stained Altar available for use in Altar Room.');
+    }
+}
+
+function boneAltar(){
+    if(vault.flesh.current >= 88 && madMin(888)){
+        numberChange('vault', 'flesh', -88, 'yellow', 'red');
+        flashFade('boneAltarOneOff');
+        fleshCrafts.boneAltar.purchased = true;
+        altars.bone.purchased = true;    
+        document.getElementById('boneWrap').style.display='flex';
+        comment('Bone Altar available in Altar Room.');
+    }
+}
+ 
 //=======================
 //                                      TomeCrafts
 //=======================
@@ -867,15 +1310,58 @@ tomeCrafts = {
     ordain:{
         callString: 'ordain',
         string: 'Ordain Priest',
-        description: ['Priests of the old ways can provide many benefits.', 'Cost: Faithful 1, Tome 1, Gold '],
+        description: ['Priests can do many things, with enough imagination.', 'Cost: Faithful 1, Tome 1, Gold '],
         func: ordain,
-        cost: 248,
-        costMultiplier: 4,
+        cost: 444,
+        costMultiplier: 2.4,
         unlocked: true,
         purchased: true,
         permanent: true
+    },
+    inn:{
+        callString: 'inn',
+        string: 'Outreach',
+        description: ['Priests lure Innocents into the Flock up to 4x the number of Faithful. The time taken is related to the number of Priests.', 'Cost: 248 Vision, 248 Charm '],
+        func: unlockPriestInn,
+        cost: '',
+        unlocked: true,
+        purchased: false,
+        permanent: false
+    },
+    priestVaultActions:{
+        callString: 'priestVaultActions',
+        string: 'Vault Conversions',
+        description: ['Priests can be taught to convert Love, Terror, and Gold into each other much like tithing. Gain/Loss ratio tied to Priest count.', 'Cost: 484 Vision, 4 Chanters, 8 Faithful, 4 Sentinels '],
+        func: unlockPriestVault,
+        cost: '',
+        unlocked: true,
+        purchased: false,
+        permanent: false
+    },
+    evangelism:{
+        callString: 'evangelism',
+        string: 'Evangelical Priests',
+        description: ['Priests can be taught to fleece the Faithful in the Altar Room.(Priests will produce Gold placement bonuses)', 'Cost: 848 Vision, 4848 Gold '],
+        func: evangelism,
+        cost: '',
+        unlocked: true,
+        purchased: false,
+        permanent: false
+    },
+    faith:{
+        callString: 'faith',
+        string: 'Indoctrination',
+        description: ['Priests convert Innocents into Faithful once the Innocent capacity has been reached. More Priests decreases time.', 'Cost: 8484 Vision, 1 Tome '],
+        func: unlockPriestFaith,
+        cost: '',
+        unlocked: true,
+        purchased: false,
+        permanent: false
     }
 };
+
+
+
 //=============================
 //                                      TomeCrafts actions
 //=============================
@@ -892,38 +1378,229 @@ function ordain(){
         numberChange('cult', 'priests', 1, 'blue', 'red');
         numberChange('vault', 'gold', -tomeCrafts.ordain.cost, 'yellow', 'red');
         numberChange('vault', 'tomes', -1, 'blue', 'red');
-        tomeCrafts.ordain.cost =  tomeCrafts.ordain.cost * 2;
+        tomeCrafts.ordain.cost =  Math.floor(tomeCrafts.ordain.cost *  tomeCrafts.ordain.costMultiplier);
         document.getElementById('ordainCost').innerHTML= tomeCrafts.ordain.cost;
         actions.preach.cost = Math.max((cult.faithful.current * actions.preach.multiplier), 4);
         document.getElementById('preachCost').innerHTML = actions.preach.cost;
         document.getElementById('preachWrapCost').innerHTML = actions.preach.cost;
         cult.priests.unlocked = true;
         document.getElementById('priestsWrap').style.display='block';
+        document.getElementById('priestsPeg').style.display= 'block';
         comment('So much easier this way');
     }
 };
+//unlocks
+function unlockPriestInn(){
+    if(stats.vision.current >= 248 && stats.charm.current >=248){
+        numberChange('stats', 'vision', -248, '', 'red');
+        numberChange('stats', 'charm', -248, '', 'red');
+        cult.priests.recruitInnocents = true;
+        tomeCrafts.inn.purchased= true;
+        flashFade('innOneOff');
+    }
+}
+function unlockPriestVault(){
+    if(stats.vision.current >= 484 && cult.chanters.current>=4 && cult.faithful.current >=8 && cult.sentinels.current >=4){
+        numberChange('stats', 'vision', -484, '', 'red');
+        numberChange('cult', 'chanters', -4, '', 'red');
+        numberChange('cult', 'faithful', -8, '', 'red');
+        numberChange('cult', 'sentinels', -4, '', 'red');
+        document.getElementById('priestActions').style.display='flex';
+        cult.priests.vaultActions = true;
+        tomeCrafts.priestVaultActions.purchased= true;
+        flashFade('priestVaultActionsOneOff');
+    }
+}
+function evangelism(){
+    if(stats.vision.current >= 848 && vault.gold.current>=4848){
+        numberChange('stats', 'vision', -848, '', 'red');
+        numberChange('vault', 'gold', -4848, '', 'red');
+        cult.priests.altar= true;
+        tomeCrafts.evangelism.purchased= true;
+        flashFade('evangelismOneOff');
+    }
+}
+function unlockPriestFaith(){
+    if(stats.vision.current >= 8484 && vault.tomes.current>=1){
+        numberChange('stats', 'vision', -8484, '', 'red');
+        numberChange('vault', 'tomes', -1, '', 'red');
+        cult.priests.convertFaithful = true;
+        tomeCrafts.faith.purchased= true;
+        flashFade('faithOneOff');
+    }
+}
+//priests should start out doing nothing
+//set priests to convert vault items. effectiveness increases with every priest. 8-1, 7-1, etc 242 Vision 2 Chanters, 4 Faithful, 2 Sentinels described as staff neededor something 
+//gold in altar room 484 Vision, 848 Gold 
+//upgrade to provide innocents only, stopping at 4x faithful. 848 Vision, 848 Charm teach them to be charming
+//convert innocents into faithful 848 Vision, 1 Tome
+//priest actions
+function priests(tics) {
+    cult.priests.vaultCounter += tics;
+    cult.priests.conversionCounter += tics;
+    if (cult.priests.vaultCounter >= cult.priests.vaultNeeded) {
+        cult.priests.vaultCounter -= cult.priests.vaultNeeded;
+        if(cult.priests.vaultAction && cult.priests.vaultActions === true){
+            priestVaultAction();
+        }
+    }
+    if (cult.priests.conversionCounter >= cult.priests.conversionTicsNeeded) {//innocent and faithful conversion
+        cult.priests.conversionCounter -= cult.priests.conversionTicsNeeded;
+        if (cult.priests.recruitInnocents === true) {
+            if (cult.innocents.current < cult.faithful.current * 4) {
+                recruitInnocents();
+            } else if(cult.priests.convertFaithful === true) {
+                convertFaithfulInnocents();
+            }
+        }
+    }
+}
+
+// Task-specific functions
+
+function recruitInnocents() {
+    numberChange('cult', 'innocents', 1, 'red', 'blue');
+    comment('Priests have recruited an Innocent into the fold.');
+    if( cult.innocents.unlocked === false){
+        cult.innocents.unlocked = true;
+        document.getElementById('innocentsWrap').style.display = 'block';
+    }
+}
+
+function convertFaithfulInnocents() {
+    numberChange('cult', 'innocents', -1, 'red', 'blue');
+    numberChange('cult', 'faithful', 1, 'red', 'blue');
+    comment('Priests have converted one of the Innocents into a Faithful follower.');
+}
+
+// Priest Vault Action function
+function priestVaultAction() {
+    const choice = cult.priests.vaultAction;
+    // Split the choice at the "-" to get first and second assets
+    const [firstAsset, secondAsset] = choice.split('-');
+    const firstAssetAmount = vault[firstAsset].current;
+    const priestCount = cult.priests.current;
+    const loss = firstAssetAmount/8; //1/8th
+    let gain = loss/(16/(1 + priestCount)); //diminishing gains per priest to avoid infinity extra 1 to bring it to 1/8 for first
+    // Check 8th min
+        window.console.log(firstAsset, -loss, secondAsset, gain);
+    if (firstAssetAmount >= 16 && cult.priests.current>=1) {
+        window.console.log(firstAsset, -loss, secondAsset, gain);
+        numberChange('vault', firstAsset, -loss, 'blue', 'red');
+        numberChange('vault', secondAsset, gain, 'blue', 'red');
+    }
+}
+function buildPriestActions() {
+    const tomesBox = document.getElementById('tomesBox');
+    const pagesDiv = document.getElementById('pagesDiv');
+    const priestActionsBox = document.createElement('div');
+    priestActionsBox.id = 'priestActions';
+    const actions = [
+        { id: 'love-terror', text: 'Love \n  ->\n Terror' },
+        { id: 'love-gold', text: 'Love \n  ->\n Gold' },
+        { id: 'terror-love', text: 'Terror \n  ->\n Love' },
+        { id: 'terror-gold', text: 'Terror \n  ->\n Gold' },
+        { id: 'gold-love', text: 'Gold \n  ->\n Love' }
+    ];
+    
+    actions.forEach(action => {
+        // Create the main div for each toggle
+        const toggleDiv = document.createElement('div');
+        toggleDiv.className = 'priestToggleDivs';
+        
+        // Create the light indicator
+        const light = document.createElement('div');
+        light.className = 'priestToggleLights';
+        light.id = `${action.id}Light`; // Unique ID for each light
+
+        // Create the text element
+        const text = document.createElement('div');
+        text.className = 'priestToggleText';
+        text.innerText = action.text;
+        text.id = `${action.id}Text`; // Unique ID for each text
+
+        // Append light and text to the toggleDiv
+        toggleDiv.appendChild(light);
+        toggleDiv.appendChild(text);
+
+        // Set an ID for each button div and append to main box
+        toggleDiv.id = `${action.id}Toggle`;
+        priestActionsBox.appendChild(toggleDiv);
+        toggleDiv.addEventListener('pointerdown', () => priestActionsToggle(action.id));
+    });
+    tomesBox.insertBefore(priestActionsBox, pagesDiv.nextSibling);
+}
+function priestActionsToggle(selectedId) {
+    const selectedIndicator = document.getElementById(`${selectedId}Light`);
+
+    // If the selected indicator is currently green, turn it off and reset vaultAction to null
+    if (selectedIndicator.style.backgroundColor === 'green') {
+        selectedIndicator.style.backgroundColor = 'red';
+        cult.priests.vaultAction = null;
+
+    } else {
+        // Turn off all indicators and reset vaultAction
+        document.querySelectorAll('.priestToggleLights').forEach(indicator => {
+            indicator.style.backgroundColor = 'red';
+        });
+
+        // Turn on the selected indicator and set vaultAction
+        selectedIndicator.style.backgroundColor = 'green';
+        cult.priests.vaultAction = selectedId;  // Set vaultAction to the selected action
+    }
+}
+
+//=======================
+//                                      IchorCrafts
+//=======================
+let ichorCrafts = {
+  drinkIchor: {
+        callString: 'drink',
+        string: 'Drink',
+        description: ['Too salty by far, with a boiled pork scent.', 'Cost: Ichor ', 'Benefit: 50 Health Maximum'],
+        func: drinkIchor,
+        unlocked: true,
+        purchased: true,
+        permanent: true
+  }
+};
+//unlocks for tulu and lagh
+//=============================
+//                                      IchorCrafts actions
+//=============================
+function drinkIchor(){
+    if(vault.ichor.current>=1){
+        numberChange('vault', 'ichor', -1, 'red', 'red');
+        comment('+50 Maximum Health', 'green');
+        stats.health.max += 50;
+        numberChange('stats', 'health', (stats.health.max-stats.health.current), 'green', '');
+    }
+}
 
                                                                                 //=========================================
                                                                                 //                                      Build Crafts
                                                                                 //=========================================
 function unlockedAtStart(){
     document.getElementById('convertChanterLock').style.display='block';
-    document.getElementById('convertSentinalLock').style.display='block';
+    document.getElementById('basementOneOff').style.display='block';
+    document.getElementById('convertsentinelLock').style.display='block';
     document.getElementById('titheLock').style.display='block';
-    document.getElementById('expeditionOneOffs').style.display='block';
+    document.getElementById('expeditionOneOff').style.display='block';
     document.getElementById('dreadRevelLock').style.display='block';
     document.getElementById('leatherBindingLock').style.display='block';
     document.getElementById('deepTradeWrap').style.display='none';
+    document.getElementById('bloodAltarOneOff').style.display='block';
 } 
  
 let craftStringKeys = ['loveCrafts', 'terrorCrafts', 'goldCrafts', 'fleshCrafts', 'tomeCrafts'];
-let craftTypeKeys = [loveCrafts, terrorCrafts, goldCrafts, fleshCrafts, tomeCrafts];
+let craftTypeKeys = [loveCrafts, terrorCrafts, goldCrafts, fleshCrafts, tomeCrafts, ichorCrafts];
     let loveKeys = Object.keys(loveCrafts);
     let terrorKeys = Object.keys(terrorCrafts);
     let goldKeys = Object.keys(goldCrafts);
     let fleshKeys = Object.keys(fleshCrafts);
     let tomeKeys = Object.keys(tomeCrafts);
-let craftKeys = [loveKeys, terrorKeys, goldKeys, fleshKeys, tomeKeys];
+    let ichorKeys = Object.keys(ichorCrafts);
+let craftKeys = [loveKeys, terrorKeys, goldKeys, fleshKeys, tomeKeys, ichorKeys];
 function buildCraftBoxes(callString, craft){
     let item = vault[callString];
     document.getElementById('right').innerHTML += 
@@ -951,11 +1628,18 @@ function buildCraftBoxes(callString, craft){
                 document.getElementById(craftKeys[i] + "Lock").style.display='block';
                 document.getElementById(craftKeys[i] + "Wrap").style.display='none';
             }
-        }else if(craft[craftKeys[i]].permanent === false){
-                       document.getElementById(callString + "Box").innerHTML += 
-                    "<button class='craftOneOffs' id= '" +craftKeys[i] + "OneOffs'>" +
-                    "<span class='craftLabels'>" + craft[craftKeys[i]].string + "</span>" +
-                    "</button>";     
+        }else if (craft[craftKeys[i]].permanent === false) {
+            var button = document.createElement("button");
+            button.classList.add('craftOneOff');
+            button.id = craftKeys[i] + "OneOff";
+            if (callString === 'tomes') {
+                button.style.display = 'block';
+            }
+            var span = document.createElement("span");
+            span.classList.add('craftLabels');
+            span.innerHTML = craft[craftKeys[i]].string;
+            button.appendChild(span);
+            document.getElementById(callString + "Box").appendChild(button);
         }
     };
 };
@@ -964,6 +1648,12 @@ buildCraftBoxes('terror', terrorCrafts);
 buildCraftBoxes('gold', goldCrafts);
 buildCraftBoxes('flesh', fleshCrafts);
 buildCraftBoxes('tomes', tomeCrafts);
+buildCraftBoxes('ichor', ichorCrafts);
 makeSacrificeChoices();
 addTithe();
+ buildPriestActions() ;
 unlockedAtStart();
+
+
+//priests
+

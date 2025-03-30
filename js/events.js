@@ -1,4 +1,6 @@
-
+function test(){
+    window.console.log(stats.madness.madCap);
+}
 function eventBox(imageSource, title, text){
     let box = document.getElementById('eventBox');
         // Create an image element
@@ -16,7 +18,7 @@ function eventBox(imageSource, title, text){
     paragraph.id = 'eventBoxText';
     paragraph.textContent = text; // Set the text content
     if(title === "The Cult") {//warning text for cult
-        var textToAdd = "*The number of Faithful is critical. This is your only Warning.*";
+        var textToAdd = "*The number of Faithful is critical. This is the only Warning.*";
         var spanElement = document.createElement('span');
         spanElement.style.color = "red"; 
         spanElement.innerHTML = textToAdd; 
@@ -34,63 +36,89 @@ function eventBox(imageSource, title, text){
     box.appendChild(image);
     box.appendChild(header);
     box.appendChild(paragraph);
-    document.querySelector('#closeEventButton').addEventListener('click', closeEventBox);
+    document.querySelector('#closeEventButton').addEventListener('pointerdown', closeEventBox);
     openEventBox();
 }
+
+let closeCheck = false;
 function closeEventBox(){
     document.getElementById('eventBox').style.display='none';
+    closeCheck = true;
     timeOn();
 }
 function openEventBox(){
+    closeCheck = false;
+        timeOff();
     setTimeout(function() {
         document.getElementById('eventBox').style.display = 'block';
-        timeOff();
     }, 500);
 }
     	//=========================================
 	// putting eventlisteners on after everything else
 	//=========================================
 function eventListeners1(){
+document.addEventListener("contextmenu", (event) => event.preventDefault());// disable rightclick from tablets
 
-    //commentary scroll listeners
-    let commentDiv =  document.getElementById("commentary");
-    commentDiv.addEventListener("mouseover", function() {
-      addMouseWheelListener(commentDiv);
+    // scroll listeners
+const scrollDivs = ["commentary", "world", "dreamEx"];
+function setupMouseWheelListeners() {
+    scrollDivs.forEach((scrollDivId) => {
+        const scrollDivElement = document.getElementById(scrollDivId);
+ 
+        // Add event listeners for each element
+        scrollDivElement.addEventListener("pointerenter", function() {
+            addMouseWheelListener(scrollDivElement);
+        });
+        scrollDivElement.addEventListener("pointerleave", function() {
+            removeMouseWheelListener(scrollDivElement);
+        });
     });
-    commentDiv.addEventListener("mouseout", function() {
-      removeMouseWheelListener(commentDiv);
-    });
+}
+// Call the function to set up the listeners
+setupMouseWheelListeners();
 
     //Action Upgrades
     for (i=0;i<upgradeKeys.length; i++){
         let actionColumn = upgradeKeys[i];
         let upgrades = Object.keys(actionUpgrades[actionColumn]);
         for(j=0;j<upgrades.length;j++){
-            document.getElementById(upgrades[j] + 'Wrap').addEventListener('click', actionUpgrades[actionColumn][upgrades[j]].func);
+            document.getElementById(upgrades[j] + 'Wrap').addEventListener('pointerdown', actionUpgrades[actionColumn][upgrades[j]].func);
         };
     };
-
-    document.getElementById('sacDropBtn').addEventListener('mousedown',   () => showSacrificeTypes());
-    document.getElementById('sacDropBtn').addEventListener('mousedown', preventButtonDrag);
-    document.getElementById('sacDropBtn').addEventListener('mouseup',   () => hideSacrificeTypes());
+ 
+    document.getElementById('sacToggle').addEventListener('pointerdown', () => toggleSacrificeTypes());
 
 var sacTypes = document.querySelectorAll('.sacrificeType');
     sacrificeKeys = Array.from(sacTypes).map(sacTypes => sacTypes.id);
     sacrificeKeys.forEach(key => {
     var option = document.getElementById(key);
-    option.addEventListener('mouseover', function() {
+    option.addEventListener('pointerenter', function() {
     this.style.background = 'transparent';});
-    option.addEventListener('mouseout', function() {
+    option.addEventListener('pointerleave', function() {
     this.style.background = '';});
-    option.addEventListener('mouseup', function() {
+    option.addEventListener('pointerup', function() {
     sacrificeType(this.id);
     });
   });
+      document.getElementById('altarToggle').addEventListener('pointerdown', toggleAltarOptions);
+
+  var altarOptions = document.querySelectorAll('.altarOptionWraps');
+    altarKeyDivs = Array.from(altarOptions).map(altarOptions => altarOptions.id);
+    altarKeyDivs.forEach(key => {
+    var option = document.getElementById(key);
+    option.addEventListener('pointerenter', function() {
+    this.style.background = 'transparent';});
+    option.addEventListener('pointerleave', function() {
+    this.style.background = '';});
+    option.addEventListener('pointerup', function() {
+    altarOptionClick(this.id);
+    });
+  });
     for(i=0;i<worldKeys.length;i++){
-        document.getElementById(worldKeys[i] + "Wrap").addEventListener('click', world[worldKeys[i]].func);
+        document.getElementById(worldKeys[i] + "Wrap").addEventListener('pointerdown', world[worldKeys[i]].func);
     }
      for(i=0;i<dreamExKeys.length;i++){
-        document.getElementById(dreamExKeys[i] + "Wrap").addEventListener('click', dreamEx[dreamExKeys[i]].func);
+        document.getElementById(dreamExKeys[i] + "Wrap").addEventListener('pointerdown', dreamEx[dreamExKeys[i]].func);
     }
 
 }
@@ -99,15 +127,14 @@ function eventListeners2(){
     var craftBoxes = document.getElementsByClassName("craftBox");
     for (var i = 0; i < craftBoxes.length; i++) {
         let element = craftBoxes[i];
-        element.addEventListener("mouseover", function() {
+        element.addEventListener("pointerenter", function() {
         addMouseWheelListener(element);
       });
-      element.addEventListener("mouseout", function() {
+      element.addEventListener("pointerleave", function() {
         removeMouseWheelListener(element);
       });
     }
             //test buttons schTogFunc()
-//document.getElementById('time').addEventListener('click',  () => localStorage.clear());
 document.addEventListener("visibilitychange", function () { //should fix off screen weirdness
     if (document.hidden) {
         afkStamp = performance.now();
@@ -117,173 +144,252 @@ document.addEventListener("visibilitychange", function () { //should fix off scr
        timeOn();
     }    
 });//
-//document.getElementById('test').addEventListener('click',  () => dhol());
-document.getElementById('save').addEventListener('click',  () =>  saveToLocalStorage());
-document.getElementById('load').addEventListener('click',  () => loadClick());
-    //main actions and their unlocks
-    document.getElementById('chantLock').addEventListener('click',  () => unlock('chant', 'actions'));
-    document.getElementById('dreamLock').addEventListener('click',  () => unlock('dream', 'actions'));
-    document.getElementById('preachLock').addEventListener('click',  () => unlock('preach', 'actions'));
 
-    document.getElementById('studyTomeWrap').addEventListener('click',  () => studyTome());
-    document.getElementById('chantWrap').addEventListener('mouseover', chantTimer);
-    document.getElementById('dreamWrap').addEventListener("mousedown", () => startDreamTimer() );
-    document.getElementById('dreamWrap').addEventListener("mouseup", () =>  endDreamTimer() );
-    document.getElementById('preachWrap').addEventListener('click', () => preach());
+document.getElementById('gear').addEventListener('pointerdown',  () =>toggleMenu());
+document.getElementById('reset').addEventListener('pointerdown',  () =>resetGame());
+document.getElementById('test').addEventListener('pointerdown',   () => test());  //top buttons
+document.getElementById('mute').addEventListener('pointerdown',  () =>  muteToggle());
+document.getElementById('save').addEventListener('pointerdown',  () =>  saveToLocalStorage());
+document.getElementById('load').addEventListener('pointerdown',  () => loadpointerdown());
+    //main actions and their unlocks
+    document.getElementById('chantLock').addEventListener('pointerdown',  () => unlock('chant', 'actions'));
+    document.getElementById('dreamLock').addEventListener('pointerdown',  () => unlock('dream', 'actions'));
+    document.getElementById('preachLock').addEventListener('pointerdown',  () => unlock('preach', 'actions'));
+
+    document.getElementById('studyWrap').addEventListener('pointerdown',  study);
+    document.getElementById('chantWrap').addEventListener('pointerenter', chantTimer);
+    document.getElementById('dreamWrap').addEventListener("pointerdown", startDreamTimer);
+    document.getElementById('preachWrap').addEventListener('pointerdown', preach);
+    document.getElementById('chantWrap').addEventListener('pointerenter', chantTimer);
     //mad actions
     for(i=0;i<madKeys.length;i++){
         let temp = madKeys[i];
-        document.getElementById(temp + 'Wrap').addEventListener('click', () => madAct(temp));
+        document.getElementById(temp + 'Wrap').addEventListener('pointerdown', () => startMadActLoop(temp));
+        document.getElementById(temp + 'Wrap').addEventListener('pointerdown', () => executeMadAction(temp) );
     };
     //vault button presses
+    document.getElementById('altarRoomTab').addEventListener('pointerdown',  () => changeTab('altarRoom'));
+
     for(i=0;i<vaultKeys.length; i++){
         let temp = vaultKeys[i];
-        document.getElementById(temp + "Wrap").addEventListener('click', () => changeCraftBox(temp));
+        document.getElementById(temp + "Wrap").addEventListener('pointerdown', () => changeCraftBox(temp));
     }
     for(let j=0; j<craftKeys.length; j++){
         let key = craftKeys[j];
         for(let k=0; k<key.length; k++){
-            if(craftTypeKeys[j][key[k]].permanent === true){
-                document.getElementById(key[k]+ "Wrap").addEventListener('click', craftTypeKeys[j][key[k]].func);  
+        let craft = craftTypeKeys[j][key[k]];
+            if(craft.permanent === true){
+                            // Determine if this should use vaultConversion
+                if (craft.func === 'vaultConversion') {
+                    document.getElementById(key[k] + "Wrap").addEventListener('pointerdown', () => vaultConversionLoop(craft));
+                    document.getElementById(key[k] + "Wrap").addEventListener('pointerdown', () => executeVaultConversion(craft) );
+                } else {
+                    document.getElementById(key[k] + "Wrap").addEventListener('pointerdown', craft.func);
+                }
                 if(craftTypeKeys[j][key[k]].unlockText){
-                    document.getElementById(key[k]+ "Lock").addEventListener('click', () => unlock(key[k], craftStringKeys[j]));   
+                    document.getElementById(key[k]+ "Lock").addEventListener('pointerdown', () => unlock(key[k], craftStringKeys[j]));   
                 }
             }
             if(craftTypeKeys[j][key[k]].permanent=== false){
-                document.getElementById(key[k]+ "OneOffs").addEventListener('click', craftTypeKeys[j][key[k]].func);  
+                document.getElementById(key[k]+ "OneOff").addEventListener('pointerdown', craftTypeKeys[j][key[k]].func);  
             }
         }
     }
-        document.getElementById('rhanWrap').addEventListener('click', () => rhan());
-        document.getElementById('nyarWrap').addEventListener('click', () => nyar());
+        for(i=0; i<godKeys.length; i++){
+        let temp = godKeys[i];
+        document.getElementById(temp + 'Wrap').addEventListener('pointerdown', gods[temp]['func']);
+    };
+    //altar room
+    addPegEvents();
+    document.getElementById('clearGrid').addEventListener('pointerdown',  () =>  clearGrid());
+
+    //divinity
+Object.keys(shardBuys.shardDoublers).forEach(actionKey => {//actionKey is doubler or reducer objects
+    document.getElementById(actionKey + 'ShardBuyWrap').addEventListener('pointerdown', function() {
+       shardActionDouble(actionKey);
+    });
+});
+Object.keys(shardBuys.madReducers).forEach(actionKey => {
+    document.getElementById(actionKey + 'ShardBuyWrap').addEventListener('pointerdown', function() {
+       madReducer(actionKey);
+    });
+});
+Object.keys(shardBuys.others).forEach(actionKey => {
+    document.getElementById(actionKey + 'ShardBuyWrap').addEventListener('pointerdown',  shardBuys.others[actionKey].func);
+});
+        //    document.getElementById('divinityTab').style.display = 'block'; //temp
 }
 
     //code for description hovers
-function addCommentsToButtons(set) {
-    const setKeys = Object.keys(set);    
-    setKeys.forEach(function (setKey) {
-        const parent = document.getElementById(setKey +'Wrap'); // Find button by ID using the key
-        const oneOffs = document.getElementById(setKey +'OneOffs');
-        const locks = document.getElementById(setKey +'Lock');
-        const container = parent || oneOffs;
-        if (container) {
-            const descriptionBox = document.createElement('div'); //main description
-            descriptionBox.classList.add('descriptionBox');
-            if(set === madActions){
-                descriptionBox.classList.add('madDescription');
-            };
-            container.appendChild(descriptionBox);
-            const description = document.createElement('p');
-            description.textContent = set[setKey].description[0];
-            description.classList.add('desc'); 
-            const Id = setKey + 'Desc'; 
-            description.id = Id; 
-            descriptionBox.appendChild(description);
-            if(set[setKey].description[3]){
-                 const terror = document.createElement('span');
-                terror.textContent = set[setKey].description[3];
-                terror.classList.add('desc'); 
-                const Id = setKey + 'Terror'; 
-                terror.id = Id; 
-                descriptionBox.appendChild(terror);
-            }
-            if(set[setKey].description[1]){
-                 const cost = document.createElement('span');
-                cost.textContent = set[setKey].description[1];
-                cost.classList.add('desc'); 
-                const Id = setKey + 'cost'; 
-                cost.id = Id;
-                descriptionBox.appendChild(cost);
-                if(set[setKey].cost){
-                    const costs = document.createElement('span');
-                    costs.textContent = set[setKey].cost;
-                    costs.classList.add('costs'); 
-                    const Id = setKey + 'Cost'; 
-                    costs.id = Id; 
-                    cost.appendChild(costs);
+function addCommentsToButtons(setArray) {
+    setArray.forEach(singleSet => {
+        const setKeys = Object.keys(singleSet);  
+        setKeys.forEach(function (setKey) {
+            const parent = document.getElementById(setKey +'Wrap'); // Find button by ID using the key
+            const OneOff = document.getElementById(setKey +'OneOff');
+            const locks = document.getElementById(setKey +'Lock');
+            const choices = document.getElementById(setKey + 'Choice');
+            const shardbuyTemp = document.getElementById(setKey + 'ShardBuyWrap');
+            const container = shardbuyTemp || parent || OneOff || choices;
+            
+            if (container) {
+                const descriptionBox = document.createElement('div'); //main description
+                descriptionBox.classList.add('descriptionBox');
+
+                if ([loveCrafts, terrorCrafts, goldCrafts, fleshCrafts, tomeCrafts].includes(singleSet)) {
+                    descriptionBox.classList.add('craftDescription');
+                };
+                if(singleSet === madActions){
+                    descriptionBox.classList.add('madDescription');
+                };
+                if(singleSet === world){
+                    descriptionBox.classList.add('worldDescription');
+                };
+                container.appendChild(descriptionBox);
+
+                const description = document.createElement('p');
+                description.textContent = singleSet[setKey].description[0];
+                description.classList.add('desc'); 
+                const Id = setKey + 'Desc'; 
+                description.id = Id; 
+                descriptionBox.appendChild(description);
+
+                if(singleSet[setKey].description[3]){ //adding terror mins
+                    const terror = document.createElement('span');
+                    terror.textContent = singleSet[setKey].description[3];
+                    terror.classList.add('desc'); 
+                    const Id = setKey + 'Terror'; 
+                    terror.id = Id; 
+                    descriptionBox.appendChild(terror);
+                }
+                if(singleSet[setKey].madMin){ //adding mad mins
+                    const madMinDesc = document.createElement('span');
+                    madMinDesc.textContent = singleSet[setKey].madMin;
+                    madMinDesc.classList.add('desc'); 
+                    const Id = setKey + 'MadMin'; 
+                    madMinDesc.id = Id; 
+                    descriptionBox.appendChild(madMinDesc);
+                }
+                if(singleSet[setKey].description[1]){
+                    const cost = document.createElement('span');
+                    cost.textContent = singleSet[setKey].description[1];
+                    cost.classList.add('desc'); 
+                    const Id = setKey + 'cost'; 
+                    cost.id = Id;
+                    descriptionBox.appendChild(cost);
+                    if(singleSet[setKey].cost){
+                        const costs = document.createElement('span');
+                        costs.textContent = singleSet[setKey].cost;
+                        costs.classList.add('costs'); 
+                        const Id = setKey + 'Cost'; 
+                        costs.id = Id; 
+                        descriptionBox.appendChild(costs);
+                    }
+                }
+                if(singleSet[setKey].description[2]){
+                    const benefit = document.createElement('span');
+                    benefit.textContent = singleSet[setKey].description[2];
+                    benefit.classList.add('desc'); 
+                    const Id = setKey + 'Benefit'; 
+                    benefit.id = Id;
+                    descriptionBox.appendChild(benefit);
                 }
             }
-            if(set[setKey].description[2]){
-                 const benefit = document.createElement('span');
-                benefit.textContent = set[setKey].description[2];
-                benefit.classList.add('desc'); 
-                const Id = setKey + 'Benefit'; 
-                benefit.id = Id;
-                descriptionBox.appendChild(benefit);
+            if (locks) {
+                const descriptionBox = document.createElement('div'); //main description
+                descriptionBox.classList.add('descriptionBox');
+                descriptionBox.classList.add('lockDesc');
+                locks.appendChild(descriptionBox);
+                const description = document.createElement('p');
+                description.textContent = singleSet[setKey].lockCost;
+                description.classList.add('desc'); 
+                const Id = setKey + 'Desc'; 
+                description.id = Id; 
+                descriptionBox.appendChild(description);
             }
-        }
-        if (locks) {
-            const descriptionBox = document.createElement('div'); //main description
-            descriptionBox.classList.add('descriptionBox');
-            descriptionBox.classList.add('lockDesc');
-            locks.appendChild(descriptionBox);
-            const description = document.createElement('p');
-            description.textContent = set[setKey].lockCost;
-            description.classList.add('desc'); 
-            const Id = setKey + 'Desc'; 
-            description.id = Id; 
-            descriptionBox.appendChild(description);
-        }
+        });
     });
 }
-function commentListeners(){
-    const descParents = document.querySelectorAll(".actionWraps, .actionUpgradeWraps, .madActionWraps, .cultWraps, .craftWraps, .craftWraps, .craftLocks, .craftOneOffs, .worldWraps, .dreamExWraps, .godsWraps, .relicWraps");
+
+
+function commentListeners() {
+    const descParents = document.querySelectorAll(".actionWraps, .dreamChoice, .actionUpgradeWraps, .madActionWraps, .cultWraps, .craftWraps, .craftLocks, .craftOneOff, .worldWraps, .dreamExWraps, .godsWraps, .relicWraps, .altarOptionWraps, .shardBuyWraps");
     descParents.forEach(function (container) {
-        const parent = container; 
+        const parent = container;
         const descriptionBox = container.querySelector(".descriptionBox");
-        let timeout;
-        parent.addEventListener("mouseover", function () {
-            timeout = setTimeout(function () {
+        let showTimeout, hideTimeout;
+        let isHovering = false;
+        parent.addEventListener("pointerenter", function () {
+            isHovering = true;
+            clearTimeout(hideTimeout); // Prevent hiding if it was scheduled
+            showTimeout = setTimeout(function () {
                 descriptionBox.classList.add("show");
-                }, 500);
+            }, 500);
         });
-        parent.addEventListener("mouseout", function () {
-            clearTimeout(timeout);
-            descriptionBox.classList.remove("show");
+        parent.addEventListener("pointerleave", function () {
+            isHovering = false;
+            clearTimeout(showTimeout); // Prevent showing if not already shown
+            hideTimeout = setTimeout(function () {
+                if (!isHovering) {
+                    descriptionBox.classList.remove("show");
+                }
+            }, 500);
         });
+        descriptionBox.addEventListener("pointerenter", function () {
+            isHovering = true; // Prevent hiding when re-entering the descriptionBox
+            clearTimeout(hideTimeout);
+        });
+        descriptionBox.addEventListener("pointerleave", function () {
+            isHovering = false;
+            hideTimeout = setTimeout(function () {
+                if (!isHovering) {
+                    descriptionBox.classList.remove("show");
+                }
+            }, 500);
+        });    
     });
-}
+} 
 
 document.addEventListener("DOMContentLoaded", function () {  //start of page after init and before load
 //localStorage.clear();
+    totalTime.timeInit = Date.now();
     shadows();
-    addCommentsToButtons(actions);
-    addCommentsToButtons(actionUpgrades.studyTome);
-    addCommentsToButtons(actionUpgrades.chant);
-    addCommentsToButtons(madActions);
-    addCommentsToButtons(cult);
-    addCommentsToButtons(vault);
-    addCommentsToButtons(dreamEx);
-    addCommentsToButtons(world);
-    addCommentsToButtons(gods);
-    addCommentsToButtons(relics);
-    addCommentsToButtons(loveCrafts);
-    addCommentsToButtons(terrorCrafts);
-    addCommentsToButtons(goldCrafts);
-    addCommentsToButtons(fleshCrafts);
-    addCommentsToButtons(tomeCrafts);
+    addCommentsToButtons([actions, actionUpgrades.study, actionUpgrades.chant, actionUpgrades.preach, dreamChoices, madActions, cult, vault, dreamEx, world, gods, relics, loveCrafts, terrorCrafts, goldCrafts, fleshCrafts, tomeCrafts, ichorCrafts, altars, shardBuys.shardDoublers, shardBuys.madReducers, shardBuys.others]);
     document.getElementById('visionBox').style.display='block';
     document.getElementById('healthBox').style.display='block';
-    document.getElementById('studyTomeWrap').style.display='block';
-    document.getElementById('studyTomeColumn').style.display='block';
+    document.getElementById('menuBox').style.display='none';
+    document.getElementById('studyWrap').style.display='block';
+    document.getElementById('studyColumn').style.display='block';
     document.getElementById('westTab').style.display='block';
     var saveTest = localStorage.getItem("savedDomUnlocks");  //save test
-    var nyarTest = localStorage.getItem('nyarStats'); //saved only in nyar resets
+    var resetRunStats = localStorage.getItem("resetRunStats");  //save test
+    var nyarTest = localStorage.getItem('savedNyarStats'); //saved only in nyar resets
+    var mistTest = localStorage.getItem('savedMistStats'); //saved only in mist resets
     commentListeners();
     eventListeners1();
     eventListeners2();
+    window.console.log("loading...");
     if (saveTest !== null) {
+        window.console.log("save found");
         loadFromLocalStorage();
         window.console.log('loaded');
+        //after load on return to page run offlineProgress
+        offlineProgress();
+    }else if (resetRunStats !== null){
+        window.console.log('resetRun');
+        resetRunPost();//in time
+        localStorage.removeItem('resetRunStats');
     }else if (nyarTest !== null){
         window.console.log('nyarload');
         nyarPostReset();
+        localStorage.removeItem('savedNyarStats');
+    }else if(mistTest !== null){
+        mistPostReset();
+        localStorage.removeItem('savedMistStats');
     }else{
-        eventBox("images/faithful.png", "Eternal Lie", "Waking as out of a dream, you stand alone in a darkened alley, hands feverishly clutching an ancient manuscript. A soothing voice in your mind calms you and hints at future glory.");
+        eventBox("images/eventImages/opener.jpg", "A beginning...", "Waking as if out of a dream, dream West stands alone in a darkened alley, hands feverishly clutching an ancient manuscript. A soothing voice in his mind calmly hints at future greatness.");
     }
-
-
-
+window.addEventListener("beforeunload", saveToLocalStorage);
 });
 
 
@@ -331,7 +437,7 @@ function checkUnlocks(){
     }
     if(stats.madness.current >= 32 &&  stats.madness.madActionBoxUnlocked === false){
         stats.madness.madActionBoxUnlocked = true;
-        comment('One must maintain a certain balance in life.', 'lavender');
+        comment("Excess won't solve your problems forever. (Madness Mitigation available)", 'lavender');
         document.getElementById('madActionBox').style.display='block';
         document.getElementById('drinkWrap').style.display='block';
         document.getElementById('smokeWrap').style.display='block';

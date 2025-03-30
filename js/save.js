@@ -5,10 +5,15 @@ local storage
 let domUnlocks = {
     cult: false,
     expeditions: false,
-    sacrarium: false
+    sacrarium: false,
+    divinity: false
 };
 // Function to save data to local storage
 function saveToLocalStorage() {
+     timeSpent();
+     totalTime.timeFinal = Date.now();
+     let offlineTimestamp = Date.now();//  - 600000;
+     localStorage.setItem("savedOfflineTimestamp", JSON.stringify(offlineTimestamp)); //time off
     //dom
   localStorage.setItem("savedDomUnlocks", JSON.stringify(domUnlocks)); //dom
         	//=========================================
@@ -21,7 +26,6 @@ function saveToLocalStorage() {
           	//=========================================
 	//  Cult
 	//=========================================
-
   localStorage.setItem("savedCult", JSON.stringify(cult)); //cult
   localStorage.setItem("savedVault", JSON.stringify(vault)); //vault
   localStorage.setItem("savedLove", JSON.stringify(loveCrafts)); //crafts
@@ -29,6 +33,7 @@ function saveToLocalStorage() {
   localStorage.setItem("savedGold", JSON.stringify(goldCrafts)); //crafts
   localStorage.setItem("savedFlesh", JSON.stringify(fleshCrafts)); //crafts
   localStorage.setItem("savedTome", JSON.stringify(tomeCrafts)); //crafts
+  localStorage.setItem("savedIchor", JSON.stringify(ichorCrafts)); //crafts
             	//=========================================
 	//  Expeditions
 	//=========================================
@@ -39,26 +44,28 @@ localStorage.setItem("savedDreamEx", JSON.stringify(dreamEx)); //dream ex
 	//=========================================
 localStorage.setItem("savedGods", JSON.stringify(gods)); //gods
 localStorage.setItem("savedRelics", JSON.stringify(relics)); //relics
+                //grid
+  localStorage.setItem("savedGridState", JSON.stringify(gridState)); 
+  localStorage.setItem("savedGridChosen", JSON.stringify(gridChosen)); //current
+  localStorage.setItem("savedAltars", JSON.stringify(altars)); 
+  localStorage.setItem("savedAltar", JSON.stringify(currentAltar)); 
+                            //Time
+  localStorage.setItem("savedTime", JSON.stringify(totalTime)); 
+	//  Divinity / Shards
+  localStorage.setItem("savedShardBuys", JSON.stringify(shardBuys)); 
+    localStorage.setItem("savedPermanentChanges", JSON.stringify(permanentChanges)); 
+  localStorage.setItem("savedPermanentMadness", JSON.stringify(permanentMadness));
 }
 // Function to load data from local storage
-//quick check
-let garbage = false;
-function garbagE(){
-    if(garbage === false){
-        garbage = true;
-        window.console.log('first run');
-    }else{
-        window.console.log('second run');
-        ergjoitdghtd;
-    }
-}
-function loadClick(){
+
+function loadpointerdown(){
     location.reload();
 }
 function loadFromLocalStorage() {
-// localStorage.clear();
-    window.console.log('load');
+    //localStorage.clear();
+   // window.console.log('load');
     //dom
+    
     let storedDomUnlocks = localStorage.getItem("savedDomUnlocks"); 
     if (storedDomUnlocks) {
         domUnlocks = JSON.parse(storedDomUnlocks); //replace dom
@@ -101,9 +108,32 @@ function loadFromLocalStorage() {
         };
         document.getElementById('preachWrapCost').innerHTML = actions.preach.cost;
         document.getElementById('preachCost').innerHTML = actions.preach.cost;
-    } else {
-    console.log("actions missing.");
-    } 
+        if(actions.chant.toggleBool === true){
+            document.getElementById('chantToggle').style.display='block';
+            document.getElementById('chantWrap').addEventListener('pointerdown',  chantToggle);
+            if(actions.chant.toggle === true){
+                document.getElementById('chantToggle').style.backgroundColor='green';
+            }
+        }
+        if(actions.dream.type !== "mindAlone"){
+            let option = actions.dream.type;
+            document.getElementById("dreamChosen").innerHTML = dreamChoices[option].string;
+            document.getElementById('dreamImg').src = dreamChoices[option].img;
+            document.getElementById('dreamDesc').innerHTML= dreamChoices[option].description[0];
+            document.getElementById('dreamcost').innerHTML= dreamChoices[option].description[1];
+            document.getElementById('dreamBenefit').innerHTML= dreamChoices[option].description[2];
+        }
+        if(actions.dream.toggleBool === true){
+            document.getElementById('dreamToggle').style.display='block';
+            document.getElementById('dreamWrap').removeEventListener("pointerdown", startDreamTimer);
+            document.getElementById('dreamWrap').addEventListener('pointerdown',  dreamToggle);
+            if(actions.dream.toggle === true){
+                document.getElementById('dreamToggle').style.backgroundColor='green';
+                startDreamTimer('toggled');
+            }
+        }
+
+    }
                                                                          //mad actions
     let storedMadAct = localStorage.getItem("savedMadAct"); 
     if (storedMadAct) {
@@ -119,7 +149,7 @@ function loadFromLocalStorage() {
         };
     } else {
     console.log("mad actions missing.");
-    } 
+    }
                                                                 //actionUpgrades
     let storedActionUpgrades = localStorage.getItem("savedActionUpgrades"); 
     if (storedActionUpgrades) {
@@ -131,11 +161,10 @@ function loadFromLocalStorage() {
                 if(actionUpgrades[upgradeKeys[i]][upgrades[j]].unlocked === true && actionUpgrades[upgradeKeys[i]][upgrades[j]].purchased === false){
                     document.getElementById(upgrades[j] + "Wrap").style.display='block';
                 }
+            }
         }
-        };
-    } else {
-    console.log("action upgrades missing.");
-    }   
+    };
+ 
             	//=========================================
 	//  Cult
 	//=========================================
@@ -148,6 +177,11 @@ function loadFromLocalStorage() {
             if(cult[cultKeys[i]].unlocked === true){
                 document.getElementById(cultKeys[i] + "Wrap").style.display='block';
                 document.getElementById(cultKeys[i]).innerHTML = cult[cultKeys[i]].current;
+            if (pegTypes.includes(cultKeys[i])) {
+                    // Show the Peg element
+                    document.getElementById(cultKeys[i] + "Peg").style.display = 'block';
+                    document.getElementById(cultKeys[i] + "Unplaced").innerText = cult[cultKeys[i]].unplaced;
+                }
             }
         };
     } else {
@@ -166,124 +200,94 @@ function loadFromLocalStorage() {
     } else {
     console.log("vault missing.");
     }
-
-    let storedLove = localStorage.getItem('savedLove');//love
-    if (storedLove) {
-        loveCrafts = JSON.parse(storedLove);
-        for(i=0;i<loveKeys.length;i++){ //3 point check
-            if(loveCrafts[loveKeys[i]].unlocked === true && loveCrafts[loveKeys[i]].purchased === true &&  loveCrafts[loveKeys[i]].permanent === true){//permanent and purchased
-                document.getElementById(loveCrafts[loveKeys[i]].callString + "Wrap").style.display='inline-block';
-                if(loveCrafts[loveKeys[i]].unlockText){
-                    document.getElementById(loveCrafts[loveKeys[i]].callString + "Lock").style.display='none';    
-                 }
-                 //permanent and purchased
-            }else if(loveCrafts[loveKeys[i]].unlocked === true && loveCrafts[loveKeys[i]].purchased === true &&  loveCrafts[loveKeys[i]].permanent === false){// hide purchased oneoffs
-                 document.getElementById(loveCrafts[loveKeys[i]].callString + "OneOffs").style.display='none';
-            }else if(loveCrafts[loveKeys[i]].unlocked === true && loveCrafts[loveKeys[i]].purchased === false){//unlocked for vision buy
-                document.getElementById(loveCrafts[loveKeys[i]].callString + "Wrap").style.display='none'; 
-                document.getElementById(loveCrafts[loveKeys[i]].callString + "Lock").style.display='block';    
-            }
-        }
-        document.getElementById('convertChanterCost').innerHTML = loveCrafts.convertChanter.cost;
-    }
-    
-    let storedTerror = localStorage.getItem('savedTerror');//terror Terror
-    if (storedTerror) {
-        terrorCrafts = JSON.parse(storedTerror);
-        for(i=0;i<terrorKeys.length;i++){
-            if(terrorCrafts[terrorKeys[i]].unlocked === true && terrorCrafts[terrorKeys[i]].purchased === true &&  terrorCrafts[terrorKeys[i]].permanent === true){//permanent and purchased
-                document.getElementById(terrorCrafts[terrorKeys[i]].callString + "Wrap").style.display='block';
-                if(terrorCrafts[terrorKeys[i]].unlockText){
-                    document.getElementById(terrorCrafts[terrorKeys[i]].callString + "Lock").style.display='none';    
-                }
-                if(terrorCrafts[terrorKeys[i]].callString === 'sacrifice'){
-                     let type = terrorCrafts.sacrifice.type;
-                    document.getElementById("sacrifice").innerHTML = sacrificeTypes[type].string;
-                    document.getElementById("sacrificeDesc").innerHTML = sacrificeTypes[type].description[0];
-                    document.getElementById("sacrificeTerror").innerHTML = sacrificeTypes[type].description[3];
-                    document.getElementById("sacrificecost").innerHTML = sacrificeTypes[type].description[1];
-                    document.getElementById("sacrificeBenefit").innerHTML = sacrificeTypes[type].description[2];
-                    document.getElementById('sacDropBtn').style.display='block';
-                }
-            }else if(terrorCrafts[terrorKeys[i]].unlocked === true && terrorCrafts[terrorKeys[i]].purchased === true&&  terrorCrafts[terrorKeys[i]].permanent === false){//should be purchaced one offs
-                document.getElementById(terrorCrafts[terrorKeys[i]].callString + "OneOffs").style.display='none'; 
-             }else if(terrorCrafts[terrorKeys[i]].unlocked === true && terrorCrafts[terrorKeys[i]].purchased === false){//unlocked for vision buy
-                if(terrorCrafts[terrorKeys[i]].unlockText){
-                    document.getElementById(terrorCrafts[terrorKeys[i]].callString + "Lock").style.display='block';
-                document.getElementById(terrorCrafts[terrorKeys[i]].callString + "Wrap").style.display='none'; 
-                 }
-            }
-        }
-        document.getElementById('convertSentinalcost').innerHTML = terrorCrafts.convertSentinal.cost;
-    }
-
-    let storedGold = localStorage.getItem('savedGold');//gold
-    if (storedGold) {
-        goldCrafts = JSON.parse(storedGold);
-        for(i=0;i<goldKeys.length;i++){
-            if(goldCrafts[goldKeys[i]].unlocked === true && goldCrafts[goldKeys[i]].purchased === true &&  goldCrafts[goldKeys[i]].permanent === true){//permanent and purchased
-                document.getElementById(goldCrafts[goldKeys[i]].callString + "Wrap").style.display='block';
-                if(goldCrafts[goldKeys[i]].unlockText){
-                    document.getElementById(goldCrafts[goldKeys[i]].callString + "Lock").style.display='none';   
-                    if(goldCrafts[goldKeys[i]].callString === 'tithe'){
-                        document.getElementById('titheToggle').style.display='block';
-                        if(goldCrafts.tithe.toggle === true){
-                            document.getElementById('titheToggle').style.backgroundColor='green';
+    let crafts = ['Love', 'Terror', 'Gold', 'Flesh', 'Tome', 'Ichor'];
+    let craftData = {
+        Love: { stored: 'savedLove', object: loveCrafts },
+        Terror: { stored: 'savedTerror', object: terrorCrafts },
+        Gold: { stored: 'savedGold', object: goldCrafts },
+        Flesh: { stored: 'savedFlesh', object: fleshCrafts },
+        Tome: { stored: 'savedTome', object: tomeCrafts },
+        Ichor: { stored: 'savedIchor', object: ichorCrafts }
+    };
+    crafts.forEach(craft => {
+        let storedCraft = localStorage.getItem(craftData[craft].stored);
+        if (storedCraft) {
+            Object.assign(craftData[craft].object, JSON.parse(storedCraft));
+            craftData[craft].keys = Object.keys(craftData[craft].object); // Generate keys dynamically
+            craftData[craft].keys.forEach(key => {
+                let item = craftData[craft].object[key];
+                let callString = item.callString;
+                if (item.unlocked && item.purchased && item.permanent) { 
+                    // Permanent and purchased
+                    document.getElementById(callString + "Wrap").style.display = 'block';
+                    if (item.unlockText) {
+                        document.getElementById(callString + "Lock").style.display = 'none';
+                    }
+                    // Special cases for permanents
+                    if (craft === 'Terror' && callString === 'sacrifice') {
+                        let type = craftData.Terror.object.sacrifice.type;
+                        document.getElementById("sacrifice").innerHTML = sacrificeTypes[type].string;
+                        document.getElementById("sacrificeDesc").innerHTML = sacrificeTypes[type].description[0];
+                        document.getElementById("sacrificeTerror").innerHTML = sacrificeTypes[type].description[3];
+                        document.getElementById("sacrificecost").innerHTML = sacrificeTypes[type].description[1];
+                        document.getElementById("sacrificeBenefit").innerHTML = sacrificeTypes[type].description[2];
+                        document.getElementById('sacToggle').style.display = 'block';
+                    }
+                    if (craft === 'Gold' && callString === 'tithe') {
+                        document.getElementById('titheToggle').style.display = 'block';
+                        if (craftData.Gold.object.tithe.toggle) {
+                            document.getElementById('titheToggle').style.backgroundColor = 'green';
                         }
                     }
+                    if (craft === 'Flesh' && key === 'leatherBinding') {
+                        document.getElementById('leatherBindingcost').innerHTML = 'Cost: ' + vault.tomes.pagesNeeded  + ' Pages, Flesh: ';
+                        document.getElementById('leatherBindingCost').innerHTML = fleshCrafts.leatherBinding.cost;
+                    }
+                    if (craft === 'Flesh' && key === 'sculpt') {
+                        document.getElementById('sculptCost').innerHTML = item.cost;
+                        document.getElementById('sculptBenefit').innerHTML = "Benefit: Gold: " + item.benefit;
+                    }
+                    if(fleshCrafts.cannibalism.tentacle === true){
+                        fleshCrafts.cannibalism.description[0] = "Watching West's second mouth eat horrifies the Faithful (increased Terror)";
+                        fleshCrafts.cannibalism.description[2] = "Benefits: Health, Madness, Terror, and Radiance";
+                    }
+                } else if (item.unlocked && item.purchased && !item.permanent) {                     // Purchased OneOffs
+                    document.getElementById(callString + "OneOff").style.display = 'none';
+                    if (craft === 'Tome' && key === 'priestVaultActions' && item.purchased) {
+                        document.getElementById('priestActions').style.display = 'flex';
+                        if(cult.priests.vaultAction){
+                            document.getElementById(cult.priests.vaultAction + "Light").style.backgroundColor = 'green';
+                        }
+                    }
+                } else if (item.unlocked && !item.purchased && item.permanent) {                    // Unlockable for vision buy
+                    document.getElementById(callString + "Lock").style.display = 'block';
+                    document.getElementById(callString + "Wrap").style.display = 'none';
+                } else if (item.unlocked && !item.purchased && !item.permanent) {                   //  unlocking  OneOffa
+                    document.getElementById(callString + "OneOff").style.display = 'block';
                 }
-            }else if(goldCrafts[goldKeys[i]].unlocked === true && goldCrafts[goldKeys[i]].purchased === true&&  goldCrafts[goldKeys[i]].permanent === false){//should be purchaced one offs
-                document.getElementById(goldCrafts[goldKeys[i]].callString + "OneOffs").style.display='none'; 
-             }else if(goldCrafts[goldKeys[i]].unlocked === true && goldCrafts[goldKeys[i]].purchased === false &&  goldCrafts[goldKeys[i]].permanent === true){//unlocked for vision buy
-                document.getElementById(goldCrafts[goldKeys[i]].callString + "Lock").style.display='block';
-                document.getElementById(goldCrafts[goldKeys[i]].callString + "Wrap").style.display='none'; 
+            });
+            // Special craft-specific updates
+            if (craft === 'Terror' && craftData.Terror.object.breedingPits.level > 0) {
+                document.getElementById('breedingPitsDesc').innerHTML = "Current stock produces an Innocent every " + Math.ceil(40 / craftData.Terror.object.breedingPits.level) + " seconds. ";
+                document.getElementById('breedingPitsCost').innerHTML = craftData.Terror.object.breedingPits.cost;
+                document.getElementById('breedingPitsBenefit').innerHTML = "Increased herd size will produce an Innocent every " + Math.ceil(40 / (craftData.Terror.object.breedingPits.level + 1)) + " seconds.";
             }
-        }
-    }
-    let storedFlesh = localStorage.getItem('savedFlesh');
-    if (storedFlesh) {
-        fleshCrafts = JSON.parse(storedFlesh);//flesh
-        
-        for(i=0;i<fleshKeys.length;i++){
-            if(fleshCrafts[fleshKeys[i]].unlocked === true && fleshCrafts[fleshKeys[i]].purchased === true &&  fleshCrafts[fleshKeys[i]].permanent === true){//permanent and purchased
-                document.getElementById(fleshCrafts[fleshKeys[i]].callString + "Wrap").style.display='block';
-                if(fleshCrafts[fleshKeys[i]].unlockText){
-                    document.getElementById(fleshCrafts[fleshKeys[i]].callString + "Lock").style.display='none';    
-                }
-                if(fleshKeys[i] === 'leatherBinding'){
-                    document.getElementById('leatherBindingcost').innerHTML = 'Cost: Flesh ' + fleshCrafts.leatherBinding.cost + ' Pages ' + vault.tomes.pagesNeeded;
-                }
-                if(fleshKeys[i] === 'sculpt'){
-                    document.getElementById('sculptcost').innerHTML = fleshCrafts.sculpt.cost;
-                    document.getElementById('sculptBenefit').innerHTML = "Benefit: Gold: " + fleshCrafts.sculpt.benefit;
-                }
-            }else if(fleshCrafts[fleshKeys[i]].unlocked === true && fleshCrafts[fleshKeys[i]].purchased === true&&  fleshCrafts[fleshKeys[i]].permanent === false){//should be purchaced one offs
-                document.getElementById(fleshCrafts[fleshKeys[i]].callString + "OneOffs").style.display='none'; 
-             }else if(fleshCrafts[fleshKeys[i]].unlocked === true && fleshCrafts[fleshKeys[i]].purchased === false){//unlocked for vision buy
-                    document.getElementById(fleshCrafts[fleshKeys[i]].callString + "Lock").style.display='block';
-                document.getElementById(fleshCrafts[fleshKeys[i]].callString + "Wrap").style.display='none'; 
+            if (craft === 'Tome') {
+                document.getElementById('pages').innerHTML = Math.floor(vault.tomes.pageCounter);
+                document.getElementById('ordainCost').innerHTML = Math.floor(craftData.Tome.object.ordain.cost);
             }
-        }
-    }
-    let storedTome = localStorage.getItem('savedTome');
-    if (storedTome) {
-        tomeCrafts = JSON.parse(storedTome);
-        for(i=0;i<tomeKeys.length;i++){
-            if(tomeCrafts[tomeKeys[i]].unlocked === true && tomeCrafts[tomeKeys[i]].purchased === true &&  tomeCrafts[tomeKeys[i]].permanent === true){//permanent and purchased
-                document.getElementById(tomeCrafts[tomeKeys[i]].callString + "Wrap").style.display='block';
-                if(tomeCrafts[tomeKeys[i]].unlockText){
-                    document.getElementById(tomeCrafts[tomeKeys[i]].callString + "Lock").style.display='none';    
-                }
-            }else if(tomeCrafts[tomeKeys[i]].unlocked === true && tomeCrafts[tomeKeys[i]].purchased === true&&  tomeCrafts[tomeKeys[i]].permanent === false){//should be purchaced one offs
-                document.getElementById(tomeCrafts[tomeKeys[i]].callString + "OneOffs").style.display='none'; 
-             }else if(tomeCrafts[tomeKeys[i]].unlocked === true && tomeCrafts[tomeKeys[i]].purchased === false){//unlocked for vision buy
-                    document.getElementById(tomeCrafts[tomeKeys[i]].callString + "Lock").style.display='block';
-                document.getElementById(tomeCrafts[tomeKeys[i]].callString + "Wrap").style.display='none'; 
+            if (craft === 'Love') {
+                document.getElementById('convertChanterCost').innerHTML = craftData.Love.object.convertChanter.cost;
             }
+            if (craft === 'Terror') {
+                document.getElementById('convertsentinelCost').innerHTML = craftData.Terror.object.convertsentinel.cost;
+            }
+            if (craft === 'Ichor') {
+                document.getElementById('deepTradeCost').innerHTML = fleshCrafts.deepTrade.cost;
+                document.getElementById('deepTradeBenefit').innerHTML = "Benefit: Gold " + fleshCrafts.deepTrade.benefit;
+            }  
         }
-        document.getElementById('pages').innerHTML = Math.floor(vault.tomes.pageCounter);
-        document.getElementById('ordainCost').innerHTML = Math.floor(tomeCrafts.ordain.cost);
-    }
+    });
                 	//=========================================
 	//  Expeditions
 	//=========================================
@@ -297,6 +301,7 @@ function loadFromLocalStorage() {
             }
             if(world[worldKeys[i]].purchased === true){
                 document.getElementById(worldKeys[i] + 'Desc').innerHTML= world[worldKeys[i]].description2[0];
+                document.getElementById(worldKeys[i] + 'cost').innerHTML= world[worldKeys[i]].description2[1];
                 document.getElementById(worldKeys[i] + 'Cost').innerHTML= world[worldKeys[i]].cost;
                 document.getElementById(worldKeys[i] + 'Benefit').innerHTML = world[worldKeys[i]].description2[2];
                 document.getElementById(worldKeys[i] + 'Wrap').style.backgroundColor='grey';
@@ -305,16 +310,14 @@ function loadFromLocalStorage() {
     } else {
     console.log("world missing.");
     }
-
-    
     let storedDreamEx = localStorage.getItem("savedDreamEx"); //dream ex
     if (storedDreamEx) {
         dreamEx = JSON.parse(storedDreamEx); //replace 
         //update dom
-        if(dreamEx.pillarOfFlame.dreamUnlocked === true){
+        if(dreamEx.pillar.dreamUnlocked === true){
             document.getElementById('dreamEx').style.display='flex';
         }
-        if(dreamEx.pillarOfFlame.purchased === true){
+        if(dreamEx.pillar.purchased === true){
             document.getElementById('dreamChosen').style.display='block';
             document.getElementById('dreamDropBtn').style.display='block';
             document.getElementById('mindAloneChoice').style.display='block';
@@ -325,6 +328,26 @@ function loadFromLocalStorage() {
                 document.getElementById(dreamExKeys[i] + "Wrap").style.display='block';
             }
         };
+        if(dreamEx.pillar.purchased === true){
+            dreamChoice(actions.dream.type);
+            toggleDreamChoices();
+        }
+        if(dreamEx.zoog.purchased === true){
+        document.getElementById('drinkCost').innerHTML= madActions.drink.cost;
+        document.getElementById('drinkBenefit').innerHTML= " Benefit: -" +madActions.drink.benefit + " Madness";  
+        }
+        if(dreamEx.zoog.purchased === true){  
+        document.getElementById('smokeCost').innerHTML= madActions.smoke.cost;
+        document.getElementById('smokeBenefit').innerHTML= " Benefit: -" +madActions.smoke.benefit + " Madness";
+        }
+        if(dreamEx.cele.purchased === true){
+            dreamChoices.whiteShip.unlocked = true;
+            document.getElementById('whiteShipChoice').style.display='block';
+        }
+        if(dreamEx.dylath.purchased === true){
+            dreamChoices.blackShip.unlocked = true;
+        document.getElementById('blackShipChoice').style.display='block';
+        }
     } else {
     console.log("dream ex missing.");
     }
@@ -355,6 +378,98 @@ function loadFromLocalStorage() {
     } else {
     console.log("relics missing.");
     }
+                    	//=========================================
+	//  Altar Room
+	//=========================================
+        
+    const savedGridChosen= localStorage.getItem("savedGridChosen");
+    if(savedGridChosen){
+    gridChosen = JSON.parse(savedGridChosen);
+        document.getElementById('altarRoomTab').innerText = grids[gridChosen].tab;
+        document.getElementById('altarRoomTitle').innerText = grids[gridChosen].title;
+    const savedGridState = localStorage.getItem("savedGridState");
+    if (savedGridState){
+        const savedGridChosen= localStorage.getItem("savedGridChosen");
+        gridChosen = JSON.parse(savedGridChosen);
+        //resettting the unplaced numbers before integrating grid
+        pegTypes.forEach(pegType => {
+            if(pegType !== "altar"){
+                cult[pegType].unplaced = cult[pegType].current;  // Set unplaced to current count
+                cult[pegType].placed = 0;  // Reset placed count to 0
+            }
+        });
+        // Parse the saved grid state into a separate variable (savedGrid)
+        const savedGrid = JSON.parse(savedGridState);
+        replaceGrid(gridChosen);
+        // Iterate through each saved grid position
+        Object.keys(savedGrid).forEach(position => {
+            const pegType = savedGrid[position];
+            // Ensure there's a peg saved at this position
+            if (pegType) {
+                            // **Set drag info for restoration:**
+                pegDragInfo.draggedPeg = pegType;
+                pegDragInfo.draggedFromHole = null;
+                // Extract row and col from the position (e.g., 'hole-1-2')
+                const [_, row, col] = position.split('-');  // Splits into ['hole', '1', '2']
+
+                // Use the saved peg type to drop pegs back into the default gridState
+                const fakeEvent = {
+                    preventDefault: () => {}, 
+                    dataTransfer: { getData: () => pegType }  // Get peg type from savedGrid
+                };
+
+                // Call dropPeg with the extracted row, col, and fakeEvent
+                dropPeg(fakeEvent, row, col);
+            }
+        });
+    }else {
+    console.log("grid state missing.");
+    }
+}else {
+    console.log("chosen grid missing.");
+    }
+    //altar
+   let storedAltars = localStorage.getItem("savedAltars"); 
+    if (storedAltars) {
+        altars = JSON.parse(storedAltars); 
+        for(i=0;i<altarKeys.length;i++){
+            if(altars[altarKeys[i]].purchased === true){
+                document.getElementById(altarKeys[i] + "Wrap").style.display='block';
+            }
+        };
+    }
+    let storedAltar = localStorage.getItem("savedAltar"); 
+    if (storedAltar) {
+        currentAltar = JSON.parse(storedAltar); 
+        altarOptionClick(currentAltar + "Wrap");
+        toggleAltarOptions();
+    }
+    
+    //time
+    let storedTime = localStorage.getItem("savedTime"); 
+    if (storedTime) {
+        totalTime = JSON.parse(storedTime); 
+        totalTime.timeInit = Date.now();
+    }
+    
+    
+                    	//=========================================
+	//  Divinity  / Shards
+	//=========================================
+        shardsBoughtLoad();
+    let savedPermanentChanges = localStorage.getItem("savedPermanentChanges");
+    permanentChanges = JSON.parse(savedPermanentChanges); 
+    if(permanentChanges.immortality === true){ 
+        domUnlocks.sacrarium = true;
+        relics.immortality.unlocked = true;
+        document.getElementById('sacrariumTab').style.display='block';
+        document.getElementById('immortalityWrap').style.display='block';
+    }
+    let savedPermanentMadness = localStorage.getItem("savedPermanentMadness");
+    if (savedPermanentMadness) {
+        permanentMadness = JSON.parse(savedPermanentMadness); 
+    }
+    
     //change cost updates in dom
    closeEventBox();
    timeOn();
