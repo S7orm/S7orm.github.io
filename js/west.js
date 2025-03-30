@@ -162,12 +162,18 @@ function chant(){
     }
 };
         
+let userInteracted = false;
+document.addEventListener("pointerdown", () => {//chant checks interaction
+    userInteracted = true;
+}, { once: true });
 function chantTimer(){
     var intervalId = null;
      let temp =  document.getElementById('chantWrap');
      document.getElementById('chantWrap').onpointerenter = function() {//calls chant every 400 mics
         intervalId = setInterval(chant, 400);
+        if(userInteracted === true){
         plays(chanting);
+    }
      temp.classList.add("chantPulse");
     };
     document.getElementById('chantWrap').onpointerleave = function() {
