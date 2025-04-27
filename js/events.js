@@ -389,6 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {  //start of page aft
         eventBox("images/eventImages/opener.jpg", "A beginning...", "Waking as if out of a dream, dream West stands alone in a darkened alley, hands feverishly clutching an ancient manuscript. A soothing voice in his mind calmly hints at future greatness.");
     }
 window.addEventListener("beforeunload", saveToLocalStorage);
+
 });
 
 

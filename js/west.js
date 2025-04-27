@@ -161,7 +161,6 @@ function chant(){
         chantToggle();
     }
 };
-        
 let userInteracted = false;
 document.addEventListener("pointerdown", () => {//chant checks interaction
     userInteracted = true;
@@ -293,7 +292,7 @@ function updateTimer() {
     if (radCost > stats.radiance.current) {
         comment('We can go no further.');
         endDreamTimer(); // Stop the timer and call endDreamTimer
-        timerDisplay.style.fontSize = "17vw";
+        timerDisplay.style.fontSize = "17dvw";
     } else {
         timerDisplay.innerText = elapsedTime.toFixed(0);
 
@@ -451,7 +450,7 @@ let actionUpgrades = { //add mad chance reduction to reading
           purchased: false
       },            
       hsan: {
-          string: 'Seven Cryptical Books of Hsan',
+          string: 'Cryptical Books of Hsan',
           description: ['One can travel the Dreamlands with confidence with these maps.', 'Cost: Vision '],
           cost: 848,
           func: hsan,
@@ -579,9 +578,12 @@ function pnak(){//unlocked by crypt
         studyMultiplier();
         madCapIncrease();
         actionUpgrades.study.pnak.purchased = true;
-        comment("+1 Tome in Vault");
+        document.getElementById('sacrariumTab').style.display='block';
+        domUnlocks.sacrarium = true;
+        comment("+1 Tome in Vault, Sacrarium bookshelf");
     }
 }
+
 function dzyan(){//unlocked by tome
     if(stats.vision.current >= actionUpgrades.study.dzyan.cost){
         numberChange('stats', 'vision', -actionUpgrades.study.dzyan.cost, '', 'red');

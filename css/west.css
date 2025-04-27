@@ -6,51 +6,51 @@
 }
                                                                                /*------ActionBox-----*/
     #actionBox{
-        width: 64vw;
+        width: 64dvw;
         display: flex;
         justify-content: space-evenly;
         clear: left;
         float: left;
     }
     .actionColumn{
-        margin: 0.5vw;
+        margin: 0.5dvw;
         float: left;
         clear: left;
-        min-width: 12vw;
-        width: 12vw;
-        height: 69vh;
+        min-width: 12dvw;
+        width: 12dvw;
+        height: 69dvh;
     }
     .actionLocks{
         display: none;
-        margin-top: 3vh;
+        margin-top: 3dvh;
         float: left;
         clear: left;
-        min-width: 12vw;
-        width: 12vw;
-        min-height: 5vw;  
+        min-width: 12dvw;
+        width: 12dvw;
+        min-height: 5dvw;  
         bottom: 10px;
-        font-size: 1.25vw;
+        font-size: 1.25dvw;
         white-space: initial;
-        border: 0.1vw solid white;
+        border: 0.1dvw solid white;
         border-radius: 5px;
         text-align: center;
         background-color: black;
         align-items: center;
         justify-content: center;
         position: relative;
-        padding: 1vw;
+        padding: 1dvw;
     }
     .actionWraps{
         display: none;
-        border: 0.1vw solid white;
+        border: 0.1dvw solid white;
         border-radius: 15px;
-        margin-top: 1vw;
+        margin-top: 1dvw;
         float: left;
         clear: left;
-        min-width: 12vw;
-        width: 12vw;
-        height: 12vw;
-        min-height: 12vw;  
+        min-width: 12dvw;
+        width: 12dvw;
+        height: 12dvw;
+        min-height: 12dvw;  
         text-align: center;
         background-color: black;
         align-items: center;
@@ -76,30 +76,30 @@
     }
     .actionPng{
         position: absolute;
-        top: 1.4vw;
-        left: 2vw;
-        width: 8vw;
-        height: 8vw;
+        top: 1.4dvw;
+        left: 2dvw;
+        width: 8dvw;
+        height: 8dvw;
         display: block;
         margin: 0 auto;
     }
         .actionText{
         position: absolute;
         bottom: 10px;
-        font-size: 1.5vw;
+        font-size: 1.5dvw;
         display: block;
         margin: 0 auto;
-        min-width: 12vw;
+        min-width: 12dvw;
     }
     #book ~ .actionPng {
-        top: 3vw; 
+        top: 3dvw; 
     }
     #studyProgress{
         position: absolute;
-        bottom: 0.2vw;
-        left: 0vw;
+        bottom: 0.2dvw;
+        left: 0dvw;
         width: 0%;
-        height: 0.5vh;
+        height: 0.5dvh;
         background-color: red;
     }
     #chantWrap{
@@ -115,14 +115,14 @@
     }
     #chantToggle {
         display: none;
-        width: 2vh;
-        min-width: 2vh;
-        min-height: 2vh;
+        width: 2dvh;
+        min-width: 2dvh;
+        min-height: 2dvh;
         background-color: red; /* Default color for "off" */
         border-radius: 50%; /* Makes it round */
         float: right;
         position: relative;
-        right: 0.5vw; 
+        right: 0.5dvw; 
     }
                                                                                    /*------Dream-----*/
     #dreamWrap{
@@ -136,24 +136,24 @@
         }
     #dreamToggle {
         display: none;
-        width: 2vh;
-        min-width: 2vh;
-        min-height: 2vh;
+        width: 2dvh;
+        min-width: 2dvh;
+        min-height: 2dvh;
         background-color: red; /* Default color for "off" */
         border-radius: 50%; /* Makes it round */
         float: right;
         position: relative;
-        right: 0.5vw; 
+        right: 0.5dvw; 
     }
         #dreamTimer {
                     display: none;
                     position: absolute;
-                    top: 0vh;
+                    top: 0dvh;
                     left: 50%; 
                     text-align: center;
                     transform: translateX(-50%); 
-                    line-height: 8vw;
-                    font-size: 8vw;
+                    line-height: 8dvw;
+                    font-size: 8dvw;
                     color: #4B0082;
                     animation: dreamTimerpulse 2s infinite alternate;
                 }
@@ -172,14 +172,14 @@
 
         #dreamChosen{
             display: none;
-            font-size: 1.5vw;
-            line-height: 3vw;
+            font-size: 1.5dvw;
+            line-height: 3dvw;
             float: left;
             clear: left;
-            min-width: 9.6vw;
-            width: 9.6vw;
-            min-height: 3vw;  
-            border: 0.1vw solid white;
+            min-width: 9.6dvw;
+            width: 9.6dvw;
+            min-height: 3dvw;  
+            border: 0.1dvw solid white;
             border-radius: 5px;
             text-align: center;
             background-color: black;
@@ -188,12 +188,12 @@
 
         #dreamDropBtn {
             display: none;
-            border: 0.1vw solid white;
+            border: 0.1dvw solid white;
             border-radius: 5px;
-            font-size: 2vw;
-            min-width: 2vw;
-            width: 2vw;
-            min-height: 3vw;  
+            font-size: 2dvw;
+            min-width: 2dvw;
+            width: 2dvw;
+            min-height: 3dvw;  
             cursor: pointer;
         }
         #dreamChoices{
@@ -201,15 +201,15 @@
         }
         .dreamChoice {   
             display:none;
-            margin-left: 1vw;
-            font-size: 1vw;
-            line-height: 2vw;
+            margin-left: 1dvw;
+            font-size: 1dvw;
+            line-height: 2dvw;
             float: left;
             clear: left;
-            min-width: 11vw;
-            width: 11vw;
-            min-height: 2vw;  
-            border: 0.1vw solid white;
+            min-width: 11dvw;
+            width: 11dvw;
+            min-height: 2dvw;  
+            border: 0.1dvw solid white;
             border-radius: 5px;
             text-align: center;
             background-color: black;
@@ -228,13 +228,13 @@
         #preach{
         }
         #preachText{
-            width: 10vw;
+            width: 10dvw;
         }
         #preachWrapCost{
             position: absolute;
             bottom: 10px;
-            right: 1vw;
-            width: 2vw;
+            right: 1dvw;
+            width: 2dvw;
         }
         #preach:active{
                 background-color: blue;
@@ -246,15 +246,15 @@
         }
     .actionUpgradeWraps{
         display: none;
-        font-size: 1.25vw;
-        margin-top: 1vw;
-        padding: 0.25vw;
+        font-size: 1.25dvw;
+        margin-top: 1dvw;
+        padding: 0.25dvw;
         float: left;
         clear: left;
-        min-width: 12vw;
-        width: 12vw;
-        min-height: 4vw;  
-        border: 0.1vw solid white;
+        min-width: 12dvw;
+        width: 12dvw;
+        min-height: 4dvw;  
+        border: 0.1dvw solid white;
         border-radius: 5px;
         text-align: center;
         background-color: black;
@@ -265,39 +265,39 @@
     #madActionBox{
         display: none;
         float: right;
-        width: 32vw;
-        height: 68vh;
+        width: 32dvw;
+        height: 68dvh;
         overflow-y: auto;
         background-color: #380B61;
-        border: 0.2vw solid #8A0886;
+        border: 0.2dvw solid #8A0886;
         z-index: 15;
     }
     #madTitle{
-        font-size: 3vh;
-        line-height: 5vh
+        font-size: 3dvh;
+        line-height: 5dvh
     }
     .madActionWraps{
         display: none;
         position: relative;
         float: left;
-        padding-top: 0.5vh;
-        min-width: 8vw;
-        width: 8vw;
-        min-height: 8vw;    
-        border: 0.1vw solid white;
+        padding-top: 0.5dvh;
+        min-width: 8dvw;
+        width: 8dvw;
+        min-height: 8dvw;    
+        border: 0.1dvw solid white;
         border-radius: 5px;
-        margin: 1vw;
+        margin: 1dvw;
         background-color: black;
     }
     .madTitle{
-        width: 8vw;
+        width: 8dvw;
         
         display: block;
     }
     .madActionPng{
         clear: left;
-        width: 6vw;
-        height: 6vw;
+        width: 6dvw;
+        height: 6dvw;
         display: block;
         margin: 0 auto;
     }

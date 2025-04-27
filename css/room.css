@@ -3,44 +3,44 @@
 #altarRoom{
   background-image: url('../images/rooms/grove.jpg');
   background-size: 100% 100%;
-  height: 69vh; 
-  width: 97vw;
+  height: 69dvh; 
+  width: 97dvw;
 }
 #altarRoomTitle{
-    line-height: 5vh;
-    font-size: 4vh;
-    width: 28vw;
+    line-height: 5dvh;
+    font-size: 4dvh;
+    width: 28dvw;
     text-align: center;
     text-shadow: 2px 2px 4px black;
     float: left;
 }
 #altarLeft{
     position: relative;
-    width: 17vw;
+    width: 17dvw;
     float: left;
     clear: left;
 }
 /* altar*/
 #altarDiv{
     background-color: black;
-    width: 16vw;
-    margin: 0.5vw;
+    width: 16dvw;
+    margin: 0.5dvw;
     margin-bottom: 0;
-    height: 26vh;
-    border: 0.1vw groove white;
+    height: 26dvh;
+    border: 0.1dvw groove white;
     border-radius: 10px;
     position: relative;
 }
 #altarText{
-    line-height: 3vh;
-    font-size: 2.5vh;
-    width: 16vw;
+    line-height: 3dvh;
+    font-size: 2.5dvh;
+    width: 16dvw;
     text-align: center;
 }
 #altarImage{
     width: 100%;
-    border-top-left-radius: 0.5vw;
-    border-top-right-radius: 0.5vw;
+    border-top-left-radius: 0.5dvw;
+    border-top-right-radius: 0.5dvw;
     position: absolute;
     top: 10%; 
     left: 50%;
@@ -49,10 +49,10 @@
     object-fit: fill;
 }
 #currentAltarDiv{
-    width: 14vw;
+    width: 14dvw;
     height: 20%;
-    font-size: 2vh;
-    border: 0.1vw groove white;
+    font-size: 2dvh;
+    border: 0.1dvw groove white;
     position: absolute;
     bottom: 0;
     float: left;
@@ -62,13 +62,13 @@
     text-align: center;      /* Ensures text is centered within the div */
 }
 #altarToggle{
-    border: 0.1vw solid white;
+    border: 0.1dvw solid white;
     position: absolute;
     bottom: 0;
     right: 0;
-    font-size: 3vw;
-    min-width: 2vw;
-    width: 2vw;
+    font-size: 3dvw;
+    min-width: 2dvw;
+    width: 2dvw;
     height: 20%;
     display: flex;           /* Enables flexbox layout */
     justify-content: center; /* Centers content horizontally */
@@ -77,71 +77,71 @@
         }
 #altarOptions{
     display: none;
-    width: 14vw;
+    width: 14dvw;
     background-color: black;
-    margin-left: 0.5vw;
+    margin-left: 0.5dvw;
     z-index: 10;
-    border: 0.1vw groove white;
+    border: 0.1dvw groove white;
     position: absolute; 
-    top:  27vh; 
+    top:  27dvh; 
     left: 0;
 }
 .altarOptionWraps{
     position: relative;
     background-color: grey;
-    width: 14vw;
-    height: 4vh;
-    line-height: 4vh;
-    font-size: 2vh;
-    border: 0.1vw groove white;
+    width: 14dvw;
+    height: 4dvh;
+    line-height: 4dvh;
+    font-size: 2dvh;
+    border: 0.1dvw groove white;
     display: none;
     justify-content: center; /* Centers horizontally */
     align-items: center;     /* Centers vertically */
     text-align: center;      /* Ensures text is centered within the div */
 }
 #altarRoomInfo{
-    margin-left: 0.5vw;
-    margin-top: 2vh;
-    padding: 0.5vw;
-    font-size: 1vw;
-    line-height: 1.5vw;
-    border: 0.1vw groove white;
-    width: 16vw;
-    height: 30vh;
+    margin-left: 0.5dvw;
+    margin-top: 2dvh;
+    padding: 0.5dvw;
+    font-size: 1dvw;
+    line-height: 1.5dvw;
+    border: 0.1dvw groove white;
+    width: 16dvw;
+    height: 30dvh;
     background-color: black;
 }
 
 
                     /* Style for the peg pool */
 #pegPoolColumn{
-    width: 12.6vw;
+    width: 12.6dvw;
     float: left;
 }
 #adjacencyInfoBox {
-    border: 0.1vh groove white;
-    margin-top: 0.4vh;
-    padding-left: 0.4vw;
+    border: 0.1dvh groove white;
+    margin-top: 0.4dvh;
+    padding-left: 0.4dvw;
     background-color: black;
     border-radius: 10px;
-    width: 12.6vw;
-    height: 8vw;
+    width: 12.6dvw;
+    height: 8dvw;
 }
 #devotion{
     width: 100%;
-    font-size: 2vh;
-    line-height: 2.8vh;
+    font-size: 2dvh;
+    line-height: 2.8dvh;
     text-decoration: underline;
 }
 #bonusLines{
     float: left;
-    width: 6vw;
+    width: 6dvw;
 }
 #clearGrid{
     background-color: lightblue;
-    border: 0.1vw groove white;
-    margin-right: 0.4vw;
-    font-size: 2vh;
-    line-height: 2.5vh;
+    border: 0.1dvw groove white;
+    margin-right: 0.4dvw;
+    font-size: 2dvh;
+    line-height: 2.5dvh;
     width: 44%;
     height: 44%;
     min-width: 44%;
@@ -151,22 +151,22 @@
     float: right;
 }
 #pegPool{
-    margin-top: 0.5vw;
+    margin-top: 0.5dvw;
     display: flex;
     flex-wrap: wrap; 
     justify-content: space-between;
     align-content: flex-start; 
     float: right;
-    width: 12.6vw;
-    font-size: 1.5vh;
-    line-height: 2vh;
+    width: 12.6dvw;
+    font-size: 1.5dvh;
+    line-height: 2dvh;
 }
 .pegPoolPeg {
   background-color: black;
   display: none;
-  height: 5.9vw;    
-  width: 5.9vw;
-  border: 0.1vh solid #ccc; 
+  height: 5.9dvw;    
+  width: 5.9dvw;
+  border: 0.1dvh solid #ccc; 
   border-radius: 5px;  
   text-align: center;
 }
@@ -186,34 +186,34 @@
   width: 70%;
   float: left;
   clear: left;
-  margin-left: 0.1vw;
+  margin-left: 0.1dvw;
 }
 
 /* Style for the peg count */
 .peg-count {
     float: right;
 width: 19%;
-    margin-right: 0.1vw;
+    margin-right: 0.1dvw;
 }
 #gridFlex{
     display: flex;
     justify-content: left; 
     align-items: center; /* Centers vertically */
-    height: 69vh; /* Ensure the container spans the full viewport height */
+    height: 69dvh; /* Ensure the container spans the full viewport height */
 }
 #activeAltarGrid {
-   border: 0.5vh groove black;
+   border: 0.5dvh groove black;
    background-color: rgba(0, 0, 0, 0.7);
   display: grid;
-  grid-template-columns: repeat(4, 15vh); /* Adjust number of columns */
-  grid-template-rows: repeat(4, 15vh); /* Adjust number of rows */
-  width:66vh;
+  grid-template-columns: repeat(4, 15dvh); /* Adjust number of columns */
+  grid-template-rows: repeat(4, 15dvh); /* Adjust number of rows */
+  width:66dvh;
 }
 
 .hole {
-  border:  0.1vh groove darkslategrey;
-  width: 15vh;
-  height: 15vh;
+  border:  0.1dvh groove darkslategrey;
+  width: 15dvh;
+  height: 15dvh;
   display: flex;
   justify-content: center;
   align-items: center;

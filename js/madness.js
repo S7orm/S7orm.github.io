@@ -35,16 +35,16 @@ function updateMadnessBoxPosition(moveAmountX, moveAmountY) {
     let madWidth = madnessBox.style.width;
     let madHeight = madnessBox.style.height;
     let currentRect = madnessBox.getBoundingClientRect();
-    let currentLeftVw = (currentRect.left / window.innerWidth) * 100;
-    let currentTopVh = (currentRect.top / window.innerHeight) * 100;
+    let currentLeftdvw = (currentRect.left / window.innerWidth) * 100;
+    let currentTopdvh = (currentRect.top / window.innerHeight) * 100;
     const maxLeft = 100 - parseFloat(madWidth);
     const maxTop = 100 - parseFloat(madHeight);
-    const updatedLeftVw = currentLeftVw + moveAmountX;
-    const updatedTopVh = currentTopVh + moveAmountY;
-    const newLeftVw = Math.min(Math.max(updatedLeftVw, 0), maxLeft);
-    const newTopVh = Math.min(Math.max(updatedTopVh, 0), maxTop);
-    madnessBox.style.left = newLeftVw + 'vw';
-    madnessBox.style.top = newTopVh + 'vh';
+    const updatedLeftdvw = currentLeftdvw + moveAmountX;
+    const updatedTopdvh = currentTopdvh + moveAmountY;
+    const newLeftdvw = Math.min(Math.max(updatedLeftdvw, 0), maxLeft);
+    const newTopdvh = Math.min(Math.max(updatedTopdvh, 0), maxTop);
+    madnessBox.style.left = newLeftdvw + 'dvw';
+    madnessBox.style.top = newTopdvh + 'dvh';
     const rotationAmount = moveAmountX *4 ; 
     madnessBox.style.transform = `rotate(${rotationAmount}deg)`; //  Apply rotation
 }
@@ -83,9 +83,9 @@ function checkMadnessValue() {
             moveAmountY = (Math.random() * 2 - 1) *  (stats.madness.current * 0.08) * (88/stats.madness.madCap);
             updateMadnessBoxPosition(moveAmountX, moveAmountY);                            
     //bigger box
-            let madWidth = ((stats.madness.current /6 ) * (88/stats.madness.madCap) )+ 'vw';
+            let madWidth = ((stats.madness.current /6 ) * (88/stats.madness.madCap) )+ 'dvw';
             document.getElementById('madnessBox').style.width=madWidth;
-            let madHeight = ((stats.madness.current /6) * (88/stats.madness.madCap)) + 'vh';
+            let madHeight = ((stats.madness.current /6) * (88/stats.madness.madCap)) + 'dvh';
             document.getElementById('madnessBox').style.height=madHeight;           
             const madnessTextElements = document.querySelectorAll('.madnessText');
             madnessTextElements.forEach(element => {
@@ -95,8 +95,8 @@ function checkMadnessValue() {
                     randomFont = fonts[Math.floor(Math.random() * fonts.length)];
                     } while (randomFont === currentFont); // Keep generating until a different font is selected
                 element.style.fontFamily = randomFont;
-                element.style.fontSize = ((stats.madness.current/20) * (88/stats.madness.madCap))  + 'vh';
-                element.style.lineHeight = ((stats.madness.current/20 + 1) * (88/stats.madness.madCap)) + 'vh';
+                element.style.fontSize = ((stats.madness.current/20) * (88/stats.madness.madCap))  + 'dvh';
+                element.style.lineHeight = ((stats.madness.current/20 + 1) * (88/stats.madness.madCap)) + 'dvh';
             });
         }
             document.getElementById("madnessBox").style.backgroundColor="#8000FF"; 
@@ -104,15 +104,15 @@ function checkMadnessValue() {
     } else if (madDelta > 0) {    // If the madness goes down
         // Calculate the position of madnessBox
         let currentRect = madnessBox.getBoundingClientRect();
-        let currentLeftVw = (currentRect.left / window.innerWidth) * 100;
-        let currentTopVh = (currentRect.top / window.innerHeight) * 100;
-        const deltaX = 41 - currentLeftVw;
-        const deltaY = 11.2 - currentTopVh;
+        let currentLeftdvw = (currentRect.left / window.innerWidth) * 100;
+        let currentTopdvh = (currentRect.top / window.innerHeight) * 100;
+        const deltaX = 41 - currentLeftdvw;
+        const deltaY = 11.2 - currentTopdvh;
         // Gradually return to centered position
-        let currentLeft = parseFloat(madnessBox.style.left.replace('vw', ''));
-        let currentTop = parseFloat(madnessBox.style.top.replace('vh', '')); 
-        madnessBox.style.left = currentLeft + (initialLeft - currentLeft) * 0.25 + 'vw'; 
-        madnessBox.style.top = currentTop + (initialTop - currentTop) * 0.25 + 'vh';
+        let currentLeft = parseFloat(madnessBox.style.left.replace('dvw', ''));
+        let currentTop = parseFloat(madnessBox.style.top.replace('dvh', '')); 
+        madnessBox.style.left = currentLeft + (initialLeft - currentLeft) * 0.25 + 'dvw'; 
+        madnessBox.style.top = currentTop + (initialTop - currentTop) * 0.25 + 'dvh';
                     // Gradually realign rotation
        let currentRotation = parseFloat(madnessBox.style.transform.replace('rotate(', '').replace('deg)', '')) || 0;
         let newRotation = currentRotation * 0.44;
@@ -124,11 +124,11 @@ function checkMadnessValue() {
         let currentWidth = parseFloat(document.getElementById('madnessBox').style.width);
         if (currentWidth > 8) {
             // Update the width and height
-            document.getElementById('madnessBox').style.width = Math.max(8, ((stats.madness.current /6 ) * (88/stats.madness.madCap))) + 'vw';
-            document.getElementById('madnessBox').style.height = Math.max(7, ((stats.madness.current /6 ) * (88/stats.madness.madCap))) + 'vh';
+            document.getElementById('madnessBox').style.width = Math.max(8, ((stats.madness.current /6 ) * (88/stats.madness.madCap))) + 'dvw';
+            document.getElementById('madnessBox').style.height = Math.max(7, ((stats.madness.current /6 ) * (88/stats.madness.madCap))) + 'dvh';
         }else{
-            document.getElementById('madnessBox').style.width = 8 + 'vw';
-            document.getElementById('madnessBox').style.height = 7 + 'vh';
+            document.getElementById('madnessBox').style.width = 8 + 'dvw';
+            document.getElementById('madnessBox').style.height = 7 + 'dvh';
         }
         const madnessTextElements = document.querySelectorAll('.madnessText');
         madnessTextElements.forEach(element => {
@@ -136,12 +136,12 @@ function checkMadnessValue() {
                 const madnessTextElements = document.querySelectorAll('.madnessText');
                 const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
                 element.style.fontFamily = randomFont;
-                element.style.fontSize =((stats.madness.current/20) * (88/stats.madness.madCap) )  + 'vh';
-                element.style.lineHeight = ((stats.madness.current/20 + 1) * (88/stats.madness.madCap)) + 'vh';
+                element.style.fontSize =((stats.madness.current/20) * (88/stats.madness.madCap) )  + 'dvh';
+                element.style.lineHeight = ((stats.madness.current/20 + 1) * (88/stats.madness.madCap)) + 'dvh';
             }else{
             element.style.fontFamily =  "Papyrus", "Arial", 'sans-serif';
-            element.style.lineHeight = 3 + 'vh';
-            element.style.fontSize  = 3  + 'vh';
+            element.style.lineHeight = 3 + 'dvh';
+            element.style.fontSize  = 3  + 'dvh';
             }
         });
     }                                             

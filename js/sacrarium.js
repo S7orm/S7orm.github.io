@@ -72,12 +72,16 @@ let godKeys = Object.keys(gods);
 
 function makeSacrarium(){
     document.getElementById('sacrarium').innerHTML =
+            "<div id='sacLeft'>" +
+            "<div id='bookshelf'><div id='shelf'></div></div>" +
+            "<h2 id='godTitle'>Invoke the Old Ones</h2>" +
             "<div id='gods'>" +
-                "<h2 id='godTitle'>Great Old Ones</h2>" +
-            "</div>" +
+            "</div></div>" +
+            "<div id='sacRight'>" +
+            "<h2 id='relicTitle'>Gods appeased / Relics obtained</h2>" +
             "<div id='relics'>" +
-            "<h2 id='relicTitle'>Relics Obtained</h2>" +
-            "</div>";
+            "</div></div>";
+
     for(i=0;i<godKeys.length;i++){
             document.getElementById('gods').innerHTML +=
                 "<button class='godsWraps' id='" + godKeys[i] + "Wrap'>" +
@@ -205,6 +209,32 @@ function nony(){
     closeEventBox();
     cancelShakeAnimation();
 }
+//bookshelf
+//writing-mode: sideways-lr;
+function addTome(tome) {
+    const shelf = document.getElementById('shelf');
+    if (!shelf) return;
+    const tomeDiv = document.createElement('div');
+    tomeDiv.className = 'tome';
+    const spine = document.createElement('div');
+    spine.className = 'spine';
+    spine.textContent = actionUpgrades.study[tome].string;
+    const pixelHeight = (window.innerHeight * 9) / 100; 
+    spine.style.writingMode = 'sideways-lr';
+    spine.style.transform = 'rotate(180deg)';
+    shelf.appendChild(tomeDiv);
+    tomeDiv.appendChild(spine);
+    const textWidth = spine.scrollWidth;
+        if (textWidth > pixelHeight) {
+            //determine how many lines are needed.
+            //determine line height
+            //change width of tomeDiv and spine by the needed amount.
+            //add //writing-mode: sideways-lr to spine text.
+    }
+}
+//addTome('pnak');
+//addTome('kult');
+
 
 let relics = {
     rhanRelic: {

@@ -171,8 +171,8 @@ function startDrag(event, pegType, holeId) {
     if (!img) return;
     const dragCopy = img.cloneNode(true);
     
-    dragCopy.style.width = "4.8vw";
-    dragCopy.style.height = "4.8vw";
+    dragCopy.style.width = "4.8dvw";
+    dragCopy.style.height = "4.8dvw";
     // Style the clone for dragging: absolute positioning and a high z-index
     dragCopy.style.position = 'absolute';
     dragCopy.style.zIndex = 1000;
@@ -450,20 +450,20 @@ const grids = {
 let gridKeys = Object.keys(grids);
 let gridChosen = "grove";
 function updateGridConfig() {
-    const maxBoxSize = 66; // Maximum bounding box in viewport units (vh)
+    const maxBoxSize = 66; // Maximum bounding box in viewport units (dvh)
     
     // Calculate cell size to fit within the bounding box, based on the larger dimension
     const cellHeight = maxBoxSize / rows; 
     const gridDiv = document.getElementById("activeAltarGrid"); // %% Get the active grid element
     // Set CSS properties dynamically
-    gridDiv.style.gridTemplateColumns = `repeat(${columns}, ${cellHeight}vh)`;
-    gridDiv.style.gridTemplateRows = `repeat(${rows}, ${cellHeight}vh)`;
-    gridDiv.style.width = `${columns * cellHeight}vh`;
-    gridDiv.style.height = `${rows * cellHeight}vh`;
+    gridDiv.style.gridTemplateColumns = `repeat(${columns}, ${cellHeight}dvh)`;
+    gridDiv.style.gridTemplateRows = `repeat(${rows}, ${cellHeight}dvh)`;
+    gridDiv.style.width = `${columns * cellHeight}dvh`;
+    gridDiv.style.height = `${rows * cellHeight}dvh`;
     const holes = document.getElementsByClassName("hole"); // Get all elements with the specified class
     for (let i = 0; i < holes.length; i++) {
-    holes[i].style.width = `${cellHeight}vh`; // Change the width
-    holes[i].style.height = `${cellHeight}vh`; // Change the height
+    holes[i].style.width = `${cellHeight}dvh`; // Change the width
+    holes[i].style.height = `${cellHeight}dvh`; // Change the height
     }
 }
                                                         //=========================================

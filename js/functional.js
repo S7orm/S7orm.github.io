@@ -186,7 +186,7 @@ allElements.forEach(element => {
         computedStyle.getPropertyValue('border-bottom-style') !== 'none' &&
         computedStyle.getPropertyValue('border-left-style') !== 'none') {
         // Add your custom styles here
-        element.style.boxShadow = '0.2vw 0.2vh 4px grey';
+        element.style.boxShadow = '0.2dvw 0.2dvh 4px grey';
     }
 });
 };
