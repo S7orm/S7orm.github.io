@@ -1,0 +1,95 @@
+* {
+  user-select: none;
+  -webkit-user-select: none; /* For Safari */
+  -ms-user-select: none; /* For older Edge */
+}
+html {
+  font-size: 0.8rem;  /* Mobile */
+}
+
+@media (min-width: 1200px) {
+    html {
+        font-size: 1rem;  /* Desktop */
+    }
+}
+body, h1, h2, h3, h4, h5, h6, p, ul, li, fieldset, form, label, legend, table, caption, tr, th, td { vertical-align:top; margin: 0; padding: 0; border: 0; outline: 0; }
+html{
+    min-height:100%;
+}
+body{
+    background-color: black;
+    color: whitesmoke;
+    background-size: 100% 100%;
+    min-height:100%;
+}
+/*Top bar and contents*/
+#top{
+    min-width: 100dvw;
+    height: 10dvh;
+}
+#topBanner{
+    position: absolute;
+    min-width: 100dvw;
+    height: 10dvh;
+    box-sizing: border-box;
+    background-image: -webkit-linear-gradient(top, #5858FA, white 60%, #0404B4 100%);
+    background-image: -ms-linear-gradient(top, #020238, white 60%, #200388 100%);
+    background-image: -moz-linear-gradient(top, #020238, white 60%, #200388 100%);
+    border: 2px groove black;
+}
+#header {
+    line-height: 4dvh;
+    height: 6.6dvh;
+    font: 2.5em bold;
+    text-shadow: 2px 2px #000;
+}
+#pmp{
+    position: relative;
+    bottom: 0;
+    left: 40%;
+    height: 4dvh;
+    font: 1.4em bold;
+    text-shadow: 2px 2px #000;
+}
+
+/*main body*/
+#core{
+  text-align: center;
+}
+#blueHeaven{
+    font: 2em bold;
+    margin: 4px;
+}
+#quoteButton{
+    background-color: black;
+    color: whitesmoke;
+    border-radius: 15px;
+    padding: 4px;
+    border: 2px solid lightskyblue;
+}
+#quoteOfTheDay{
+    border: 3px groove silver;
+    font-size: 16px;
+    font-family: "Courier New", Courier, monospace;
+    font-style: italic;
+    width:88dvw;
+    padding:10px;
+    margin:10px;
+    border-radius:30px;
+}
+.gameTitle{
+    margin-top: 4dvh;
+    font-size: 24px;
+}
+#lieDesc{
+    margin: 2dvw;
+font-size: 16px;
+}
+#gameBox{
+    margin-bottom: 4dvh;
+    font-size: 16px;
+}
+.games{
+    
+    font-size: 16px;
+}
